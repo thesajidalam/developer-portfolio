@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { db } from '@/lib/db'
 
-export const dynamic = 'force-static';
+export const dynamic = 'force-static'
 
 const portfolioIds = Array.from({ length: 18 }, (_, i) => `port-${String(i + 1).padStart(3, '0')}`)
 const portfolioSlugs = [

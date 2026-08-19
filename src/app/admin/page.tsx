@@ -4,8 +4,6 @@ import { StatsCard } from '@/components/admin/stats-card'
 import Link from 'next/link'
 import { formatDate } from '@/lib/utils'
 
-export const dynamic = 'force-static'
-
 export default async function AdminDashboard() {
   const [totalPortfolios, pendingSubmissions, offlinePortfolios, recentVotes, recentActivity] =
     await Promise.all([

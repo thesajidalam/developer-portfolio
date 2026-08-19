@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { db } from '@/lib/db'
 
-export const dynamic = 'force-static';
+export const dynamic = 'force-static'
 
 const slugs = [
   'alex-chen', 'priya-sharma', 'marcus-johnson', 'yuki-tanaka',
