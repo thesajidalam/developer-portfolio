@@ -1,18 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server'
 
-export const dynamic = 'force-static'
-
-const usernames = [
-  'alexchen', 'priyasharma', 'marcusj', 'yukitanaka', 'elenapetrova',
-  'diegoramirez', 'amaraokafor', 'kaimueller', 'sophielaurent', 'ravipatel',
-  'linaalrashid', 'tomwilson', 'meilin', 'oscarfernandez', 'fzahra',
-  'hanskim', 'annakowalski', 'jamalwright',
-]
-
-export function generateStaticParams() {
-  return usernames.map(username => ({ username }))
-}
-
 export async function GET(
   _request: NextRequest,
   { params }: { params: Promise<{ username: string }> }

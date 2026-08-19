@@ -14,7 +14,7 @@ Thank you for your interest in contributing! This guide will help you get up and
 ### Getting Started
 
 ```bash
-git clone https://github.com/your-org/developer-portfolio.git
+git clone https://github.com/thesajidalam/developer-portfolio.git
 cd developer-portfolio
 npm install
 cp .env.example .env
@@ -137,4 +137,4 @@ Please use the appropriate template when creating issues.
 
 ## Questions?
 
-Open a [discussion](https://github.com/your-org/developer-portfolio/discussions) or reach out to the maintainers.
+Open a [discussion](https://github.com/thesajidalam/developer-portfolio/discussions) or reach out to the maintainers.

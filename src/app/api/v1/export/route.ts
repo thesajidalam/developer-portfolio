@@ -1,8 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { db } from '@/lib/db'
 
-export const dynamic = 'force-static'
-
 export async function GET(request: NextRequest) {
   try {
     const format = new URL(request.url).searchParams.get('format') || 'json'

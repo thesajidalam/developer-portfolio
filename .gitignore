@@ -41,9 +41,3 @@ next-env.d.ts
 # OS
 .DS_Store
 Thumbs.db
-
-# prisma
-prisma/devbeacon.db
-prisma/devbeacon.db-journal
-
-.vercel

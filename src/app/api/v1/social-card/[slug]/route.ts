@@ -1,20 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { db } from '@/lib/db'
 
-export const dynamic = 'force-static'
-
-const slugs = [
-  'alex-chen', 'priya-sharma', 'marcus-johnson', 'yuki-tanaka',
-  'elena-petrova', 'diego-ramirez', 'amara-okafor', 'kai-mueller',
-  'sophie-laurent', 'ravi-patel', 'lina-al-rashid', 'tom-wilson',
-  'mei-lin', 'oscar-fernandez', 'fatima-zahra', 'hans-kim',
-  'anna-kowalski', 'jamal-wright',
-]
-
-export function generateStaticParams() {
-  return slugs.map(slug => ({ slug }))
-}
-
 function escapeXml(str: string): string {
   return str
     .replace(/&/g, '&amp;')
