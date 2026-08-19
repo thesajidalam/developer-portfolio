@@ -1,4 +1,6 @@
 {
-  "framework": "nextjs",
-  "buildCommand": "npx prisma generate && npx prisma db push --skip-generate && npx tsx scripts/seed.ts && npm run build"
+  "buildCommand": "DATABASE_URL=file:./developer-portfolio.db npx prisma generate && DATABASE_URL=file:./developer-portfolio.db npx prisma db push --skip-generate && DATABASE_URL=file:./developer-portfolio.db npx tsx scripts/seed.ts && DATABASE_URL=file:./developer-portfolio.db npm run build",
+  "env": {
+    "NEXT_PUBLIC_BASE_URL": "https://gitdevfolio.vercel.app"
+  }
 }

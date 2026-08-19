@@ -7,7 +7,6 @@
 ### The open-source platform for discovering, evaluating, and learning from developer portfolios.
 
 [![Deployed on Vercel](https://img.shields.io/badge/Deployed_on-Vercel-000000?style=for-the-badge&logo=vercel&logoColor=white)](https://gitdevfolio.vercel.app)
-[![GitHub Pages](https://img.shields.io/badge/GitHub-Pages-24292e?style=for-the-badge&logo=github&logoColor=white)](https://thesajidalam.github.io/developer-portfolio/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-22c55e?style=for-the-badge)](LICENSE)
 [![PRs Welcome](https://img.shields.io/badge/PRs-Welcome-16a34a?style=for-the-badge)](CONTRIBUTING.md)
 [![Stars](https://img.shields.io/github/stars/thesajidalam/developer-portfolio?style=for-the-badge&color=f59e0b)](https://github.com/thesajidalam/developer-portfolio)
@@ -42,8 +41,7 @@ Built for developers who want to learn from the best, hiring managers who want t
 
 | Platform | URL | Status |
 |----------|-----|--------|
-| **Vercel** (full features) | [gitdevfolio.vercel.app](https://gitdevfolio.vercel.app) | Active — submit, search, admin |
-| **GitHub Pages** (static) | [thesajidalam.github.io/developer-portfolio](https://thesajidalam.github.io/developer-portfolio/) | Active — browse, compare, rankings |
+| **Vercel** | [gitdevfolio.vercel.app](https://gitdevfolio.vercel.app) | Active — full features |
 
 <br />
 
@@ -126,7 +124,7 @@ Framework    Next.js 16 (App Router)          Language     TypeScript 5.9
 UI           React 19, Tailwind CSS v4        Database     Prisma 6 + SQLite / PostgreSQL
 Components   Radix UI                         Validation   Zod
 Icons        Lucide React                     Testing      Vitest
-Deploy       Vercel + GitHub Pages            CI/CD        GitHub Actions
+Deploy       Vercel                         CI/CD        GitHub Actions
 ```
 
 <br />
@@ -197,17 +195,11 @@ data/seed.ts                 18 Portfolios, 12 Technologies, 10 Categories
 
 ## Deploy
 
-### Vercel (Recommended)
-
 ```bash
 vercel deploy
 ```
 
 Set `DATABASE_URL` in your Vercel project settings. SQLite works for development. Use PostgreSQL or Turso for production.
-
-### GitHub Pages
-
-Push to `main`. The GitHub Actions workflow builds and deploys automatically.
 
 <br />
 
