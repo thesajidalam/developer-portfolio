@@ -1,5 +1,5 @@
 {
   "framework": "nextjs",
-  "buildCommand": "npx prisma generate && npm run build",
+  "buildCommand": "npx prisma generate && npx prisma db push --skip-generate && npx tsx scripts/seed.ts && npm run build",
   "outputDirectory": "out"
 }
