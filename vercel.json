@@ -1,6 +1,3 @@
 {
-  "buildCommand": "bash scripts/build.sh",
-  "env": {
-    "NEXT_PUBLIC_BASE_URL": "https://gitdevfolio.vercel.app"
-  }
+  "buildCommand": "bash scripts/build.sh"
 }
