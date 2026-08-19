@@ -1,5 +1,5 @@
 {
-  "buildCommand": "DATABASE_URL=file:./developer-portfolio.db npx prisma generate && DATABASE_URL=file:./developer-portfolio.db npx prisma db push --skip-generate && DATABASE_URL=file:./developer-portfolio.db npx tsx scripts/seed.ts && DATABASE_URL=file:./developer-portfolio.db npm run build",
+  "buildCommand": "bash scripts/build.sh",
   "env": {
     "NEXT_PUBLIC_BASE_URL": "https://gitdevfolio.vercel.app"
   }
