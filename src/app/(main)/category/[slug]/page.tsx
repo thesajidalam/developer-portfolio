@@ -7,11 +7,19 @@ interface PageProps {
   params: Promise<{ slug: string }>
 }
 
+export async function generateStaticParams() {
+  const categories = await db.category.findMany({
+    select: { slug: true },
+  })
+  return categories.map(c => ({ slug: c.slug }))
+}
+
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
   const { slug } = await params
   const category = await db.category.findUnique({ where: { slug } })
   return {
-    title: category ? `${category.name} — DevBeacon` : 'Category — DevBeacon',
+    title: category ? `${category.name} — Developer Portfolio` : 'Category — Developer Portfolio',
+    description: category?.description ?? undefined,
   }
 }
 
@@ -50,7 +58,7 @@ export default async function CategoryDetailPage({ params }: PageProps) {
       <div className="mx-auto max-w-7xl px-4 py-10 sm:px-6 lg:px-8">
         <div className="mb-8">
           <div className="flex items-center gap-2 text-xs text-zinc-500">
-            <a href="/categories" className="hover:text-zinc-300 transition-colors">Categories</a>
+            <a href="/categories/" className="hover:text-zinc-300 transition-colors">Categories</a>
             <span>/</span>
             <span className="text-zinc-300">{category.name}</span>
           </div>

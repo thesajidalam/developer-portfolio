@@ -76,7 +76,7 @@ export async function safeFetch(url: string, timeoutMs = 10000): Promise<Respons
       signal: controller.signal,
       redirect: 'follow',
       headers: {
-        'User-Agent': 'DevBeacon/1.0 (Portfolio-Checker)',
+        'User-Agent': 'DeveloperPortfolio/1.0 (Portfolio-Checker)',
       },
     })
     return response

@@ -11,7 +11,7 @@
 If you discover a security vulnerability, please report it responsibly:
 
 1. **Do NOT** open a public GitHub issue.
-2. Email security details to: `security@devbeacon.dev` (or open a private security advisory on GitHub).
+2. Email security details to: `security@developer-portfolio.dev` (or open a private security advisory on GitHub).
 3. Include:
    - Description of the vulnerability
    - Steps to reproduce

@@ -1,4 +1,4 @@
-# DevBeacon Roadmap
+# Developer Portfolio Roadmap
 
 ## Phase 1: Core Platform (Current)
 

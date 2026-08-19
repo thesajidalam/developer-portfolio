@@ -522,7 +522,7 @@ export function PortfolioDetail({ portfolio }: PortfolioDetailProps) {
                     <p className="text-xs leading-relaxed text-zinc-500">
                       Automated scores (Performance, Accessibility, SEO, Best Practices) are derived
                       from Lighthouse and similar tooling. Editorial scores (Design, Content) are
-                      assessed by the DevBeacon team. The overall score is a weighted average of all
+                      assessed by the Developer Portfolio team. The overall score is a weighted average of all
                       dimensions.
                     </p>
                   </div>

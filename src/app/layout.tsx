@@ -11,9 +11,9 @@ const inter = Inter({
 })
 
 export const metadata: Metadata = {
-  title: 'DevBeacon — Discover. Evaluate. Learn.',
+  title: 'Developer Portfolio — Discover. Evaluate. Learn.',
   description:
-    'DevBeacon is a curated platform for discovering, evaluating, and learning from the best developer portfolios. Find inspiration, compare skills, and showcase your craft.',
+    'Developer Portfolio is a curated platform for discovering, evaluating, and learning from the best developer portfolios. Find inspiration, compare skills, and showcase your craft.',
 }
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {

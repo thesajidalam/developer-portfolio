@@ -1,4 +1,4 @@
-# Contributing to DevBeacon
+# Contributing to Developer Portfolio
 
 Thank you for your interest in contributing! This guide will help you get up and running.
 
@@ -14,8 +14,8 @@ Thank you for your interest in contributing! This guide will help you get up and
 ### Getting Started
 
 ```bash
-git clone https://github.com/your-org/devbeacon.git
-cd devbeacon
+git clone https://github.com/your-org/developer-portfolio.git
+cd developer-portfolio
 npm install
 cp .env.example .env
 npx prisma db push
@@ -137,4 +137,4 @@ Please use the appropriate template when creating issues.
 
 ## Questions?
 
-Open a [discussion](https://github.com/your-org/devbeacon/discussions) or reach out to the maintainers.
+Open a [discussion](https://github.com/your-org/developer-portfolio/discussions) or reach out to the maintainers.

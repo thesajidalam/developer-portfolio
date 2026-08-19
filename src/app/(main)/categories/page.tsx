@@ -4,7 +4,7 @@ import { db } from '@/lib/db'
 import { Grid3X3, Code, Smartphone, Globe, Database, Layers, Palette, BookOpen, Rocket, Shield, Users, Briefcase } from 'lucide-react'
 
 export const metadata: Metadata = {
-  title: 'Categories — DevBeacon',
+  title: 'Categories — Developer Portfolio',
 }
 
 const iconMap: Record<string, React.ReactNode> = {

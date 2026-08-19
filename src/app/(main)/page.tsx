@@ -18,17 +18,10 @@ import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 
 export const metadata = {
-  title: 'DevBeacon — Discover what great developers build',
+  title: 'Developer Portfolio — Discover what great developers build',
   description:
     'The open-source platform for exploring, evaluating, and learning from developer portfolios. Not another list — an intelligence layer.',
 }
-
-const stats = [
-  { value: '500+', label: 'Portfolios' },
-  { value: '50+', label: 'Technologies' },
-  { value: '10+', label: 'Categories' },
-  { value: '100%', label: 'Open Source' },
-]
 
 const steps = [
   {
@@ -51,36 +44,53 @@ const steps = [
   },
 ]
 
-const categories = [
+const categoryIcons = [
   { name: 'Best Overall', icon: Trophy, slug: 'best-overall' },
   { name: 'Best Visual Design', icon: Palette, slug: 'best-visual-design' },
   { name: 'Best Performance', icon: Gauge, slug: 'best-performance' },
   { name: 'Best Accessibility', icon: Accessibility, slug: 'best-accessibility' },
   { name: 'Best Frontend', icon: Code2, slug: 'best-frontend' },
   { name: 'Best Full Stack', icon: Layers, slug: 'best-full-stack' },
-  { name: 'Most Creative', icon: Sparkles, slug: 'most-creative' },
+  { name: 'Most Creative', icon: Sparkles, slug: 'best-creative' },
 ]
 
 export default async function HomePage() {
-  let rawPortfolios: Awaited<ReturnType<typeof getFeaturedPortfolios>> = []
+  let rawFeatured: Awaited<ReturnType<typeof getFeaturedPortfolios>> = []
+  let portfolioCount = 0
+  let techCount = 0
+  let categoryCount = 0
 
   try {
-    rawPortfolios = await getFeaturedPortfolios()
+    const [featured, pCount, tCount, cCount] = await Promise.all([
+      getFeaturedPortfolios(),
+      db.portfolio.count({ where: { status: 'approved' } }),
+      db.technology.count(),
+      db.category.count(),
+    ])
+    rawFeatured = featured
+    portfolioCount = pCount
+    techCount = tCount
+    categoryCount = cCount
   } catch {
-    rawPortfolios = []
+    rawFeatured = []
   }
 
-  const featuredPortfolios = rawPortfolios.map(p => ({
+  const featuredPortfolios = rawFeatured.map(p => ({
     ...p,
     technologies: p.technologies.map(pt => pt.technology),
     score: p.score ?? undefined,
   }))
 
+  const stats = [
+    { value: String(portfolioCount), label: 'Portfolios' },
+    { value: String(techCount), label: 'Technologies' },
+    { value: String(categoryCount), label: 'Categories' },
+    { value: '100%', label: 'Open Source' },
+  ]
+
   return (
     <div className="relative">
-      {/* Hero Section */}
       <section className="relative overflow-hidden">
-        {/* Background pattern */}
         <div className="pointer-events-none absolute inset-0">
           <div className="absolute inset-0 bg-[radial-gradient(ellipse_80%_50%_at_50%_-20%,rgba(245,158,11,0.08),transparent)]" />
           <div
@@ -117,7 +127,7 @@ export default async function HomePage() {
             </p>
 
             <div className="mt-10 flex items-center justify-center gap-3">
-              <Link href="/explore">
+              <Link href="/explore/">
                 <Button
                   size="lg"
                   className="bg-amber-500 px-6 text-sm font-semibold text-zinc-950 shadow-lg shadow-amber-500/20 hover:bg-amber-400"
@@ -126,7 +136,7 @@ export default async function HomePage() {
                   <ArrowRight className="ml-2 h-4 w-4" />
                 </Button>
               </Link>
-              <Link href="/submit">
+              <Link href="/submit/">
                 <Button
                   variant="outline"
                   size="lg"
@@ -138,7 +148,6 @@ export default async function HomePage() {
             </div>
           </div>
 
-          {/* Stats */}
           <div className="mx-auto mt-20 grid max-w-2xl grid-cols-2 gap-px rounded-xl border border-zinc-800 bg-zinc-800/50 sm:grid-cols-4">
             {stats.map(stat => (
               <div
@@ -157,7 +166,6 @@ export default async function HomePage() {
         </div>
       </section>
 
-      {/* Featured Portfolios */}
       <section className="relative border-t border-zinc-800/60">
         <div className="mx-auto max-w-7xl px-4 py-20 sm:px-6 lg:px-8">
           <div className="flex items-end justify-between">
@@ -171,7 +179,7 @@ export default async function HomePage() {
               </p>
             </div>
             <Link
-              href="/explore"
+              href="/explore/"
               className="hidden text-sm font-medium text-amber-400 transition-colors hover:text-amber-300 sm:inline-flex sm:items-center sm:gap-1"
             >
               View all
@@ -202,7 +210,7 @@ export default async function HomePage() {
 
           <div className="mt-8 text-center sm:hidden">
             <Link
-              href="/explore"
+              href="/explore/"
               className="text-sm font-medium text-amber-400 hover:text-amber-300"
             >
               View all portfolios →
@@ -211,12 +219,11 @@ export default async function HomePage() {
         </div>
       </section>
 
-      {/* How It Works */}
       <section className="relative border-t border-zinc-800/60 bg-zinc-950">
         <div className="mx-auto max-w-7xl px-4 py-20 sm:px-6 lg:px-8">
           <div className="mx-auto max-w-2xl text-center">
             <h2 className="text-2xl font-bold tracking-tight text-zinc-50 sm:text-3xl">
-              How DevBeacon works
+              How Developer Portfolio works
             </h2>
             <p className="mt-2 text-sm text-zinc-400">
               Three steps from submission to discovery.
@@ -247,7 +254,6 @@ export default async function HomePage() {
         </div>
       </section>
 
-      {/* Categories */}
       <section className="relative border-t border-zinc-800/60">
         <div className="mx-auto max-w-7xl px-4 py-20 sm:px-6 lg:px-8">
           <div className="flex items-end justify-between">
@@ -261,7 +267,7 @@ export default async function HomePage() {
               </p>
             </div>
             <Link
-              href="/categories"
+              href="/categories/"
               className="hidden text-sm font-medium text-amber-400 transition-colors hover:text-amber-300 sm:inline-flex sm:items-center sm:gap-1"
             >
               All categories
@@ -270,10 +276,10 @@ export default async function HomePage() {
           </div>
 
           <div className="mt-10 flex gap-3 overflow-x-auto pb-4 scrollbar-none sm:grid sm:grid-cols-4 lg:grid-cols-7 sm:overflow-visible sm:pb-0">
-            {categories.map(category => (
+            {categoryIcons.map(category => (
               <Link
                 key={category.slug}
-                href={`/category/${category.slug}`}
+                href={`/category/${category.slug}/`}
                 className="group flex min-w-[140px] flex-col items-center gap-3 rounded-xl border border-zinc-800 bg-zinc-900/50 p-5 text-center transition-all hover:border-zinc-700 hover:bg-zinc-900 sm:min-w-0"
               >
                 <span className="inline-flex h-11 w-11 items-center justify-center rounded-lg bg-zinc-800/80 text-zinc-400 ring-1 ring-zinc-700/50 transition-colors group-hover:text-amber-400 group-hover:ring-amber-500/30">
@@ -288,7 +294,7 @@ export default async function HomePage() {
 
           <div className="mt-8 text-center sm:hidden">
             <Link
-              href="/categories"
+              href="/categories/"
               className="text-sm font-medium text-amber-400 hover:text-amber-300"
             >
               View all categories →
@@ -297,9 +303,7 @@ export default async function HomePage() {
         </div>
       </section>
 
-      {/* CTA Section */}
       <section className="relative border-t border-zinc-800/60">
-        {/* Background pattern */}
         <div className="pointer-events-none absolute inset-0">
           <div className="absolute inset-0 bg-[radial-gradient(ellipse_60%_40%_at_50%_100%,rgba(245,158,11,0.06),transparent)]" />
         </div>
@@ -313,7 +317,7 @@ export default async function HomePage() {
               Submit your portfolio for free. Get scored, ranked, and discovered.
             </p>
             <div className="mt-8">
-              <Link href="/submit">
+              <Link href="/submit/">
                 <Button
                   size="lg"
                   className="bg-amber-500 px-8 text-sm font-semibold text-zinc-950 shadow-lg shadow-amber-500/20 hover:bg-amber-400"

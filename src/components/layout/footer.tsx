@@ -51,12 +51,13 @@ export function Footer() {
                 className="h-7 w-7 text-amber-500"
                 aria-hidden="true"
               >
-                <rect x="13" y="6" width="6" height="20" rx="1.5" fill="currentColor" opacity="0.9" />
-                <circle cx="16" cy="9" r="3.5" fill="currentColor" />
-                <path d="M8 4C8 4 10 9 16 9C22 9 24 4 24 4" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" opacity="0.4" />
-                <rect x="11" y="26" width="10" height="3" rx="1.5" fill="currentColor" opacity="0.6" />
+                <circle cx="16" cy="16" r="12" stroke="currentColor" strokeWidth="1.5" opacity="0.3" />
+                <circle cx="16" cy="16" r="8" stroke="currentColor" strokeWidth="1.5" opacity="0.15" />
+                <polygon points="16,4 17.5,14.5 16,12 14.5,14.5" fill="currentColor" opacity="0.9" />
+                <polygon points="16,28 14.5,17.5 16,20 17.5,17.5" fill="currentColor" opacity="0.4" />
+                <circle cx="16" cy="16" r="2" fill="currentColor" opacity="0.9" />
               </svg>
-              <span className="text-base font-semibold text-zinc-50">DevBeacon</span>
+              <span className="text-base font-semibold text-zinc-50">Developer Portfolio</span>
             </Link>
             <p className="mt-3 max-w-xs text-sm leading-relaxed text-zinc-400">
               Where developer craft meets discovery. Find, evaluate, and learn from the best developer portfolios.
@@ -91,7 +92,7 @@ export function Footer() {
         {/* Bottom bar */}
         <div className="flex flex-col items-center justify-between gap-4 border-t border-zinc-800/60 py-6 sm:flex-row">
           <p className="text-xs text-zinc-500">
-            &copy; {new Date().getFullYear()} DevBeacon. Built with care for the developer community.
+            &copy; {new Date().getFullYear()} Developer Portfolio. Built with care for the developer community.
           </p>
           <p className="text-xs text-zinc-600">
             Crafted for developers, by developers.

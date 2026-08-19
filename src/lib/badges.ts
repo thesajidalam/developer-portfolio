@@ -14,7 +14,7 @@ export const BADGES: Badge[] = [
   {
     id: 'featured',
     name: 'Featured Portfolio',
-    description: 'Hand-picked by the DevBeacon team for outstanding quality.',
+    description: 'Hand-picked by the Developer Portfolio team for outstanding quality.',
     icon: 'Star',
     color: 'text-amber-400',
     bgColor: 'bg-amber-500/10',

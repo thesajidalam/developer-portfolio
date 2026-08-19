@@ -55,7 +55,7 @@ export function CommandPalette({ open, onOpenChange }: CommandPaletteProps) {
     {
       id: 'submit',
       label: 'Submit Portfolio',
-      description: 'Add your portfolio to DevBeacon',
+      description: 'Add your portfolio to Developer Portfolio',
       icon: PlusCircle,
       action: () => { router.push('/submit'); onOpenChange(false) },
       keywords: ['submit', 'add', 'portfolio', 'register'],

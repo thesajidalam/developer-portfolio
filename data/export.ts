@@ -196,7 +196,7 @@ async function exportMarkdown(outputPath: string, filters?: ExportOptions['filte
   })
 
   const lines: string[] = [
-    '# DevBeacon Portfolio Directory',
+    '# Developer Portfolio Directory',
     '',
     `> Exported on ${new Date().toISOString().split('T')[0]}`,
     `> Total portfolios: ${portfolios.length}`,

@@ -1,6 +1,21 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { db } from '@/lib/db'
 
+export const dynamic = 'force-static';
+
+const portfolioIds = Array.from({ length: 18 }, (_, i) => `port-${String(i + 1).padStart(3, '0')}`)
+const portfolioSlugs = [
+  'alex-chen', 'priya-sharma', 'marcus-johnson', 'yuki-tanaka',
+  'elena-petrova', 'diego-ramirez', 'amara-okafor', 'kai-mueller',
+  'sophie-laurent', 'ravi-patel', 'lina-al-rashid', 'tom-wilson',
+  'mei-lin', 'oscar-fernandez', 'fatima-zahra', 'hans-kim',
+  'anna-kowalski', 'jamal-wright',
+]
+
+export function generateStaticParams() {
+  return [...portfolioIds, ...portfolioSlugs].map(id => ({ id }))
+}
+
 export async function GET(
   _request: NextRequest,
   { params }: { params: Promise<{ id: string }> }

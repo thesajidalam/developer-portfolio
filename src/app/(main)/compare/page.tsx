@@ -3,7 +3,7 @@ import { db } from '@/lib/db'
 import { ComparisonView } from '@/components/comparison/comparison-view'
 
 export const metadata: Metadata = {
-  title: 'Compare Portfolios — DevBeacon',
+  title: 'Compare Portfolios — Developer Portfolio',
 }
 
 export default async function ComparePage() {

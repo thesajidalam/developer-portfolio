@@ -3,7 +3,7 @@ import { db } from '@/lib/db'
 import { RankingTabs } from '@/components/comparison/ranking-tabs'
 
 export const metadata: Metadata = {
-  title: 'Rankings — DevBeacon',
+  title: 'Rankings — Developer Portfolio',
 }
 
 export default async function RankingsPage() {

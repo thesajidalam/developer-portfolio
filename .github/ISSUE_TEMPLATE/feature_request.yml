@@ -17,7 +17,7 @@ body:
     attributes:
       label: Proposed Solution
       description: Describe the solution you'd like
-      placeholder: "I'd like DevBeacon to..."
+      placeholder: "I'd like Developer Portfolio to..."
     validations:
       required: true
 
@@ -33,7 +33,7 @@ body:
     id: area
     attributes:
       label: Feature Area
-      description: Which part of DevBeacon does this affect?
+      description: Which part of Developer Portfolio does this affect?
       options:
         - Portfolio Directory
         - Scoring Engine

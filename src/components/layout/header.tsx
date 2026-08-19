@@ -39,43 +39,15 @@ export function Header() {
                 className="h-8 w-8 text-amber-500"
                 aria-hidden="true"
               >
-                <rect
-                  x="13"
-                  y="6"
-                  width="6"
-                  height="20"
-                  rx="1.5"
-                  fill="currentColor"
-                  opacity="0.9"
-                />
-                <circle cx="16" cy="9" r="3.5" fill="currentColor" />
-                <path
-                  d="M8 4C8 4 10 9 16 9C22 9 24 4 24 4"
-                  stroke="currentColor"
-                  strokeWidth="1.5"
-                  strokeLinecap="round"
-                  opacity="0.4"
-                />
-                <path
-                  d="M5 2C5 2 9 8 16 8C23 8 27 2 27 2"
-                  stroke="currentColor"
-                  strokeWidth="1.5"
-                  strokeLinecap="round"
-                  opacity="0.2"
-                />
-                <rect
-                  x="11"
-                  y="26"
-                  width="10"
-                  height="3"
-                  rx="1.5"
-                  fill="currentColor"
-                  opacity="0.6"
-                />
+                <circle cx="16" cy="16" r="12" stroke="currentColor" strokeWidth="1.5" opacity="0.3" />
+                <circle cx="16" cy="16" r="8" stroke="currentColor" strokeWidth="1.5" opacity="0.15" />
+                <polygon points="16,4 17.5,14.5 16,12 14.5,14.5" fill="currentColor" opacity="0.9" />
+                <polygon points="16,28 14.5,17.5 16,20 17.5,17.5" fill="currentColor" opacity="0.4" />
+                <circle cx="16" cy="16" r="2" fill="currentColor" opacity="0.9" />
               </svg>
             </div>
             <span className="text-lg font-semibold tracking-tight text-zinc-50">
-              DevBeacon
+              Developer Portfolio
             </span>
           </Link>
 

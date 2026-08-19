@@ -3,7 +3,7 @@ import Link from 'next/link'
 import { Zap, Eye, SearchCode, CheckCircle, Activity, Heart, Shield, Code2, ArrowRight, ExternalLink, GitBranch } from 'lucide-react'
 
 export const metadata: Metadata = {
-  title: 'About — DevBeacon',
+  title: 'About — Developer Portfolio',
 }
 
 const scoringDimensions = [
@@ -58,7 +58,7 @@ export default function AboutPage() {
             Open Source
           </div>
           <h1 className="text-4xl font-bold tracking-tight text-zinc-50 sm:text-5xl">
-            About DevBeacon
+            About Developer Portfolio
           </h1>
           <p className="mx-auto mt-6 max-w-2xl text-lg leading-relaxed text-zinc-400">
             The open-source platform for discovering, evaluating, and learning from developer portfolios.
@@ -70,7 +70,7 @@ export default function AboutPage() {
           <div className="rounded-2xl border border-zinc-800 bg-zinc-900/50 p-8">
             <h2 className="mb-4 text-xl font-semibold text-zinc-100">Our Mission</h2>
             <p className="text-sm leading-relaxed text-zinc-400">
-              DevBeacon exists to help developers build better portfolios by providing transparent,
+              Developer Portfolio exists to help developers build better portfolios by providing transparent,
               data-driven evaluations. We believe every developer deserves to showcase their work
               effectively, and every visitor deserves to find inspiration easily. By open-sourcing
               our scoring methodology and health monitoring, we empower the community to learn,
@@ -178,7 +178,7 @@ export default function AboutPage() {
             </div>
             <h2 className="mb-3 text-xl font-semibold text-zinc-100">Open Source Commitment</h2>
             <p className="text-sm leading-relaxed text-zinc-400">
-              DevBeacon is built in the open. Our scoring algorithms, health monitoring pipeline,
+              Developer Portfolio is built in the open. Our scoring algorithms, health monitoring pipeline,
               and platform code are all publicly available. We believe transparency builds trust,
               and trust builds community. Every evaluation can be reproduced, every algorithm can
               be audited, and every improvement can be contributed.
@@ -191,7 +191,7 @@ export default function AboutPage() {
           <div className="rounded-2xl border border-zinc-800 bg-zinc-900/50 p-8">
             <h2 className="mb-3 text-xl font-semibold text-zinc-100">Get Involved</h2>
             <p className="mx-auto mb-6 max-w-md text-sm text-zinc-400">
-              Have ideas for improving DevBeacon? Found a bug? Want to add a feature?
+              Have ideas for improving Developer Portfolio? Found a bug? Want to add a feature?
               We welcome contributions from the community.
             </p>
             <div className="flex flex-wrap items-center justify-center gap-3">
