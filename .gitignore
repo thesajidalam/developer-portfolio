@@ -45,3 +45,5 @@ Thumbs.db
 # prisma
 prisma/devbeacon.db
 prisma/devbeacon.db-journal
+
+.vercel

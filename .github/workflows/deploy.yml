@@ -46,6 +46,7 @@ jobs:
         run: npm run build
         env:
           DATABASE_URL: "file:./deploy.db"
+          DEPLOY_TARGET: "github-pages"
           NEXT_PUBLIC_BASE_URL: "https://thesajidalam.github.io/developer-portfolio"
 
       - name: Setup GitHub Pages
