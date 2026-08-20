@@ -1,191 +1,82 @@
+import portfoliosRaw from "./portfolios.json"
+
 const now = new Date().toISOString()
 
 function slugify(text: string): string {
   return text.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '')
 }
 
-const portfolios = [
-  {
-    id: "port-001", name: "Alex Chen", slug: "alex-chen", username: "alexchen",
-    title: "Full Stack Developer", portfolioUrl: "https://alexchen.dev",
-    githubUrl: "https://github.com/alexchen",
-    socialLinks: JSON.stringify({ twitter: "alexchendev", linkedin: "alexchen" }),
-    description: "Building tools that make developers more productive. Previously at Stripe, now exploring the intersection of AI and developer tooling.",
-    location: "San Francisco, CA", experienceLevel: "senior", status: "approved", health: "healthy",
-    framework: "Next.js", language: "TypeScript", hostingProvider: "Vercel",
-    featured: true, verified: true, submittedAt: now, updatedAt: now,
-  },
-  {
-    id: "port-002", name: "Priya Sharma", slug: "priya-sharma", username: "priyasharma",
-    title: "AI/ML Engineer", portfolioUrl: "https://priyasharma.dev",
-    githubUrl: "https://github.com/priyasharma",
-    socialLinks: JSON.stringify({ twitter: "priya_ml", linkedin: "priyasharma" }),
-    description: "Machine learning engineer passionate about NLP and computer vision. Building models that understand context and nuance.",
-    location: "Bangalore, India", experienceLevel: "mid", status: "approved", health: "healthy",
-    framework: "Astro", language: "Python", hostingProvider: "Netlify",
-    featured: true, verified: true, submittedAt: now, updatedAt: now,
-  },
-  {
-    id: "port-003", name: "Marcus Johnson", slug: "marcus-johnson", username: "marcusj",
-    title: "DevOps Engineer", portfolioUrl: "https://marcusjohnson.io",
-    githubUrl: "https://github.com/marcusj",
-    socialLinks: JSON.stringify({ linkedin: "marcusjohnson" }),
-    description: "Infrastructure engineer focused on cloud-native architecture and zero-downtime deployments. Kubernetes enthusiast.",
-    location: "Austin, TX", experienceLevel: "senior", status: "approved", health: "healthy",
-    framework: "Hugo", language: "Go", hostingProvider: "Cloudflare Pages",
-    featured: false, verified: true, submittedAt: now, updatedAt: now,
-  },
-  {
-    id: "port-004", name: "Yuki Tanaka", slug: "yuki-tanaka", username: "yukitanaka",
-    title: "Frontend Engineer", portfolioUrl: "https://yukitanaka.dev",
-    githubUrl: "https://github.com/yukitanaka",
-    socialLinks: JSON.stringify({ twitter: "yuki_codes" }),
-    description: "Creating beautiful, accessible interfaces with React and TypeScript. Deeply interested in design systems and micro-interactions.",
-    location: "Tokyo, Japan", experienceLevel: "mid", status: "approved", health: "healthy",
-    framework: "React", language: "TypeScript", hostingProvider: "Vercel",
-    featured: true, verified: true, submittedAt: now, updatedAt: now,
-  },
-  {
-    id: "port-005", name: "Elena Petrova", slug: "elena-petrova", username: "elenapetrova",
-    title: "Backend Engineer", portfolioUrl: "https://elenapetrova.com",
-    githubUrl: "https://github.com/elenapetrova",
-    socialLinks: JSON.stringify({ linkedin: "elenapetrova" }),
-    description: "Distributed systems architect with 15 years of experience. Built payment systems processing billions of transactions.",
-    location: "Berlin, Germany", experienceLevel: "principal", status: "approved", health: "needs_attention",
-    framework: null, language: "Rust", hostingProvider: "GitHub Pages",
-    featured: false, verified: true, submittedAt: now, updatedAt: now,
-  },
-  {
-    id: "port-006", name: "Diego Ramirez", slug: "diego-ramirez", username: "diegoramirez",
-    title: "Mobile Developer", portfolioUrl: "https://diegoramirez.dev",
-    githubUrl: "https://github.com/diegoramirez",
-    socialLinks: JSON.stringify({ twitter: "diego_codes", linkedin: "diegoramirez" }),
-    description: "React Native and Flutter developer building apps that work beautifully across platforms. Shipped 3 apps to the App Store.",
-    location: "Mexico City, Mexico", experienceLevel: "mid", status: "approved", health: "healthy",
-    framework: "React Native", language: "TypeScript", hostingProvider: "Vercel",
-    featured: false, verified: false, submittedAt: now, updatedAt: now,
-  },
-  {
-    id: "port-007", name: "Amara Okafor", slug: "amara-okafor", username: "amaraokafor",
-    title: "Creative Developer", portfolioUrl: "https://amaraokafor.dev",
-    githubUrl: "https://github.com/amaraokafor",
-    socialLinks: JSON.stringify({ twitter: "amara_creates" }),
-    description: "Blending code and creativity to build immersive web experiences. WebGL, Three.js, and generative art are my playground.",
-    location: "Lagos, Nigeria", experienceLevel: "mid", status: "approved", health: "healthy",
-    framework: "Next.js", language: "TypeScript", hostingProvider: "Vercel",
-    featured: true, verified: true, submittedAt: now, updatedAt: now,
-  },
-  {
-    id: "port-008", name: "Kai Mueller", slug: "kai-mueller", username: "kaimueller",
-    title: "Full Stack Developer", portfolioUrl: "https://kaimueller.dev",
-    githubUrl: "https://github.com/kaimueller",
-    socialLinks: JSON.stringify({ linkedin: "kaimueller" }),
-    description: "Recent bootcamp grad turned developer. Learning SvelteKit and Go while building my first SaaS for indie musicians.",
-    location: "Munich, Germany", experienceLevel: "junior", status: "approved", health: "healthy",
-    framework: "SvelteKit", language: "TypeScript", hostingProvider: "Vercel",
-    featured: false, verified: false, submittedAt: now, updatedAt: now,
-  },
-  {
-    id: "port-009", name: "Sophie Laurent", slug: "sophie-laurent", username: "sophielaurent",
-    title: "Frontend Engineer", portfolioUrl: "https://sophielaurent.dev",
-    githubUrl: "https://github.com/sophielaurent",
-    socialLinks: JSON.stringify({ twitter: "sophie_frontend", linkedin: "sophielaurent" }),
-    description: "Design systems architect and accessibility advocate. Built and maintained component libraries used by hundreds of engineers.",
-    location: "Paris, France", experienceLevel: "senior", status: "approved", health: "healthy",
-    framework: "React", language: "TypeScript", hostingProvider: "Netlify",
-    featured: true, verified: true, submittedAt: now, updatedAt: now,
-  },
-  {
-    id: "port-010", name: "Ravi Patel", slug: "ravi-patel", username: "ravipatel",
-    title: "DevOps Engineer", portfolioUrl: "https://ravipatel.dev",
-    githubUrl: "https://github.com/ravipatel",
-    socialLinks: JSON.stringify({ twitter: "ravi_devops", linkedin: "ravipatel" }),
-    description: "Platform engineer focused on developer experience and CI/CD automation. Building internal tools that make shipping code feel like magic.",
-    location: "Toronto, Canada", experienceLevel: "mid", status: "approved", health: "healthy",
-    framework: "Astro", language: "TypeScript", hostingProvider: "Cloudflare Pages",
-    featured: false, verified: false, submittedAt: now, updatedAt: now,
-  },
-  {
-    id: "port-011", name: "Lina Al-Rashid", slug: "lina-al-rashid", username: "linaalrashid",
-    title: "Backend Engineer", portfolioUrl: "https://linaalrashid.dev",
-    githubUrl: "https://github.com/linaalrashid",
-    socialLinks: JSON.stringify({ linkedin: "linaalrashid" }),
-    description: "Rust enthusiast building high-performance backend services. Currently working on real-time data pipelines for IoT systems.",
-    location: "Dubai, UAE", experienceLevel: "mid", status: "approved", health: "healthy",
-    framework: null, language: "Rust", hostingProvider: "GitHub Pages",
-    featured: false, verified: false, submittedAt: now, updatedAt: now,
-  },
-  {
-    id: "port-012", name: "Tom Wilson", slug: "tom-wilson", username: "tomwilson",
-    title: "Indie Hacker", portfolioUrl: "https://tomwilson.dev",
-    githubUrl: "https://github.com/tomwilson",
-    socialLinks: JSON.stringify({ twitter: "tom_builds" }),
-    description: "Former Spotify engineer now building products independently. Currently running two profitable SaaS products.",
-    location: "Bristol, UK", experienceLevel: "senior", status: "approved", health: "healthy",
-    framework: "Next.js", language: "TypeScript", hostingProvider: "Vercel",
-    featured: true, verified: true, submittedAt: now, updatedAt: now,
-  },
-  {
-    id: "port-013", name: "Mei Lin", slug: "mei-lin", username: "meilin",
-    title: "Frontend Engineer", portfolioUrl: "https://meilin.dev",
-    githubUrl: "https://github.com/meilin",
-    socialLinks: JSON.stringify({ twitter: "mei_codes", linkedin: "meilin" }),
-    description: "Self-taught developer passionate about Vue.js and web animation. Recently completed a 30-day CSS challenge.",
-    location: "Singapore", experienceLevel: "junior", status: "approved", health: "needs_attention",
-    framework: "Vue", language: "JavaScript", hostingProvider: "Netlify",
-    featured: false, verified: false, submittedAt: now, updatedAt: now,
-  },
-  {
-    id: "port-014", name: "Oscar Fernandez", slug: "oscar-fernandez", username: "oscarfernandez",
-    title: "Security Engineer", portfolioUrl: "https://oscarfernandez.dev",
-    githubUrl: "https://github.com/oscarfernandez",
-    socialLinks: JSON.stringify({ linkedin: "oscarfernandez" }),
-    description: "Application security engineer with a passion for secure coding practices. I audit codebases and build security tooling.",
-    location: "Madrid, Spain", experienceLevel: "senior", status: "approved", health: "healthy",
-    framework: "Astro", language: "TypeScript", hostingProvider: "Cloudflare Pages",
-    featured: false, verified: true, submittedAt: now, updatedAt: now,
-  },
-  {
-    id: "port-015", name: "Fatima Zahra", slug: "fatima-zahra", username: "fzahra",
-    title: "Data Engineer", portfolioUrl: "https://fzahra.dev",
-    githubUrl: "https://github.com/fzahra",
-    socialLinks: JSON.stringify({ twitter: "fzahra_data", linkedin: "fzahra" }),
-    description: "Building data pipelines that scale. Expertise in Apache Spark, Kafka, and dbt. Real-time analytics infrastructure.",
-    location: "Casablanca, Morocco", experienceLevel: "mid", status: "approved", health: "healthy",
-    framework: null, language: "Python", hostingProvider: "Vercel",
-    featured: false, verified: false, submittedAt: now, updatedAt: now,
-  },
-  {
-    id: "port-016", name: "Hans Kim", slug: "hans-kim", username: "hanskim",
-    title: "Site Reliability Engineer", portfolioUrl: "https://hanskim.dev",
-    githubUrl: "https://github.com/hanskim",
-    socialLinks: JSON.stringify({ linkedin: "hanskim" }),
-    description: "20 years in operations and reliability. I teach others how to build resilient systems. SRE book club organizer and mentor.",
-    location: "Seoul, South Korea", experienceLevel: "principal", status: "approved", health: "offline",
-    framework: "Hugo", language: "Go", hostingProvider: "GitHub Pages",
-    featured: false, verified: true, submittedAt: now, updatedAt: now,
-  },
-  {
-    id: "port-017", name: "Anna Kowalski", slug: "anna-kowalski", username: "annakowalski",
-    title: "Full Stack Developer", portfolioUrl: "https://annakowalski.dev",
-    githubUrl: "https://github.com/annakowalski",
-    socialLinks: JSON.stringify({ twitter: "anna_dev", linkedin: "annakowalski" }),
-    description: "Building with Next.js and Postgres by day, contributing to open source by night. Maintaining a popular React table library.",
-    location: "Warsaw, Poland", experienceLevel: "mid", status: "approved", health: "healthy",
-    framework: "Next.js", language: "TypeScript", hostingProvider: "Vercel",
-    featured: false, verified: true, submittedAt: now, updatedAt: now,
-  },
-  {
-    id: "port-018", name: "Jamal Wright", slug: "jamal-wright", username: "jamalwright",
-    title: "Cloud Architect", portfolioUrl: "https://jamalwright.com",
-    githubUrl: "https://github.com/jamalwright",
-    socialLinks: JSON.stringify({ twitter: "jamal_cloud", linkedin: "jamalwright" }),
-    description: "AWS Solutions Architect and infrastructure strategist. Helped migrate three enterprises to cloud-native architectures.",
-    location: "Atlanta, GA", experienceLevel: "senior", status: "approved", health: "healthy",
-    framework: "Astro", language: "TypeScript", hostingProvider: "Cloudflare Pages",
-    featured: false, verified: false, submittedAt: now, updatedAt: now,
-  },
+function seededRandom(seed: number): () => number {
+  let s = seed
+  return () => {
+    s = (s * 16807 + 0) % 2147483647
+    return (s - 1) / 2147483646
+  }
+}
+
+const roles = [
+  "Full Stack Developer", "Frontend Engineer", "Backend Engineer", "Software Engineer",
+  "DevOps Engineer", "Mobile Developer", "AI/ML Engineer", "Cloud Architect",
+  "UI/UX Designer", "Site Reliability Engineer", "Data Engineer", "Security Engineer",
+  "Creative Developer", "Indie Hacker", "System Architect", "Platform Engineer",
+  "React Developer", "Vue Developer", "Svelte Developer", "Python Developer",
+  "Go Developer", "Rust Developer", "iOS Developer", "Android Developer",
+  "Full Stack Developer", "Full Stack Developer", "Software Engineer", "Full Stack Developer",
 ]
+
+const frameworks = ["Next.js", "React", "Vue", "SvelteKit", "Astro", "Nuxt", "Angular", "Hugo", "Gatsby", "Remix"]
+const languages = ["TypeScript", "JavaScript", "Python", "Go", "Rust", "Java", "C#", "Ruby", "Swift", "Kotlin"]
+const hostingProviders = ["Vercel", "Netlify", "Cloudflare Pages", "GitHub Pages", "AWS", "Railway", "Render"]
+const experienceLevels = ["junior", "mid", "senior", "principal"]
+const statuses = ["approved", "approved", "approved", "approved", "approved"]
+const healthStates = ["healthy", "healthy", "healthy", "healthy", "needs_attention"]
+const locations = [
+  "San Francisco, CA", "New York, NY", "London, UK", "Berlin, Germany", "Tokyo, Japan",
+  "Bangalore, India", "Toronto, Canada", "Paris, France", "Austin, TX", "Singapore",
+  "Melbourne, Australia", "Stockholm, Sweden", "Seoul, South Korea", "Amsterdam, Netherlands",
+  "Remote", "Remote", "Remote", "Remote",
+]
+
+const raw = portfoliosRaw as Array<{ name: string; url: string; role: string }>
+
+const portfolios = raw.map((p, i) => {
+  const rand = seededRandom(i + 1)
+  const slug = slugify(p.name)
+  const role = p.role || roles[Math.floor(rand() * roles.length)]
+  const level = experienceLevels[Math.floor(rand() * experienceLevels.length)]
+  const fw = frameworks[Math.floor(rand() * frameworks.length)]
+  const lang = languages[Math.floor(rand() * languages.length)]
+  const host = hostingProviders[Math.floor(rand() * hostingProviders.length)]
+  const loc = locations[Math.floor(rand() * locations.length)]
+  const status = statuses[Math.floor(rand() * statuses.length)]
+  const health = healthStates[Math.floor(rand() * healthStates.length)]
+  const featured = i < 50
+  const verified = i < 200 || rand() > 0.7
+
+  return {
+    id: `port-${String(i + 1).padStart(4, '0')}`,
+    name: p.name,
+    slug: slug + (i > 0 && raw.slice(0, i).some(x => slugify(x.name) === slug) ? `-${i}` : ''),
+    username: slugify(p.name).replace(/-/g, ''),
+    title: role,
+    portfolioUrl: p.url,
+    githubUrl: null as string | null,
+    socialLinks: null as string | null,
+    description: null as string | null,
+    location: loc,
+    experienceLevel: level,
+    status,
+    health,
+    framework: fw,
+    language: lang,
+    hostingProvider: host,
+    screenshotUrl: null as string | null,
+    featured,
+    verified,
+    submittedAt: now,
+    updatedAt: now,
+  }
+})
 
 const technologies = [
   { id: "tech-001", name: "TypeScript", slug: "typescript" },
@@ -228,117 +119,81 @@ const tags = [
   { id: "tag-010", name: "Blog", slug: "blog" },
 ]
 
-const scores = [
-  { id: "score-001", portfolioId: "port-001", version: "1.0", performanceScore: 94, accessibilityScore: 91, seoScore: 88, bestPracticesScore: 92, designScore: 89, contentScore: 87, overallScore: 90, calculatedAt: now },
-  { id: "score-002", portfolioId: "port-002", version: "1.0", performanceScore: 88, accessibilityScore: 85, seoScore: 92, bestPracticesScore: 86, designScore: 91, contentScore: 93, overallScore: 89, calculatedAt: now },
-  { id: "score-003", portfolioId: "port-003", version: "1.0", performanceScore: 96, accessibilityScore: 82, seoScore: 85, bestPracticesScore: 90, designScore: 78, contentScore: 80, overallScore: 85, calculatedAt: now },
-  { id: "score-004", portfolioId: "port-004", version: "1.0", performanceScore: 91, accessibilityScore: 95, seoScore: 90, bestPracticesScore: 88, designScore: 94, contentScore: 86, overallScore: 91, calculatedAt: now },
-  { id: "score-005", portfolioId: "port-005", version: "1.0", performanceScore: 72, accessibilityScore: 78, seoScore: 80, bestPracticesScore: 75, designScore: 85, contentScore: 88, overallScore: 80, calculatedAt: now },
-  { id: "score-006", portfolioId: "port-006", version: "1.0", performanceScore: 85, accessibilityScore: 80, seoScore: 78, bestPracticesScore: 82, designScore: 83, contentScore: 79, overallScore: 81, calculatedAt: now },
-  { id: "score-007", portfolioId: "port-007", version: "1.0", performanceScore: 82, accessibilityScore: 76, seoScore: 74, bestPracticesScore: 80, designScore: 96, contentScore: 85, overallScore: 82, calculatedAt: now },
-  { id: "score-008", portfolioId: "port-008", version: "1.0", performanceScore: 78, accessibilityScore: 72, seoScore: 70, bestPracticesScore: 68, designScore: 74, contentScore: 75, overallScore: 73, calculatedAt: now },
-  { id: "score-009", portfolioId: "port-009", version: "1.0", performanceScore: 93, accessibilityScore: 98, seoScore: 91, bestPracticesScore: 94, designScore: 90, contentScore: 88, overallScore: 92, calculatedAt: now },
-  { id: "score-010", portfolioId: "port-010", version: "1.0", performanceScore: 90, accessibilityScore: 84, seoScore: 82, bestPracticesScore: 88, designScore: 80, contentScore: 78, overallScore: 84, calculatedAt: now },
-  { id: "score-011", portfolioId: "port-011", version: "1.0", performanceScore: 87, accessibilityScore: 79, seoScore: 76, bestPracticesScore: 85, designScore: 77, contentScore: 82, overallScore: 81, calculatedAt: now },
-  { id: "score-012", portfolioId: "port-012", version: "1.0", performanceScore: 92, accessibilityScore: 88, seoScore: 89, bestPracticesScore: 90, designScore: 87, contentScore: 95, overallScore: 90, calculatedAt: now },
-  { id: "score-013", portfolioId: "port-013", version: "1.0", performanceScore: 68, accessibilityScore: 65, seoScore: 72, bestPracticesScore: 60, designScore: 70, contentScore: 74, overallScore: 68, calculatedAt: now },
-  { id: "score-014", portfolioId: "port-014", version: "1.0", performanceScore: 89, accessibilityScore: 86, seoScore: 84, bestPracticesScore: 93, designScore: 81, contentScore: 83, overallScore: 86, calculatedAt: now },
-  { id: "score-015", portfolioId: "port-015", version: "1.0", performanceScore: 80, accessibilityScore: 77, seoScore: 75, bestPracticesScore: 78, designScore: 76, contentScore: 81, overallScore: 78, calculatedAt: now },
-  { id: "score-016", portfolioId: "port-016", version: "1.0", performanceScore: 55, accessibilityScore: 60, seoScore: 58, bestPracticesScore: 52, designScore: 65, contentScore: 70, overallScore: 60, calculatedAt: now },
-  { id: "score-017", portfolioId: "port-017", version: "1.0", performanceScore: 91, accessibilityScore: 87, seoScore: 86, bestPracticesScore: 89, designScore: 84, contentScore: 86, overallScore: 87, calculatedAt: now },
-  { id: "score-018", portfolioId: "port-018", version: "1.0", performanceScore: 84, accessibilityScore: 81, seoScore: 83, bestPracticesScore: 86, designScore: 79, contentScore: 82, overallScore: 83, calculatedAt: now },
-]
+const scores = portfolios.map((p, i) => {
+  const rand = seededRandom(i + 1000)
+  const base = 55 + Math.floor(rand() * 40)
+  return {
+    id: `score-${String(i + 1).padStart(4, '0')}`,
+    portfolioId: p.id,
+    version: "1.0",
+    performanceScore: Math.min(100, base + Math.floor(rand() * 20)),
+    accessibilityScore: Math.min(100, base + Math.floor(rand() * 20)),
+    seoScore: Math.min(100, base + Math.floor(rand() * 20)),
+    bestPracticesScore: Math.min(100, base + Math.floor(rand() * 20)),
+    designScore: Math.min(100, base + Math.floor(rand() * 20)),
+    contentScore: Math.min(100, base + Math.floor(rand() * 20)),
+    overallScore: base,
+    calculatedAt: now,
+  }
+})
 
-const healthChecks = [
-  { id: "hc-001", portfolioId: "port-001", checkedAt: now, statusCode: 200, responseTime: 245, sslValid: true, accessible: true },
-  { id: "hc-002", portfolioId: "port-002", checkedAt: now, statusCode: 200, responseTime: 312, sslValid: true, accessible: true },
-  { id: "hc-003", portfolioId: "port-003", checkedAt: now, statusCode: 200, responseTime: 189, sslValid: true, accessible: true },
-  { id: "hc-004", portfolioId: "port-004", checkedAt: now, statusCode: 200, responseTime: 278, sslValid: true, accessible: true },
-  { id: "hc-005", portfolioId: "port-005", checkedAt: now, statusCode: 301, responseTime: 1200, sslValid: false, accessible: true },
-  { id: "hc-006", portfolioId: "port-006", checkedAt: now, statusCode: 200, responseTime: 345, sslValid: true, accessible: true },
-  { id: "hc-007", portfolioId: "port-007", checkedAt: now, statusCode: 200, responseTime: 267, sslValid: true, accessible: true },
-  { id: "hc-008", portfolioId: "port-008", checkedAt: now, statusCode: 200, responseTime: 390, sslValid: true, accessible: true },
-  { id: "hc-009", portfolioId: "port-009", checkedAt: now, statusCode: 200, responseTime: 198, sslValid: true, accessible: true },
-  { id: "hc-010", portfolioId: "port-010", checkedAt: now, statusCode: 200, responseTime: 256, sslValid: true, accessible: true },
-  { id: "hc-011", portfolioId: "port-011", checkedAt: now, statusCode: 200, responseTime: 289, sslValid: true, accessible: true },
-  { id: "hc-012", portfolioId: "port-012", checkedAt: now, statusCode: 200, responseTime: 234, sslValid: true, accessible: true },
-  { id: "hc-013", portfolioId: "port-013", checkedAt: now, statusCode: 503, responseTime: 5000, sslValid: true, accessible: false },
-  { id: "hc-014", portfolioId: "port-014", checkedAt: now, statusCode: 200, responseTime: 212, sslValid: true, accessible: true },
-  { id: "hc-015", portfolioId: "port-015", checkedAt: now, statusCode: 200, responseTime: 278, sslValid: true, accessible: true },
-  { id: "hc-016", portfolioId: "port-016", checkedAt: now, statusCode: 0, responseTime: 0, sslValid: false, accessible: false, details: "Domain unreachable" },
-  { id: "hc-017", portfolioId: "port-017", checkedAt: now, statusCode: 200, responseTime: 223, sslValid: true, accessible: true },
-  { id: "hc-018", portfolioId: "port-018", checkedAt: now, statusCode: 200, responseTime: 301, sslValid: true, accessible: true },
-]
+const healthChecks = portfolios.map((p, i) => {
+  const rand = seededRandom(i + 2000)
+  const healthy = rand() > 0.1
+  return {
+    id: `hc-${String(i + 1).padStart(4, '0')}`,
+    portfolioId: p.id,
+    checkedAt: now,
+    statusCode: healthy ? 200 : (rand() > 0.5 ? 301 : 503),
+    responseTime: Math.floor(150 + rand() * 800),
+    sslValid: rand() > 0.05,
+    accessible: healthy,
+  }
+})
 
-function pt(portfolioId: string, technologyId: string) {
-  return { portfolioId, technologyId }
-}
+const tagIds = tags.map(t => t.id)
+const catIds = categories.map(c => c.id)
 
-const portfolioTechnologies = [
-  pt("port-001", "tech-001"), pt("port-001", "tech-007"), pt("port-001", "tech-006"),
-  pt("port-002", "tech-003"), pt("port-002", "tech-010"),
-  pt("port-003", "tech-004"), pt("port-003", "tech-011"), pt("port-003", "tech-012"),
-  pt("port-004", "tech-001"), pt("port-004", "tech-006"),
-  pt("port-005", "tech-005"),
-  pt("port-006", "tech-001"), pt("port-006", "tech-006"),
-  pt("port-007", "tech-001"), pt("port-007", "tech-007"), pt("port-007", "tech-006"),
-  pt("port-008", "tech-001"), pt("port-008", "tech-009"), pt("port-008", "tech-004"),
-  pt("port-009", "tech-001"), pt("port-009", "tech-006"),
-  pt("port-010", "tech-001"), pt("port-010", "tech-010"), pt("port-010", "tech-011"),
-  pt("port-011", "tech-005"),
-  pt("port-012", "tech-001"), pt("port-012", "tech-007"), pt("port-012", "tech-006"),
-  pt("port-013", "tech-002"), pt("port-013", "tech-008"),
-  pt("port-014", "tech-001"), pt("port-014", "tech-010"),
-  pt("port-015", "tech-003"),
-  pt("port-016", "tech-004"),
-  pt("port-017", "tech-001"), pt("port-017", "tech-007"), pt("port-017", "tech-006"),
-  pt("port-018", "tech-001"), pt("port-018", "tech-010"),
-]
+const portfolioTags = portfolios.flatMap((p, i) => {
+  const rand = seededRandom(i + 3000)
+  const count = Math.floor(rand() * 3) + 1
+  const picked = new Set<string>()
+  while (picked.size < count && picked.size < tagIds.length) {
+    picked.add(tagIds[Math.floor(rand() * tagIds.length)])
+  }
+  return Array.from(picked).map(tagId => ({ portfolioId: p.id, tagId }))
+})
 
-function pc(portfolioId: string, categoryId: string) {
-  return { portfolioId, categoryId }
-}
+const portfolioCategories = portfolios.flatMap((p, i) => {
+  const rand = seededRandom(i + 4000)
+  const count = Math.floor(rand() * 2) + 1
+  const picked = new Set<string>()
+  while (picked.size < count && picked.size < catIds.length) {
+    picked.add(catIds[Math.floor(rand() * catIds.length)])
+  }
+  return Array.from(picked).map(categoryId => ({ portfolioId: p.id, categoryId }))
+})
 
-const portfolioCategories = [
-  pc("port-001", "cat-001"), pc("port-001", "cat-007"),
-  pc("port-002", "cat-001"), pc("port-002", "cat-010"),
-  pc("port-003", "cat-003"), pc("port-003", "cat-010"),
-  pc("port-004", "cat-002"), pc("port-004", "cat-006"), pc("port-004", "cat-004"),
-  pc("port-005", "cat-007"), pc("port-005", "cat-010"),
-  pc("port-006", "cat-007"),
-  pc("port-007", "cat-008"), pc("port-007", "cat-002"),
-  pc("port-008", "cat-005"),
-  pc("port-009", "cat-004"), pc("port-009", "cat-006"), pc("port-009", "cat-009"),
-  pc("port-010", "cat-010"), pc("port-010", "cat-003"),
-  pc("port-012", "cat-001"), pc("port-012", "cat-009"),
-  pc("port-013", "cat-005"),
-  pc("port-017", "cat-007"), pc("port-017", "cat-003"),
-]
+const techIds = technologies.map(t => t.id)
 
-function ptg(portfolioId: string, tagId: string) {
-  return { portfolioId, tagId }
-}
-
-const portfolioTags = [
-  ptg("port-001", "tag-009"), ptg("port-001", "tag-008"),
-  ptg("port-002", "tag-007"), ptg("port-002", "tag-010"),
-  ptg("port-003", "tag-007"),
-  ptg("port-004", "tag-003"), ptg("port-004", "tag-008"),
-  ptg("port-005", "tag-007"),
-  ptg("port-006", "tag-008"),
-  ptg("port-007", "tag-004"), ptg("port-007", "tag-005"), ptg("port-007", "tag-006"),
-  ptg("port-008", "tag-001"),
-  ptg("port-009", "tag-008"), ptg("port-009", "tag-002"),
-  ptg("port-010", "tag-007"),
-  ptg("port-011", "tag-007"),
-  ptg("port-012", "tag-001"), ptg("port-012", "tag-010"),
-  ptg("port-013", "tag-003"), ptg("port-013", "tag-002"),
-  ptg("port-014", "tag-007"),
-  ptg("port-015", "tag-007"),
-  ptg("port-016", "tag-007"),
-  ptg("port-017", "tag-001"), ptg("port-017", "tag-008"),
-  ptg("port-018", "tag-007"),
-]
+const portfolioTechnologies = portfolios.map((p) => {
+  const techMap: Record<string, string[]> = {
+    "Next.js": ["tech-001", "tech-007", "tech-006"],
+    "React": ["tech-001", "tech-006"],
+    "Vue": ["tech-002", "tech-008"],
+    "SvelteKit": ["tech-001", "tech-009"],
+    "Astro": ["tech-001", "tech-010"],
+    "Nuxt": ["tech-002", "tech-008"],
+    "Angular": ["tech-002"],
+    "Hugo": ["tech-004"],
+    "Gatsby": ["tech-002", "tech-006"],
+    "Remix": ["tech-001", "tech-006"],
+  }
+  return (techMap[p.framework || "React"] || ["tech-001", "tech-006"]).map(technologyId => ({
+    portfolioId: p.id,
+    technologyId,
+  }))
+}).flat()
 
 export const seedData = {
   portfolios,
