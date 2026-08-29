@@ -13,48 +13,12 @@ export interface ScoringMethodology {
 export const SCORING_V1: ScoringMethodology = {
   version: '1.0',
   dimensions: [
-    {
-      name: 'Performance',
-      key: 'performancescore',
-      weight: 0.20,
-      description: 'Page load speed, bundle size, Core Web Vitals (LCP, FID, CLS)',
-      automated: true,
-    },
-    {
-      name: 'Accessibility',
-      key: 'accessibilityscore',
-      weight: 0.15,
-      description: 'WCAG compliance, keyboard navigation, screen reader support',
-      automated: true,
-    },
-    {
-      name: 'SEO',
-      key: 'seoscore',
-      weight: 0.15,
-      description: 'Meta tags, semantic HTML, structured data, crawlability',
-      automated: true,
-    },
-    {
-      name: 'Best Practices',
-      key: 'bestpracticesscore',
-      weight: 0.10,
-      description: 'HTTPS, security headers, no vulnerable dependencies',
-      automated: true,
-    },
-    {
-      name: 'Design',
-      key: 'designscore',
-      weight: 0.20,
-      description: 'Visual hierarchy, typography, color, spacing, consistency',
-      automated: false,
-    },
-    {
-      name: 'Content',
-      key: 'contentscore',
-      weight: 0.20,
-      description: 'Clarity, storytelling, project presentation, personality',
-      automated: false,
-    },
+    { name: 'Performance', key: 'performancescore', weight: 0.2, description: 'Page load speed, bundle size, Core Web Vitals (LCP, CLS, INP)', automated: true },
+    { name: 'Accessibility', key: 'accessibilityscore', weight: 0.15, description: 'WCAG compliance, keyboard navigation, screen reader support', automated: true },
+    { name: 'SEO', key: 'seoscore', weight: 0.15, description: 'Meta tags, semantic HTML, structured data, crawlability', automated: true },
+    { name: 'Best Practices', key: 'bestpracticesscore', weight: 0.1, description: 'HTTPS, security headers, no known vulnerable dependencies', automated: true },
+    { name: 'Design', key: 'designscore', weight: 0.2, description: 'Visual hierarchy, typography, color, spacing, consistency', automated: false },
+    { name: 'Content', key: 'contentscore', weight: 0.2, description: 'Clarity, storytelling, project presentation, personality', automated: false },
   ],
   calculateOverall(scores) {
     let total = 0
@@ -70,10 +34,7 @@ export const SCORING_V1: ScoringMethodology = {
   },
 }
 
-export function calculateScore(
-  scores: Record<string, number>,
-  methodology: ScoringMethodology = SCORING_V1,
-): number {
+export function calculateScore(scores: Record<string, number>, methodology: ScoringMethodology = SCORING_V1): number {
   return methodology.calculateOverall(scores)
 }
 
@@ -96,7 +57,6 @@ export function getScoreBreakdown(
     designscore: score.designScore,
     contentscore: score.contentScore,
   }
-
   return methodology.dimensions.map((dim) => ({
     name: dim.name,
     key: dim.key,
@@ -106,4 +66,12 @@ export function getScoreBreakdown(
     automated: dim.automated,
     description: dim.description,
   }))
+}
+
+export function scoreLabel(score: number): { label: string; color: string } {
+  if (score >= 90) return { label: 'Excellent', color: 'text-emerald-500' }
+  if (score >= 75) return { label: 'Great', color: 'text-green-500' }
+  if (score >= 60) return { label: 'Good', color: 'text-amber-500' }
+  if (score >= 40) return { label: 'Fair', color: 'text-orange-500' }
+  return { label: 'Needs work', color: 'text-red-500' }
 }

@@ -1,64 +1,17 @@
-import { NextRequest, NextResponse } from 'next/server'
-import { db } from '@/lib/db'
+import { NextResponse } from 'next/server'
+import type { NextRequest } from 'next/server'
+import { listPortfolios } from '@/lib/repository'
 import { SearchQuerySchema } from '@/lib/validations'
 
+export const runtime = 'nodejs'
+export const dynamic = 'force-dynamic'
+
 export async function GET(request: NextRequest) {
-  try {
-    const { searchParams } = new URL(request.url)
-    const q = searchParams.get('q') ?? ''
-
-    const parsed = SearchQuerySchema.safeParse({ q })
-    if (!parsed.success) {
-      return NextResponse.json(
-        { error: 'Search query is required' },
-        { status: 400 }
-      )
-    }
-
-    const query = parsed.data.q
-
-    const portfolios = await db.portfolio.findMany({
-      where: {
-        status: 'approved',
-        OR: [
-          { name: { contains: query } },
-          { title: { contains: query } },
-          { description: { contains: query } },
-          {
-            technologies: {
-              some: {
-                technology: { name: { contains: query } },
-              },
-            },
-          },
-        ],
-      },
-      include: {
-        technologies: { include: { technology: true } },
-        categories: { include: { category: true } },
-        score: true,
-      },
-      orderBy: { submittedAt: 'desc' },
-      take: 20,
-    })
-
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const data = portfolios.map((p: any) => ({
-      ...p,
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      technologies: p.technologies.map((pt: any) => pt.technology),
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      categories: p.categories.map((pc: any) => pc.category),
-      score: p.score ?? null,
-    }))
-
-    return NextResponse.json({
-      portfolios: data,
-      total: data.length,
-      query,
-    })
-  } catch (error) {
-    console.error('Search failed:', error)
-    return NextResponse.json({ error: 'Internal server error' }, { status: 500 })
+  const params = new URL(request.url).searchParams
+  const parsed = SearchQuerySchema.safeParse(Object.fromEntries(params))
+  if (!parsed.success) {
+    return NextResponse.json({ error: 'Invalid search query' }, { status: 400 })
   }
+  const result = await listPortfolios({ search: parsed.data.q, pageSize: 20 })
+  return NextResponse.json({ data: result.data }, { status: 200 })
 }

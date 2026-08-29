@@ -1,38 +1,46 @@
-import type { Metadata } from 'next'
-import { Inter } from 'next/font/google'
-import { TooltipProvider } from '@/components/ui/tooltip'
-import { Header } from '@/components/layout/header'
-import { Footer } from '@/components/layout/footer'
+import type { Metadata, Viewport } from 'next'
 import './globals.css'
-
-const inter = Inter({
-  variable: '--font-inter',
-  subsets: ['latin'],
-})
+import { Navbar } from '@/components/Navbar'
+import { Footer } from '@/components/Footer'
 
 export const metadata: Metadata = {
-  title: 'Developer Portfolio — Discover. Evaluate. Learn.',
+  metadataBase: new URL(process.env.NEXT_PUBLIC_BASE_URL || 'http://localhost:3000'),
+  title: {
+    default: 'DevFolio — Discover Developer Portfolios',
+    template: '%s · DevFolio',
+  },
   description:
-    'Developer Portfolio is a curated platform for discovering, evaluating, and learning from the best developer portfolios. Find inspiration, compare skills, and showcase your craft.',
+    'DevFolio is a curated directory of 1,900+ developer portfolios, scored across performance, accessibility, SEO, design and content.',
+  keywords: ['developer portfolio', 'directory', 'web development', 'frontend', 'portfolios', 'DevFolio'],
+  openGraph: {
+    type: 'website',
+    siteName: 'DevFolio',
+    title: 'DevFolio — Discover Developer Portfolios',
+    description:
+      'Explore and compare 1,900+ curated developer portfolios, ranked by a transparent six-dimension scoring model.',
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'DevFolio — Discover Developer Portfolios',
+    description:
+      'Explore and compare 1,900+ curated developer portfolios, ranked by a transparent six-dimension scoring model.',
+  },
+  robots: { index: true, follow: true },
+}
+
+export const viewport: Viewport = {
+  themeColor: '#0f172a',
+  width: 'device-width',
+  initialScale: 1,
 }
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en" className={`${inter.variable} h-full`}>
-      <body className="min-h-full bg-zinc-950 font-sans text-zinc-50 antialiased">
-        <a
-          href="#main-content"
-          className="sr-only focus:not-sr-only focus:absolute focus:z-[100] focus:rounded-md focus:bg-amber-500 focus:px-4 focus:py-2 focus:text-sm focus:font-semibold focus:text-zinc-950 focus:outline-none"
-        >
-          Skip to content
-        </a>
-        <TooltipProvider delayDuration={200}>
-          <Header />
-          <main id="main-content" className="flex-1">
-            {children}
-          </main>
-          <Footer />
-        </TooltipProvider>
+    <html lang="en">
+      <body className="min-h-screen bg-slate-950 text-slate-100 antialiased">
+        <Navbar />
+        <main className="flex min-h-[calc(100vh-10rem)] flex-col">{children}</main>
+        <Footer />
       </body>
     </html>
   )

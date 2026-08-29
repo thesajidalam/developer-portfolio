@@ -32,6 +32,11 @@ export const UrlValidationSchema = z.object({
     .refine((u) => u.startsWith('https://'), 'Only HTTPS URLs are accepted'),
 })
 
+export const ComparisonSchema = z.object({
+  ids: z.array(z.string().min(1)).min(2).max(5),
+})
+
 export type PortfolioFiltersInput = z.infer<typeof PortfolioFiltersSchema>
 export type SubmissionInput = z.infer<typeof SubmissionSchema>
 export type UrlValidationInput = z.infer<typeof UrlValidationSchema>
+export type ComparisonInput = z.infer<typeof ComparisonSchema>

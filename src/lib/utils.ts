@@ -1,13 +1,12 @@
-import { type ClassValue, clsx } from "clsx"
-import { twMerge } from "tailwind-merge"
-
-export function cn(...inputs: ClassValue[]) {
-  return twMerge(clsx(inputs))
+export function cn(...inputs: Array<string | false | null | undefined>): string {
+  return inputs.filter(Boolean).join(' ')
 }
 
 export function formatDate(date: Date | string): string {
   return new Date(date).toLocaleDateString('en-US', {
-    year: 'numeric', month: 'short', day: 'numeric'
+    year: 'numeric',
+    month: 'short',
+    day: 'numeric',
   })
 }
 
@@ -30,24 +29,51 @@ export function getScoreBg(score: number): string {
 }
 
 export function getHealthColor(health: string): string {
-  switch(health) {
-    case 'healthy': return 'bg-emerald-500'
-    case 'needs_attention': return 'bg-yellow-500'
-    case 'offline': return 'bg-red-500'
-    default: return 'bg-zinc-400'
+  switch (health) {
+    case 'healthy':
+      return 'bg-emerald-500'
+    case 'needs_attention':
+      return 'bg-yellow-500'
+    case 'down':
+    case 'offline':
+      return 'bg-red-500'
+    default:
+      return 'bg-zinc-400'
   }
 }
 
 export function getHealthLabel(health: string): string {
-  switch(health) {
-    case 'healthy': return 'Healthy'
-    case 'needs_attention': return 'Needs attention'
-    case 'offline': return 'Offline'
-    default: return 'Unknown'
+  switch (health) {
+    case 'healthy':
+      return 'Healthy'
+    case 'needs_attention':
+      return 'Needs attention'
+    case 'down':
+    case 'offline':
+      return 'Offline'
+    default:
+      return 'Unknown'
   }
 }
 
 export function truncate(text: string, length: number): string {
   if (text.length <= length) return text
   return text.slice(0, length) + '…'
+}
+
+export function hostnameOf(url: string): string {
+  try {
+    return new URL(url).hostname.replace(/^www\./, '')
+  } catch {
+    return url
+  }
+}
+
+export function initials(name: string): string {
+  return name
+    .split(/\s+/)
+    .filter(Boolean)
+    .slice(0, 2)
+    .map((w) => w[0]?.toUpperCase() ?? '')
+    .join('')
 }

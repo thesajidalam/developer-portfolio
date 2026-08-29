@@ -1,97 +1,60 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { db } from '@/lib/db'
+import { checkAdminKey } from '@/lib/admin-auth'
+import {
+  adminListPortfolios,
+  adminUpdatePortfolio,
+  adminDeletePortfolio,
+} from '@/lib/repository'
+
+export const runtime = 'nodejs'
+export const dynamic = 'force-dynamic'
 
 export async function GET(request: NextRequest) {
+  const unauthorized = checkAdminKey(request)
+  if (unauthorized) return unauthorized
+
   try {
-    const { searchParams } = new URL(request.url)
-    const page = Math.max(1, parseInt(searchParams.get('page') || '1', 10))
-    const pageSize = Math.min(100, Math.max(1, parseInt(searchParams.get('pageSize') || '15', 10)))
-    const status = searchParams.get('status') || undefined
-    const q = searchParams.get('q') || undefined
-
-    const where: Record<string, unknown> = {}
-
-    if (status && status !== 'all') {
-      where.status = status
-    }
-
-    if (q) {
-      where.OR = [
-        { name: { contains: q } },
-        { title: { contains: q } },
-        { description: { contains: q } },
-        { portfolioUrl: { contains: q } },
-      ]
-    }
-
-    const [total, portfolios] = await Promise.all([
-      db.portfolio.count({ where }),
-      db.portfolio.findMany({
-        where,
-        orderBy: { submittedAt: 'desc' },
-        skip: (page - 1) * pageSize,
-        take: pageSize,
-        include: {
-          score: true,
-        },
-      }),
-    ])
-
-    return NextResponse.json({
-      data: portfolios,
-      meta: {
-        total,
-        page,
-        pageSize,
-        totalPages: Math.ceil(total / pageSize),
-      },
-    })
+    const sp = new URL(request.url).searchParams
+    const page = Math.max(1, parseInt(sp.get('page') || '1', 10))
+    const pageSize = Math.min(100, Math.max(1, parseInt(sp.get('pageSize') || '15', 10)))
+    const status = sp.get('status') || undefined
+    const q = sp.get('q') || undefined
+    const result = await adminListPortfolios(page, pageSize, status, q)
+    return NextResponse.json(result)
   } catch (error) {
-    console.error('Failed to fetch admin portfolios:', error)
+    console.error('Admin list portfolios failed:', error)
     return NextResponse.json({ error: 'Internal server error' }, { status: 500 })
   }
 }
 
 export async function PATCH(request: NextRequest) {
-  try {
-    const body = await request.json()
-    const { id, status, featured, verified } = body
+  const unauthorized = checkAdminKey(request)
+  if (unauthorized) return unauthorized
 
-    if (!id) {
+  try {
+    const body = await request.json().catch(() => null)
+    if (!body || !body.id) {
       return NextResponse.json({ error: 'id is required' }, { status: 400 })
     }
-
-    const data: Record<string, unknown> = { updatedAt: new Date() }
-    if (status) data.status = status
-    if (typeof featured === 'boolean') data.featured = featured
-    if (typeof verified === 'boolean') data.verified = verified
-
-    const updated = await db.portfolio.update({
-      where: { id },
-      data,
-    })
-
+    const updated = await adminUpdatePortfolio(String(body.id), body)
     return NextResponse.json({ data: updated })
   } catch (error) {
-    console.error('Failed to update portfolio:', error)
+    console.error('Admin update portfolio failed:', error)
     return NextResponse.json({ error: 'Internal server error' }, { status: 500 })
   }
 }
 
 export async function DELETE(request: NextRequest) {
+  const unauthorized = checkAdminKey(request)
+  if (unauthorized) return unauthorized
+
   try {
-    const { searchParams } = new URL(request.url)
-    const id = searchParams.get('id')
-
-    if (!id) {
-      return NextResponse.json({ error: 'id is required' }, { status: 400 })
-    }
-
-    await db.portfolio.delete({ where: { id } })
-
+    const id = new URL(request.url).searchParams.get('id')
+    if (!id) return NextResponse.json({ error: 'id is required' }, { status: 400 })
+    await adminDeletePortfolio(id)
     return NextResponse.json({ data: { deleted: true } })
   } catch (error) {
-    console.error('Failed to delete portfolio:', error)
+    console.error('Admin delete portfolio failed:', error)
     return NextResponse.json({ error: 'Internal server error' }, { status: 500 })
   }
 }

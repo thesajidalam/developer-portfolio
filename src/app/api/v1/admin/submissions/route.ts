@@ -1,104 +1,67 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { db } from '@/lib/db'
+import { checkAdminKey } from '@/lib/admin-auth'
+import {
+  listSubmissions,
+  getSubmissionById,
+  updateSubmission,
+  createPortfolioFromSubmission,
+} from '@/lib/repository'
+
+export const runtime = 'nodejs'
+export const dynamic = 'force-dynamic'
 
 export async function GET(request: NextRequest) {
+  const unauthorized = checkAdminKey(request)
+  if (unauthorized) return unauthorized
+
   try {
-    const { searchParams } = new URL(request.url)
-    const page = Math.max(1, parseInt(searchParams.get('page') || '1', 10))
-    const pageSize = Math.min(100, Math.max(1, parseInt(searchParams.get('pageSize') || '15', 10)))
-    const status = searchParams.get('status') || undefined
-
-    const where: Record<string, unknown> = {}
-
-    if (status && status !== 'all') {
-      where.status = status
-    }
-
-    const [total, submissions] = await Promise.all([
-      db.submission.count({ where }),
-      db.submission.findMany({
-        where,
-        orderBy: { createdAt: 'desc' },
-        skip: (page - 1) * pageSize,
-        take: pageSize,
-      }),
-    ])
-
-    return NextResponse.json({
-      data: submissions,
-      meta: {
-        total,
-        page,
-        pageSize,
-        totalPages: Math.ceil(total / pageSize),
-      },
-    })
+    const sp = new URL(request.url).searchParams
+    const page = Math.max(1, parseInt(sp.get('page') || '1', 10))
+    const pageSize = Math.min(100, Math.max(1, parseInt(sp.get('pageSize') || '15', 10)))
+    const status = sp.get('status') || undefined
+    const result = await listSubmissions(page, pageSize, status)
+    return NextResponse.json(result)
   } catch (error) {
-    console.error('Failed to fetch submissions:', error)
+    console.error('Admin list submissions failed:', error)
     return NextResponse.json({ error: 'Internal server error' }, { status: 500 })
   }
 }
 
 export async function PATCH(request: NextRequest) {
-  try {
-    const body = await request.json()
-    const { id, status } = body
+  const unauthorized = checkAdminKey(request)
+  if (unauthorized) return unauthorized
 
-    if (!id || !status) {
+  try {
+    const body = await request.json().catch(() => null)
+    if (!body || !body.id || !body.status) {
       return NextResponse.json({ error: 'id and status are required' }, { status: 400 })
     }
 
-    const submission = await db.submission.findUnique({ where: { id } })
+    const submission = await getSubmissionById(String(body.id))
     if (!submission) {
       return NextResponse.json({ error: 'Submission not found' }, { status: 404 })
     }
 
-    const updated = await db.submission.update({
-      where: { id },
-      data: { status, processedAt: new Date() },
+    const updated = await updateSubmission(submission.id, {
+      status: String(body.status),
+      processed_at: new Date().toISOString(),
     })
 
-    if (status === 'completed') {
-      const slug = submission.portfolioUrl
-        .replace(/^https?:\/\//, '')
-        .replace(/^www\./, '')
-        .replace(/\/+$/, '')
-        .split('/')
-        .slice(0, 2)
-        .join('-')
-        .toLowerCase()
-        .replace(/[^a-z0-9-]/g, '-')
-        .replace(/-+/g, '-')
-        .replace(/^-|-$/g, '')
-
-      let result: Record<string, unknown> = {}
-      if (submission.result) {
-        try {
-          result = JSON.parse(submission.result)
-        } catch {
-          result = {}
-        }
-      }
-
-      const now = new Date()
-      await db.portfolio.create({
-        data: {
-          name: submission.submitterName || slug,
-          slug: `${slug}-${Date.now()}`,
-          portfolioUrl: submission.portfolioUrl,
-          description: (result.description as string) || null,
-          experienceLevel: 'mid',
-          status: 'pending',
-          health: 'unknown',
-          submittedAt: now,
-          updatedAt: now,
-        },
+    if (body.status === 'completed') {
+      const description =
+        submission.result && typeof submission.result === 'object' && 'role' in submission.result
+          ? String((submission.result as { role?: unknown }).role ?? '') || null
+          : null
+      await createPortfolioFromSubmission({
+        portfolioUrl: submission.portfolioUrl,
+        name: submission.submitterName || 'New Portfolio',
+        description,
       })
     }
 
     return NextResponse.json({ data: updated })
   } catch (error) {
-    console.error('Failed to update submission:', error)
+    console.error('Admin update submission failed:', error)
     return NextResponse.json({ error: 'Internal server error' }, { status: 500 })
   }
 }
