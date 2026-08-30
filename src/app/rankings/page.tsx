@@ -110,6 +110,7 @@ export default async function RankingsPage({
           {page > 1 ? (
             <Link
               href={`/rankings?page=${page - 1}`}
+              scroll={false}
               className="rounded-lg border border-white/10 bg-white/[0.03] px-4 py-2 text-sm font-medium text-slate-300 transition-colors hover:border-indigo-500/50 hover:text-white"
             >
               ← Previous
@@ -122,6 +123,7 @@ export default async function RankingsPage({
           {page < result.meta.totalPages ? (
             <Link
               href={`/rankings?page=${page + 1}`}
+              scroll={false}
               className="shine rounded-lg bg-gradient-to-r from-indigo-500 to-sky-500 px-4 py-2 text-sm font-semibold text-white shadow-lg shadow-indigo-500/25 transition-all hover:scale-[1.03] hover:shadow-xl hover:shadow-indigo-500/40 active:scale-95"
             >
               Next →

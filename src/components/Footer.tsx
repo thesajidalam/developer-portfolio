@@ -7,8 +7,14 @@ const cols: { title: string; links: { href: string; label: string }[] }[] = [
     links: [
       { href: '/', label: 'Gallery' },
       { href: '/rankings', label: 'Rankings' },
-      { href: '/compare', label: 'Compare' },
-      { href: '/submit', label: 'Submit a portfolio' },
+    ],
+  },
+  {
+    title: 'Service',
+    links: [
+      { href: '/compare', label: 'Compare portfolios' },
+      { href: '/submit', label: 'List your portfolio' },
+      { href: '/privacy', label: 'Privacy policy' },
     ],
   },
   {
@@ -22,14 +28,15 @@ const cols: { title: string; links: { href: string; label: string }[] }[] = [
 
 export function Footer() {
   return (
-    <footer className="relative overflow-hidden border-t border-slate-800/80 bg-slate-950">
+    <footer className="relative overflow-hidden border-t border-white/5 bg-[#04050d]">
       <div className="pointer-events-none absolute -top-40 left-1/2 h-80 w-[42rem] -translate-x-1/2 rounded-full bg-indigo-500/10 blur-3xl" />
+      <div className="pointer-events-none absolute -bottom-32 right-0 h-72 w-96 rounded-full bg-sky-500/8 blur-3xl" />
       <div className="relative mx-auto max-w-7xl px-4 py-14 sm:px-6">
         <div className="grid gap-10 sm:grid-cols-3">
           <div className="space-y-4">
             <Logo />
             <p className="max-w-xs text-sm leading-relaxed text-slate-400">
-              A curated directory of developer portfolios, transparently scored across six dimensions.
+              A curated directory of developer portfolios — transparently rated so the best work is never hard to find.
             </p>
           </div>
           {cols.map((col) => (
@@ -53,13 +60,18 @@ export function Footer() {
             </div>
           ))}
         </div>
-        <div className="mt-12 flex flex-col items-center justify-between gap-4 border-t border-slate-800/60 pt-6 text-sm text-slate-500 sm:flex-row">
-          <p>© {new Date().getFullYear()} DevFolio. Built with care, rated with transparency.</p>
+        <div className="mt-12 flex flex-col items-center justify-between gap-4 border-t border-white/5 pt-6 text-sm text-slate-500 sm:flex-row">
+          <div className="flex flex-col items-center gap-1 sm:items-start">
+            <p>© {new Date().getFullYear()} DevFolio. Built with care, rated with transparency.</p>
+            <p className="text-xs text-slate-600">
+              Your data stays private and is never shared. Ratings are open and visible to everyone.
+            </p>
+          </div>
           <a
             href="https://github.com/thesajidalam"
             target="_blank"
             rel="noopener noreferrer"
-            className="group inline-flex items-center gap-2 rounded-full border border-slate-800 bg-slate-900/60 px-4 py-2 text-sm font-medium text-slate-300 shadow-sm transition-all hover:-translate-y-0.5 hover:border-indigo-500/50 hover:text-white hover:shadow-lg hover:shadow-indigo-500/10"
+            className="group inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/[0.03] px-4 py-2 text-sm font-medium text-slate-300 shadow-sm transition-all hover:-translate-y-0.5 hover:border-indigo-500/50 hover:text-white hover:shadow-lg hover:shadow-indigo-500/10"
           >
             <span className="h-1.5 w-1.5 rounded-full bg-gradient-to-r from-indigo-400 to-sky-400 transition-transform group-hover:scale-125" />
             <span className="text-slate-400">Made by</span>

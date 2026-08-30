@@ -47,24 +47,26 @@ function Pagination({
         {prevHref ? (
           <Link
             href={prevHref}
-            className="rounded-lg border border-slate-800 bg-slate-900/60 px-4 py-2 text-sm font-medium text-slate-300 transition-colors hover:border-indigo-500/50 hover:text-white"
+            scroll={false}
+            className="rounded-lg border border-white/10 bg-white/[0.03] px-4 py-2 text-sm font-medium text-slate-300 transition-colors hover:border-indigo-500/50 hover:text-white"
           >
             ← Previous
           </Link>
         ) : (
-          <span className="cursor-not-allowed rounded-lg border border-slate-800/60 px-4 py-2 text-sm font-medium text-slate-600">
+          <span className="cursor-not-allowed rounded-lg border border-white/5 px-4 py-2 text-sm font-medium text-slate-600">
             ← Previous
           </span>
         )}
         {nextHref ? (
           <Link
             href={nextHref}
+            scroll={false}
             className="shine rounded-lg bg-gradient-to-r from-indigo-500 to-sky-500 px-4 py-2 text-sm font-semibold text-white shadow-lg shadow-indigo-500/25 transition-all hover:scale-[1.03] hover:shadow-xl hover:shadow-indigo-500/40 active:scale-95"
           >
             Next →
           </Link>
         ) : (
-          <span className="cursor-not-allowed rounded-lg border border-slate-800/60 px-4 py-2 text-sm font-medium text-slate-600">
+          <span className="cursor-not-allowed rounded-lg border border-white/5 px-4 py-2 text-sm font-medium text-slate-600">
             Next →
           </span>
         )}
@@ -89,9 +91,10 @@ export default async function HomePage({ searchParams }: { searchParams: Promise
 
   const filters = parsed.success ? parsed.data : { page: 1, pageSize: 12 }
 
-  const [total, trending, gallery] = await Promise.all([
+  const [total, trending, topPortfolio, gallery] = await Promise.all([
     getTotalCount(),
     getTrendingPortfolios(8),
+    listPortfolios({ sort: 'score', page: 1, pageSize: 1 }).then((r) => r.data[0] ?? null),
     listPortfolios({
       search: filters.search,
       tech: filters.tech,
@@ -171,7 +174,7 @@ export default async function HomePage({ searchParams }: { searchParams: Promise
               </div>
             </div>
 
-            {/* floating score card */}
+            {/* floating top-portfolio card */}
             <div className="hidden flex-1 justify-center lg:flex">
               <div className="reveal reveal-visible relative w-full max-w-sm rounded-2xl border border-white/10 bg-white/[0.03] p-6 shadow-2xl shadow-indigo-500/10 backdrop-blur-xl">
                 <div className="mb-4 flex items-center justify-between">
@@ -180,32 +183,59 @@ export default async function HomePage({ searchParams }: { searchParams: Promise
                 </div>
                 <div className="flex items-center gap-4">
                   <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-gradient-to-br from-indigo-500 to-sky-400 text-xl font-bold text-white shadow-lg shadow-indigo-500/30">
-                    A
+                    {topPortfolio?.name?.charAt(0) ?? 'D'}
                   </div>
                   <div>
-                    <div className="font-semibold text-white">A curated pick</div>
-                    <div className="text-sm text-slate-500">Score 98 / 100</div>
+                    <div className="font-semibold text-white">{topPortfolio?.name ?? 'Discover something new'}</div>
+                    <div className="text-sm text-slate-500">
+                      {topPortfolio?.score ? `Score ${topPortfolio.score.overallScore} / 100` : 'Rated across six dimensions'}
+                    </div>
                   </div>
                 </div>
                 <div className="mt-5 space-y-3">
                   {[
-                    ['Performance', 92],
-                    ['Design', 97],
-                    ['Content', 90],
-                  ].map(([label, v]) => (
-                    <div key={label as string}>
-                      <div className="mb-1 flex justify-between text-xs">
-                        <span className="text-slate-400">{label}</span>
-                        <span className="font-semibold text-white">{v}</span>
+                    ['Performance', topPortfolio?.score?.performanceScore],
+                    ['Design', topPortfolio?.score?.designScore],
+                    ['Content', topPortfolio?.score?.contentScore],
+                  ].map(([label, v]) => {
+                    const value = typeof v === 'number' ? v : 0
+                    return (
+                      <div key={label as string}>
+                        <div className="mb-1 flex justify-between text-xs">
+                          <span className="text-slate-400">{label}</span>
+                          <span className="font-semibold text-white">{value}</span>
+                        </div>
+                        <div className="h-1.5 w-full overflow-hidden rounded-full bg-white/10">
+                          <div
+                            className="h-full rounded-full bg-gradient-to-r from-indigo-500 to-sky-400"
+                            style={{ width: `${value}%` }}
+                          />
+                        </div>
                       </div>
-                      <div className="h-1.5 w-full overflow-hidden rounded-full bg-white/10">
-                        <div
-                          className="h-full rounded-full bg-gradient-to-r from-indigo-500 to-sky-400"
-                          style={{ width: `${v}%` }}
-                        />
-                      </div>
-                    </div>
-                  ))}
+                    )
+                  })}
+                </div>
+                {topPortfolio?.slug && (
+                  <Link
+                    href={`/p/${topPortfolio.slug}`}
+                    className="group mt-5 flex items-center justify-between rounded-xl border border-white/10 bg-white/[0.04] px-4 py-3 text-sm transition-all hover:border-indigo-500/50 hover:bg-white/[0.06]"
+                  >
+                    <span className="text-slate-300">
+                      See why <span className="font-semibold text-white">{topPortfolio.name}</span> ranks here
+                    </span>
+                    <span className="inline-block text-indigo-400 transition-transform group-hover:translate-x-1">→</span>
+                  </Link>
+                )}
+                <div className="mt-4 rounded-xl border border-dashed border-indigo-500/30 bg-indigo-500/5 p-3.5 text-center">
+                  <p className="text-xs text-slate-400">
+                    <span className="font-semibold text-indigo-300">Your portfolio could be the next pick.</span>
+                  </p>
+                  <Link
+                    href="/submit"
+                    className="mt-1 inline-block text-xs font-semibold text-sky-400 transition-colors hover:text-sky-300"
+                  >
+                    Add yours → it only takes a minute
+                  </Link>
                 </div>
               </div>
             </div>

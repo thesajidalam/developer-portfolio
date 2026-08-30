@@ -3,10 +3,11 @@
 @tailwind utilities;
 
 :root {
-  --background: #060914;
-  --foreground: #f1f5f9;
-  --indigo: #6366f1;
-  --sky: #38bdf8;
+  --background: #06070f;
+  --foreground: #f4f6fb;
+  color-scheme: dark;
+  --indigo: #7066ff;
+  --sky: #22d3ee;
 }
 
 * {
@@ -29,34 +30,63 @@ body {
   overflow-x: hidden;
 }
 
-/* ---- premium scrollbar ------------------------------------------------ */
+/* ---- theme native form controls (fixes white dropdowns) ----------------- */
+select,
+input,
+textarea {
+  color-scheme: dark;
+}
+select option,
+select optgroup {
+  background-color: #0b1020;
+  color: #e7ecf7;
+}
+select option:disabled {
+  color: #64748b;
+}
+
+/* ---- premium focus rings -------------------------------------------------- */
+:focus-visible {
+  outline: 2px solid rgb(112 102 255 / 0.7);
+  outline-offset: 2px;
+  border-radius: 4px;
+}
+a:focus-visible,
+button:focus-visible,
+input:focus-visible,
+select:focus-visible,
+textarea:focus-visible {
+  outline-color: rgb(34 211 238 / 0.6);
+}
+
+/* ---- premium scrollbar -------------------------------------------------- */
 ::-webkit-scrollbar {
   width: 10px;
   height: 10px;
 }
 ::-webkit-scrollbar-track {
-  background: #0b1020;
+  background: #0a0e1a;
 }
 ::-webkit-scrollbar-thumb {
-  background: linear-gradient(180deg, rgb(99 102 241 / 0.6), rgb(56 189 248 / 0.5));
+  background: linear-gradient(180deg, rgb(112 102 255 / 0.65), rgb(34 211 238 / 0.5));
   border-radius: 999px;
-  border: 2px solid #0b1020;
+  border: 2px solid #0a0e1a;
 }
 ::-webkit-scrollbar-thumb:hover {
-  background: linear-gradient(180deg, rgb(99 102 241 / 0.85), rgb(56 189 248 / 0.7));
+  background: linear-gradient(180deg, rgb(112 102 255 / 0.9), rgb(34 211 238 / 0.7));
 }
 ::selection {
-  background: rgb(99 102 241 / 0.4);
+  background: rgb(112 102 255 / 0.4);
   color: #fff;
 }
 
-/* ---- ambient aurora background ---------------------------------------- */
+/* ---- ambient aurora background ------------------------------------------- */
 @layer utilities {
   .bg-aurora {
     background:
-      radial-gradient(900px circle at 12% -10%, rgb(99 102 241 / 0.22), transparent 42%),
-      radial-gradient(1000px circle at 95% -5%, rgb(56 189 248 / 0.16), transparent 45%),
-      radial-gradient(700px circle at 50% 120%, rgb(139 92 246 / 0.10), transparent 50%);
+      radial-gradient(900px circle at 12% -10%, rgb(112 102 255 / 0.22), transparent 42%),
+      radial-gradient(1000px circle at 95% -5%, rgb(34 211 238 / 0.14), transparent 45%),
+      radial-gradient(700px circle at 50% 120%, rgb(167 139 250 / 0.10), transparent 50%);
   }
 
   .bg-grid {
@@ -69,7 +99,7 @@ body {
   }
 }
 
-/* ---- cinematic entrance animations ------------------------------------- */
+/* ---- cinematic entrance animations --------------------------------------- */
 @layer utilities {
   .animate-hero {
     animation: heroIn 0.9s cubic-bezier(0.16, 1, 0.3, 1) both;
@@ -94,7 +124,7 @@ body {
   }
 }
 
-/* ---- scroll reveal ------------------------------------------------------ */
+/* ---- scroll reveal -------------------------------------------------------- */
 .reveal {
   opacity: 0;
   transform: translateY(26px);
@@ -106,16 +136,16 @@ body {
   transform: translateY(0);
 }
 
-/* ---- premium interactive surfaces ---------------------------------------- */
+/* ---- premium interactive surfaces ------------------------------------------ */
 @layer utilities {
   .glass {
-    background: rgb(15 23 42 / 0.55);
+    background: rgb(11 16 32 / 0.55);
     backdrop-filter: blur(16px) saturate(140%);
     -webkit-backdrop-filter: blur(16px) saturate(140%);
     border: 1px solid rgb(148 163 184 / 0.12);
   }
   .glass-strong {
-    background: rgb(10 15 30 / 0.78);
+    background: rgb(8 11 22 / 0.78);
     backdrop-filter: blur(20px) saturate(150%);
     -webkit-backdrop-filter: blur(20px) saturate(150%);
     border: 1px solid rgb(148 163 184 / 0.14);
@@ -124,19 +154,19 @@ body {
 
 /* animated gradient text */
 .text-gradient {
-  background: linear-gradient(90deg, #818cf8, #38bdf8, #818cf8);
-  background-size: 200% auto;
+  background: linear-gradient(90deg, #a5b4fc, #38bdf8, #c4b5fd, #a5b4fc);
+  background-size: 300% auto;
   -webkit-background-clip: text;
   background-clip: text;
   color: transparent;
-  animation: gradientMove 6s linear infinite;
+  animation: gradientMove 8s linear infinite;
 }
 @keyframes gradientMove {
   0% { background-position: 0% center; }
-  100% { background-position: 200% center; }
+  100% { background-position: 300% center; }
 }
 
-/* ---- shine sweep on buttons/cards ---------------------------------------- */
+/* ---- shine sweep on buttons/cards ------------------------------------------ */
 .shine {
   position: relative;
   overflow: hidden;
@@ -154,7 +184,6 @@ body {
   transform: translateX(120%);
 }
 
-/* soft breathing glow used on hero orbs / primary CTAs */
 @keyframes floatSlow {
   0%, 100% { transform: translateY(0) translateX(0); }
   33% { transform: translateY(-22px) translateX(16px); }
@@ -172,7 +201,6 @@ body {
   animation: pulseGlow 5s ease-in-out infinite;
 }
 
-/* shimmer skeleton */
 @keyframes shimmer {
   0% { background-position: -400px 0; }
   100% { background-position: 400px 0; }
@@ -183,7 +211,7 @@ body {
   animation: shimmer 1.6s linear infinite;
 }
 
-/* respectful of users who prefer reduced motion ---------------------------- */
+/* respectful of users who prefer reduced motion ------------------------------ */
 @media (prefers-reduced-motion: reduce) {
   html {
     scroll-behavior: auto;
