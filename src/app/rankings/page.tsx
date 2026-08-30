@@ -43,27 +43,29 @@ export default async function RankingsPage({
   const result = await listPortfolios({ sort: 'score', page, pageSize: PAGE_SIZE })
 
   return (
-    <div className="mx-auto max-w-5xl px-4 py-12 sm:px-6">
-      <div className="mb-10">
-        <h1 className="text-4xl font-bold tracking-tight text-white">Rankings</h1>
-        <p className="mt-2 text-slate-400">
-          {result.meta.total.toLocaleString()} portfolios, ranked by overall score.
-        </p>
-      </div>
+    <div className="relative overflow-hidden">
+      <div className="bg-aurora pointer-events-none absolute inset-0" />
+      <div className="relative mx-auto max-w-5xl px-4 py-12 sm:px-6">
+        <div className="animate-hero mb-10">
+          <h1 className="text-4xl font-bold tracking-tight text-white">Rankings</h1>
+          <p className="mt-2 text-slate-400">
+            {result.meta.total.toLocaleString()} portfolios, ranked by overall score.
+          </p>
+        </div>
 
-      <ol className="space-y-2">
-        {result.data.map((p, i) => {
-          const rank = i + 1 + (page - 1) * PAGE_SIZE
-          const medal = MEDAL_STYLES[rank]
-          return (
-            <li key={p.id}>
-              <Link
-                href={`/p/${p.slug}`}
-                className={cn(
-                  'flex items-center gap-4 rounded-2xl border border-slate-800 bg-slate-900/60 p-4 transition-all hover:-translate-y-0.5 hover:border-indigo-500/50',
-                  medal?.ring,
-                )}
-              >
+        <ol className="space-y-2">
+          {result.data.map((p, i) => {
+            const rank = i + 1 + (page - 1) * PAGE_SIZE
+            const medal = MEDAL_STYLES[rank]
+            return (
+              <li key={p.id} className="animate-hero" style={{ animationDelay: `${Math.min(i, 12) * 30}ms` }}>
+                <Link
+                  href={`/p/${p.slug}`}
+                  className={cn(
+                    'group flex items-center gap-4 rounded-2xl border border-white/10 bg-white/[0.03] p-4 backdrop-blur-sm transition-all duration-300 hover:-translate-y-0.5 hover:border-indigo-500/40 hover:bg-white/[0.05] hover:shadow-xl hover:shadow-indigo-500/10',
+                    medal?.ring,
+                  )}
+                >
                 <div
                   className={cn(
                     'flex h-9 w-9 shrink-0 items-center justify-center rounded-lg text-sm font-bold',
@@ -108,28 +110,29 @@ export default async function RankingsPage({
           {page > 1 ? (
             <Link
               href={`/rankings?page=${page - 1}`}
-              className="rounded-lg border border-slate-800 bg-slate-900/60 px-4 py-2 text-sm font-medium text-slate-300 transition-colors hover:border-indigo-500/50 hover:text-white"
+              className="rounded-lg border border-white/10 bg-white/[0.03] px-4 py-2 text-sm font-medium text-slate-300 transition-colors hover:border-indigo-500/50 hover:text-white"
             >
-              Previous
+              ← Previous
             </Link>
           ) : (
-            <span className="cursor-not-allowed rounded-lg border border-slate-800/60 px-4 py-2 text-sm font-medium text-slate-600">
-              Previous
+            <span className="cursor-not-allowed rounded-lg border border-white/5 px-4 py-2 text-sm font-medium text-slate-600">
+              ← Previous
             </span>
           )}
           {page < result.meta.totalPages ? (
             <Link
               href={`/rankings?page=${page + 1}`}
-              className="rounded-lg bg-gradient-to-r from-indigo-500 to-sky-500 px-4 py-2 text-sm font-semibold text-white shadow-lg shadow-indigo-500/25 transition-transform hover:scale-[1.03]"
+              className="shine rounded-lg bg-gradient-to-r from-indigo-500 to-sky-500 px-4 py-2 text-sm font-semibold text-white shadow-lg shadow-indigo-500/25 transition-all hover:scale-[1.03] hover:shadow-xl hover:shadow-indigo-500/40 active:scale-95"
             >
-              Next
+              Next →
             </Link>
           ) : (
-            <span className="cursor-not-allowed rounded-lg border border-slate-800/60 px-4 py-2 text-sm font-medium text-slate-600">
-              Next
+            <span className="cursor-not-allowed rounded-lg border border-white/5 px-4 py-2 text-sm font-medium text-slate-600">
+              Next →
             </span>
           )}
         </div>
+      </div>
       </div>
     </div>
   )

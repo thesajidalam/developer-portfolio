@@ -50,13 +50,13 @@ function LikeButton({ p }: { p: PortfolioWithScore }) {
       onClick={like}
       aria-label={liked ? 'Liked' : 'Like this portfolio'}
       className={cn(
-        'inline-flex items-center gap-1.5 rounded-md border px-2.5 py-1 text-xs font-medium transition-colors',
+        'inline-flex items-center gap-1.5 rounded-lg border px-2.5 py-1.5 text-xs font-medium transition-all duration-200',
         liked
-          ? 'border-indigo-500/50 bg-indigo-500/10 text-indigo-300'
-          : 'border-slate-800 bg-slate-900/60 text-slate-300 hover:border-indigo-500/50 hover:text-white',
+          ? 'border-indigo-500/50 bg-indigo-500/15 text-indigo-300'
+          : 'border-white/10 bg-white/[0.03] text-slate-300 hover:border-indigo-500/50 hover:bg-white/[0.06] hover:text-white',
       )}
     >
-      <span aria-hidden className="text-sm leading-none">{liked ? '♥' : '♡'}</span>
+      <span aria-hidden className={cn('text-sm leading-none transition-transform duration-200', liked && 'animate-bounce')}>{liked ? '♥' : '♡'}</span>
       <span>Like{votes > 0 ? ` · ${votes}` : ''}</span>
     </button>
   )
@@ -66,10 +66,11 @@ export function PortfolioCard({ p, className }: { p: PortfolioWithScore; classNa
   return (
     <div
       className={cn(
-        'group flex flex-col rounded-2xl border border-slate-800 bg-slate-900/60 p-4 transition-all hover:-translate-y-1 hover:border-indigo-500/50 hover:shadow-xl hover:shadow-indigo-500/10',
+        'group relative flex flex-col overflow-hidden rounded-2xl border border-white/10 bg-[#0b1020]/70 p-4 transition-all duration-300 ease-out hover:-translate-y-1.5 hover:border-indigo-500/40 hover:shadow-2xl hover:shadow-indigo-500/15',
         className,
       )}
     >
+      <div className="pointer-events-none absolute inset-x-8 -top-16 h-24 rounded-full bg-indigo-500/0 blur-2xl transition-all duration-500 group-hover:bg-indigo-500/15" />
       <Link href={`/p/${p.slug}`} className="flex min-w-0 items-start justify-between gap-3">
         <div className="flex min-w-0 items-center gap-3">
           <Avatar p={p} />
@@ -101,18 +102,18 @@ export function PortfolioCard({ p, className }: { p: PortfolioWithScore; classNa
 
       <div className="mt-3 flex flex-wrap gap-1.5">
         {(p.technologies ?? []).slice(0, 4).map((t) => (
-          <span key={t} className="rounded-md bg-slate-800 px-2 py-0.5 text-[11px] font-medium text-slate-300">
+          <span key={t} className="rounded-md border border-white/5 bg-white/[0.04] px-2 py-0.5 text-[11px] font-medium text-slate-300">
             {t}
           </span>
         ))}
         {(p.categories ?? []).slice(0, 2).map((c) => (
-          <span key={c} className="rounded-md bg-indigo-500/10 px-2 py-0.5 text-[11px] font-medium text-indigo-300">
+          <span key={c} className="rounded-md border border-indigo-500/20 bg-indigo-500/10 px-2 py-0.5 text-[11px] font-medium text-indigo-300">
             {c}
           </span>
         ))}
       </div>
 
-      <div className="mt-4 flex items-center justify-between border-t border-slate-800/60 pt-3">
+      <div className="mt-4 flex items-center justify-between border-t border-white/5 pt-3">
         <div className="flex items-center gap-3">
           <span className="inline-flex items-center gap-1.5 text-xs text-slate-500">
             <span className={cn('h-2 w-2 rounded-full', getHealthColor(p.health))} />
@@ -126,7 +127,7 @@ export function PortfolioCard({ p, className }: { p: PortfolioWithScore; classNa
             href={p.portfolioUrl}
             target="_blank"
             rel="noopener noreferrer"
-            className="inline-flex items-center gap-1 rounded-md border border-slate-800 bg-slate-900/60 px-2.5 py-1 text-xs font-medium text-indigo-300 transition-colors hover:border-indigo-500/50 hover:text-white"
+            className="inline-flex items-center gap-1 rounded-lg border border-white/10 bg-white/[0.03] px-2.5 py-1.5 text-xs font-medium text-indigo-300 transition-all duration-200 hover:border-indigo-500/50 hover:bg-white/[0.06] hover:text-white"
           >
             Visit site <span aria-hidden>↗</span>
           </a>

@@ -6,14 +6,14 @@ export function ScoreBadge({ score, className }: { score: number; className?: st
   return (
     <span
       className={cn(
-        'inline-flex items-center gap-1.5 rounded-full px-2.5 py-1 text-xs font-semibold',
+        'inline-flex items-center gap-1 rounded-full border border-white/10 px-2.5 py-1 text-xs font-semibold backdrop-blur-sm',
         getScoreBg(score),
         getScoreColor(score),
         className,
       )}
       title={`${title} — ${score}/100`}
     >
-      <span aria-hidden className="text-[0.8em]">★</span>
+      <span aria-hidden className="text-[0.8em] drop-shadow">★</span>
       {Math.round(score)}
     </span>
   )
