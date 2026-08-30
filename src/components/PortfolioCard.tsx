@@ -1,3 +1,6 @@
+'use client'
+
+import { useState } from 'react'
 import Link from 'next/link'
 import type { PortfolioWithScore } from '@/lib/types'
 import { ScoreBadge } from '@/components/ScoreBadge'
@@ -16,16 +19,58 @@ export function Avatar({ p, size = 'md' }: { p: PortfolioWithScore; size?: 'sm' 
   )
 }
 
+function LikeButton({ p }: { p: PortfolioWithScore }) {
+  const [votes, setVotes] = useState(0)
+  const [liked, setLiked] = useState(false)
+  const [busy, setBusy] = useState(false)
+
+  async function like() {
+    if (busy || liked) return
+    setBusy(true)
+    try {
+      const res = await fetch('/api/v1/vote', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ portfolioId: p.id, value: 1 }),
+      })
+      if (!res.ok) return
+      const j = (await res.json()) as { data?: { total?: number } }
+      setVotes(j.data?.total ?? votes + 1)
+      setLiked(true)
+    } catch {
+      // ignore network errors
+    } finally {
+      setBusy(false)
+    }
+  }
+
+  return (
+    <button
+      type="button"
+      onClick={like}
+      aria-label={liked ? 'Liked' : 'Like this portfolio'}
+      className={cn(
+        'inline-flex items-center gap-1.5 rounded-md border px-2.5 py-1 text-xs font-medium transition-colors',
+        liked
+          ? 'border-indigo-500/50 bg-indigo-500/10 text-indigo-300'
+          : 'border-slate-800 bg-slate-900/60 text-slate-300 hover:border-indigo-500/50 hover:text-white',
+      )}
+    >
+      <span aria-hidden className="text-sm leading-none">{liked ? '♥' : '♡'}</span>
+      <span>Like{votes > 0 ? ` · ${votes}` : ''}</span>
+    </button>
+  )
+}
+
 export function PortfolioCard({ p, className }: { p: PortfolioWithScore; className?: string }) {
   return (
-    <Link
-      href={`/p/${p.slug}`}
+    <div
       className={cn(
         'group flex flex-col rounded-2xl border border-slate-800 bg-slate-900/60 p-4 transition-all hover:-translate-y-1 hover:border-indigo-500/50 hover:shadow-xl hover:shadow-indigo-500/10',
         className,
       )}
     >
-      <div className="flex items-start justify-between gap-3">
+      <Link href={`/p/${p.slug}`} className="flex min-w-0 items-start justify-between gap-3">
         <div className="flex min-w-0 items-center gap-3">
           <Avatar p={p} />
           <div className="min-w-0">
@@ -46,7 +91,7 @@ export function PortfolioCard({ p, className }: { p: PortfolioWithScore; classNa
           </div>
         </div>
         {p.score ? <ScoreBadge score={p.score.overallScore} /> : <ScoreBadge score={0} />}
-      </div>
+      </Link>
 
       {p.description ? (
         <p className="mt-3 line-clamp-2 text-sm text-slate-400">{p.description}</p>
@@ -68,12 +113,25 @@ export function PortfolioCard({ p, className }: { p: PortfolioWithScore; classNa
       </div>
 
       <div className="mt-4 flex items-center justify-between border-t border-slate-800/60 pt-3">
-        <span className="inline-flex items-center gap-1.5 text-xs text-slate-500">
-          <span className={cn('h-2 w-2 rounded-full', getHealthColor(p.health))} />
-          {p.health === 'healthy' ? 'Healthy' : p.health === 'needs_attention' ? 'Attention' : p.health === 'down' ? 'Offline' : '—'}
-        </span>
-        <span className="text-xs font-medium text-indigo-300 opacity-0 transition-opacity group-hover:opacity-100">{p.experienceLevel}</span>
+        <div className="flex items-center gap-3">
+          <span className="inline-flex items-center gap-1.5 text-xs text-slate-500">
+            <span className={cn('h-2 w-2 rounded-full', getHealthColor(p.health))} />
+            {p.health === 'healthy' ? 'Healthy' : p.health === 'needs_attention' ? 'Attention' : p.health === 'down' ? 'Offline' : '—'}
+          </span>
+          <span className="text-xs font-medium text-indigo-300">{p.experienceLevel}</span>
+        </div>
+        <div className="flex items-center gap-2">
+          <LikeButton p={p} />
+          <a
+            href={p.portfolioUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="inline-flex items-center gap-1 rounded-md border border-slate-800 bg-slate-900/60 px-2.5 py-1 text-xs font-medium text-indigo-300 transition-colors hover:border-indigo-500/50 hover:text-white"
+          >
+            Visit site <span aria-hidden>↗</span>
+          </a>
+        </div>
       </div>
-    </Link>
+    </div>
   )
 }

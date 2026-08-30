@@ -140,14 +140,21 @@ export async function listPortfolios(f: PortfolioFilters = {}): Promise<Paginate
       : rows
 
   const result: PortfolioWithScore[] = ordered.map((r) =>
-    withScore(mapPortfolio(r), Array.isArray(r.scores) ? (r.scores[0] as unknown as Row) : null),
+    withScore(mapPortfolio(r), scoreRow(r)),
   )
 
   return { data: result, meta: { total: count ?? 0, page, pageSize, totalPages: Math.max(1, Math.ceil((count ?? 0) / pageSize)) } }
 }
 
+function scoreRow(r: Row): Row | null {
+  const s = r.scores
+  if (Array.isArray(s)) return (s[0] as unknown as Row) ?? null
+  if (s && typeof s === 'object') return s as Row
+  return null
+}
+
 function scoreOf(r: Row): number {
-  const s = Array.isArray(r.scores) ? (r.scores[0] as unknown as Row | undefined) : undefined
+  const s = scoreRow(r)
   return s ? Number(s.overall_score) || 0 : 0
 }
 
@@ -161,7 +168,7 @@ export async function getPortfolioBySlug(slug: string): Promise<PortfolioWithSco
   if (error) throw new Error(error.message)
   if (!data) return null
   const r = data as unknown as Row
-  return withScore(mapPortfolio(r), Array.isArray(r.scores) ? (r.scores[0] as unknown as Row) : null)
+  return withScore(mapPortfolio(r), scoreRow(r))
 }
 
 export async function getPortfolioById(id: string): Promise<PortfolioWithScore | null> {
@@ -174,7 +181,7 @@ export async function getPortfolioById(id: string): Promise<PortfolioWithScore |
   if (error) throw new Error(error.message)
   if (!data) return null
   const r = data as unknown as Row
-  return withScore(mapPortfolio(r), Array.isArray(r.scores) ? (r.scores[0] as unknown as Row) : null)
+  return withScore(mapPortfolio(r), scoreRow(r))
 }
 
 export async function countApproved(): Promise<number> {
@@ -197,7 +204,7 @@ export async function fetchApprovedBatch(limit = 200): Promise<PortfolioWithScor
     .limit(limit)
   if (error) throw new Error(error.message)
   return ((data as unknown as Row[]) ?? []).map((r) =>
-    withScore(mapPortfolio(r), Array.isArray(r.scores) ? (r.scores[0] as unknown as Row) : null),
+    withScore(mapPortfolio(r), scoreRow(r)),
   )
 }
 
@@ -222,7 +229,7 @@ export async function getRandomPortfolio(): Promise<PortfolioWithScore | null> {
   if (error) throw new Error(error.message)
   const r = (data as unknown as Row[])[0]
   if (!r) return null
-  return withScore(mapPortfolio(r), Array.isArray(r.scores) ? (r.scores[0] as unknown as Row) : null)
+  return withScore(mapPortfolio(r), scoreRow(r))
 }
 
 export async function topScored(limit = 12): Promise<PortfolioWithScore[]> {
@@ -235,7 +242,7 @@ export async function topScored(limit = 12): Promise<PortfolioWithScore[]> {
     .limit(limit)
   if (error) throw new Error(error.message)
   return ((data as unknown as Row[]) ?? []).sort((a, b) => scoreOf(b) - scoreOf(a)).map((r) =>
-    withScore(mapPortfolio(r), Array.isArray(r.scores) ? (r.scores[0] as unknown as Row) : null),
+    withScore(mapPortfolio(r), scoreRow(r)),
   )
 }
 
