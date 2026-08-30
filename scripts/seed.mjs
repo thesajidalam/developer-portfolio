@@ -4,6 +4,23 @@ import { fileURLToPath } from 'node:url'
 import { dirname, join } from 'node:path'
 
 const __dirname = dirname(fileURLToPath(import.meta.url))
+
+// Load .env / .env.local into process.env (only for unset vars) so the seed
+// can be run straight from a terminal: `node scripts/seed.mjs`
+for (const file of ['.env.local', '.env']) {
+  try {
+    const text = readFileSync(join(__dirname, '..', file), 'utf8')
+    for (const line of text.split(/\r?\n/)) {
+      const m = line.match(/^\s*([A-Z0-9_]+)\s*=\s*(.*)\s*$/)
+      if (m && process.env[m[1]] === undefined) {
+        process.env[m[1]] = m[2].replace(/^["']|["']$/g, '')
+      }
+    }
+  } catch {
+    /* ignore missing env files */
+  }
+}
+
 const SUPABASE_URL = process.env.NEXT_PUBLIC_SUPABASE_URL
 const SERVICE_KEY = process.env.SUPABASE_SERVICE_KEY
 
@@ -75,14 +92,14 @@ function clamp(n) {
   return Math.max(40, Math.min(99, Math.round(n)))
 }
 
-async function post(path, body) {
+async function post(path, body, conflictCol) {
   const res = await fetch(`${SUPABASE_URL}${path}`, {
     method: 'POST',
     headers: {
       apikey: SERVICE_KEY,
       Authorization: `Bearer ${SERVICE_KEY}`,
       'Content-Type': 'application/json',
-      Prefer: 'return=representation',
+      Prefer: `return=representation${conflictCol ? ',resolution=merge-duplicates' : ''}`,
     },
     body: JSON.stringify(body),
   })
@@ -118,7 +135,7 @@ async function main() {
       verified: c.verified,
       status: 'approved',
     }))
-    const created = await post('/rest/v1/portfolios?select=id,slug', rows)
+    const created = await post('/rest/v1/portfolios?select=id,slug&on_conflict=slug', rows, 'slug')
     const bySlug = new Map((created || []).map((r) => [r.slug, r.id]))
     inserted += created ? created.length : 0
 
@@ -139,7 +156,7 @@ async function main() {
       })
       .filter(Boolean)
     if (scoreRows.length) {
-      await post('/rest/v1/scores', scoreRows)
+      await post('/rest/v1/scores?on_conflict=portfolio_id', scoreRows, 'portfolio_id')
       scoresInserted += scoreRows.length
     }
 

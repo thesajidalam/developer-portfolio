@@ -91,16 +91,18 @@ function escapeLike(term: string): string {
   return term.replace(/[\\%_]/g, (m) => `\\${m}`)
 }
 
-function buildWhere(f: PortfolioFilters) {
-  const w: Record<string, unknown> = { status: 'approved' }
-  if (f.tech) w.technologies = `cs.{"${escapeLike(f.tech)}"}`
-  if (f.category) w.categories = `cs.{"${escapeLike(f.category)}"}`
-  if (f.experience) w.experience_level = f.experience
+type PortfolioQuery = ReturnType<ReturnType<DBClient['from']>['select']>
+
+function applyFilters(base: PortfolioQuery, f: PortfolioFilters): PortfolioQuery {
+  let q = base.eq('status', 'approved') as PortfolioQuery
+  if (f.tech) q = q.contains('technologies', [f.tech]) as PortfolioQuery
+  if (f.category) q = q.contains('categories', [f.category]) as PortfolioQuery
+  if (f.experience) q = q.eq('experience_level', f.experience) as PortfolioQuery
   if (f.search) {
     const term = escapeLike(f.search)
-    w.or = `name.ilike.%${term}%,title.ilike.%${term}%,description.ilike.%${term}%`
+    q = q.or(`name.ilike.%${term}%,title.ilike.%${term}%,description.ilike.%${term}%`) as PortfolioQuery
   }
-  return w
+  return q
 }
 
 export async function listPortfolios(f: PortfolioFilters = {}): Promise<Paginated<PortfolioWithScore>> {
@@ -109,20 +111,31 @@ export async function listPortfolios(f: PortfolioFilters = {}): Promise<Paginate
   const sort = f.sort ?? 'newest'
   const client = getAdminClient()
 
-  let query = client.from('portfolios').select(PORTFOLIO_SELECT + ',scores(' + SCORE_SELECT + ')', { count: 'exact' })
-  const where = buildWhere(f)
-  query = query.match(where)
+  const filtered = applyFilters(
+    client.from('portfolios').select(PORTFOLIO_SELECT + ',scores(' + SCORE_SELECT + ')', { count: 'exact' }),
+    f,
+  )
 
-  const { data, count, error } = await query.order(
-    sort === 'score' ? 'scores.overall_score' : 'submitted_at',
-    { ascending: sort === 'oldest', referencedTable: 'scores' },
-  ).range((page - 1) * pageSize, page * pageSize - 1)
+  const scoreSort = sort === 'score' || sort === 'trending'
+  const orderCol = scoreSort ? 'overall_score' : 'submitted_at'
+  const orderOpts = scoreSort
+    ? { referencedTable: 'scores', ascending: false }
+    : { ascending: sort === 'oldest' }
+
+  let query: PortfolioQuery
+  try {
+    query = filtered.order(orderCol, orderOpts) as PortfolioQuery
+  } catch {
+    query = filtered
+  }
+
+  const { data, count, error } = await query.range((page - 1) * pageSize, page * pageSize - 1)
 
   if (error) throw new Error(error.message)
 
   const rows = (data as unknown as Row[]) ?? []
   const ordered =
-    sort === 'trending' || sort === 'score'
+    scoreSort
       ? [...rows].sort((a, b) => scoreOf(b) - scoreOf(a))
       : rows
 
