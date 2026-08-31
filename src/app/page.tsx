@@ -76,7 +76,7 @@ function Pagination({
 }
 
 const SELECT_CLASS =
-  'w-full rounded-xl border border-white/10 bg-white/[0.04] px-3.5 py-2.5 text-sm text-slate-200 outline-none transition-all focus:border-indigo-500/60 focus:bg-white/[0.06] sm:w-auto'
+  'h-11 w-full rounded-xl border border-white/10 bg-[#0a1120]/80 px-3.5 text-sm text-slate-200 outline-none transition-all focus:border-indigo-500/60 focus:ring-2 focus:ring-indigo-500/20 sm:w-auto [&>option]:bg-[#0a1120]'
 
 export default async function HomePage({ searchParams }: { searchParams: Promise<{ [key: string]: string | string[] | undefined }> }) {
   const sp = await searchParams
@@ -91,10 +91,10 @@ export default async function HomePage({ searchParams }: { searchParams: Promise
 
   const filters = parsed.success ? parsed.data : { page: 1, pageSize: 12 }
 
-  const [total, trending, topPortfolio, gallery] = await Promise.all([
+  const [total, trending, topCandidates, gallery] = await Promise.all([
     getTotalCount(),
     getTrendingPortfolios(8),
-    listPortfolios({ sort: 'score', page: 1, pageSize: 1 }).then((r) => r.data[0] ?? null),
+    listPortfolios({ sort: 'score', page: 1, pageSize: 24 }),
     listPortfolios({
       search: filters.search,
       tech: filters.tech,
@@ -105,6 +105,17 @@ export default async function HomePage({ searchParams }: { searchParams: Promise
       pageSize: filters.pageSize,
     }),
   ])
+
+  // Never spotlight a degenerate entry (0 score / unknown health / no name).
+  // Pick the highest-scored portfolio that actually looks real.
+  const topPortfolio =
+    topCandidates.data.find(
+      (p) =>
+        (p.score?.overallScore ?? 0) > 0 &&
+        p.health !== 'unknown' &&
+        p.health !== 'down' &&
+        Boolean(p.name),
+    ) ?? topCandidates.data[0] ?? null
 
   return (
     <>
@@ -271,35 +282,55 @@ export default async function HomePage({ searchParams }: { searchParams: Promise
         </Reveal>
 
         <Reveal>
-          <form method="get" action="/" className="glass mb-8 grid grid-cols-1 gap-3 rounded-2xl p-4 sm:grid-cols-2 lg:grid-cols-5">
-            <input
-              type="search"
-              name="search"
-              defaultValue={filters.search ?? ''}
-              placeholder="Search portfolios..."
-              className="w-full rounded-xl border border-white/10 bg-white/[0.04] px-3.5 py-2.5 text-sm text-slate-200 outline-none transition-all placeholder:text-slate-500 focus:border-indigo-500/60 focus:bg-white/[0.06] lg:col-span-1"
-            />
-            <input
-              type="text"
-              name="tech"
-              defaultValue={filters.tech ?? ''}
-              placeholder="Technology (e.g. React)"
-              className={SELECT_CLASS}
-            />
-            <input
-              type="text"
-              name="category"
-              defaultValue={filters.category ?? ''}
-              placeholder="Category (e.g. Design)"
-              className={SELECT_CLASS}
-            />
-            <select name="experience" defaultValue={filters.experience ?? ''} className={SELECT_CLASS}>
-              <option value="">Any experience</option>
-              <option value="beginner">Beginner</option>
-              <option value="mid">Mid-level</option>
-              <option value="senior">Senior</option>
-            </select>
-            <div className="flex flex-col gap-3 sm:flex-row lg:col-span-1">
+          <form method="get" action="/" className="glass relative overflow-hidden rounded-2xl border border-white/10 bg-white/[0.03] p-5 shadow-xl shadow-indigo-500/5 backdrop-blur-xl">
+            <div className="pointer-events-none absolute -top-24 right-0 h-40 w-40 rounded-full bg-indigo-500/10 blur-3xl" />
+
+            {/* primary search — the hero of the filter bar */}
+            <div className="relative">
+              <svg
+                className="pointer-events-none absolute left-3.5 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-500"
+                viewBox="0 0 20 20"
+                fill="currentColor"
+              >
+                <path fillRule="evenodd" d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z" clipRule="evenodd" />
+              </svg>
+              <input
+                type="search"
+                name="search"
+                defaultValue={filters.search ?? ''}
+                placeholder="Search portfolios by name, role, or URL…"
+                className="h-12 w-full rounded-xl border border-white/10 bg-[#0a1120]/80 pl-10 pr-4 text-sm text-slate-200 outline-none transition-all placeholder:text-slate-500 focus:border-indigo-500/60 focus:ring-2 focus:ring-indigo-500/20"
+              />
+            </div>
+
+            {/* refinement controls */}
+            <div className="mt-3 grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-5">
+              <div className="relative">
+                <span className="pointer-events-none absolute left-3.5 top-1/2 -translate-y-1/2 text-xs font-semibold uppercase tracking-wide text-slate-500">Tech</span>
+                <input
+                  type="text"
+                  name="tech"
+                  defaultValue={filters.tech ?? ''}
+                  placeholder="e.g. React"
+                  className="h-11 w-full rounded-xl border border-white/10 bg-[#0a1120]/80 pl-16 pr-3.5 text-sm text-slate-200 outline-none transition-all placeholder:text-slate-500 focus:border-indigo-500/60 focus:ring-2 focus:ring-indigo-500/20"
+                />
+              </div>
+              <div className="relative">
+                <span className="pointer-events-none absolute left-3.5 top-1/2 -translate-y-1/2 text-xs font-semibold uppercase tracking-wide text-slate-500">Category</span>
+                <input
+                  type="text"
+                  name="category"
+                  defaultValue={filters.category ?? ''}
+                  placeholder="e.g. Design"
+                  className="h-11 w-full rounded-xl border border-white/10 bg-[#0a1120]/80 pl-20 pr-3.5 text-sm text-slate-200 outline-none transition-all placeholder:text-slate-500 focus:border-indigo-500/60 focus:ring-2 focus:ring-indigo-500/20"
+                />
+              </div>
+              <select name="experience" defaultValue={filters.experience ?? ''} className={SELECT_CLASS}>
+                <option value="">Any experience</option>
+                <option value="beginner">Beginner</option>
+                <option value="mid">Mid-level</option>
+                <option value="senior">Senior</option>
+              </select>
               <select name="sort" defaultValue={filters.sort ?? 'newest'} className={SELECT_CLASS}>
                 <option value="newest">Newest</option>
                 <option value="oldest">Oldest</option>
@@ -307,20 +338,20 @@ export default async function HomePage({ searchParams }: { searchParams: Promise
                 <option value="name">Name</option>
                 <option value="trending">Trending</option>
               </select>
-            </div>
-            <div className="flex gap-2 lg:col-span-1">
-              <button
-                type="submit"
-                className="shine flex-1 rounded-xl bg-gradient-to-r from-indigo-500 to-sky-500 px-4 py-2.5 text-sm font-semibold text-white shadow-lg shadow-indigo-500/25 transition-all hover:scale-[1.02] hover:shadow-lg hover:shadow-indigo-500/40 active:scale-95"
-              >
-                Apply
-              </button>
-              <Link
-                href="/"
-                className="rounded-xl border border-white/10 bg-white/[0.04] px-4 py-2.5 text-sm font-medium text-slate-300 transition-colors hover:border-indigo-500/50 hover:text-white"
-              >
-                Reset
-              </Link>
+              <div className="flex gap-2">
+                <button
+                  type="submit"
+                  className="shine h-11 flex-1 rounded-xl bg-gradient-to-r from-indigo-500 to-sky-500 px-4 text-sm font-semibold text-white shadow-lg shadow-indigo-500/25 transition-all hover:scale-[1.02] hover:shadow-xl hover:shadow-indigo-500/40 active:scale-95"
+                >
+                  Apply
+                </button>
+                <Link
+                  href="/"
+                  className="h-11 rounded-xl border border-white/10 bg-white/[0.03] px-4 py-2.5 text-sm font-medium text-slate-300 transition-colors hover:border-indigo-500/50 hover:text-white"
+                >
+                  Reset
+                </Link>
+              </div>
             </div>
           </form>
         </Reveal>

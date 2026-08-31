@@ -19,7 +19,8 @@ export async function GET(request: NextRequest) {
     const page = Math.max(1, parseInt(sp.get('page') || '1', 10))
     const pageSize = Math.min(100, Math.max(1, parseInt(sp.get('pageSize') || '15', 10)))
     const status = sp.get('status') || undefined
-    const result = await listSubmissions(page, pageSize, status)
+    const q = sp.get('q') || undefined
+    const result = await listSubmissions(page, pageSize, status, q)
     return NextResponse.json(result)
   } catch (error) {
     console.error('Admin list submissions failed:', error)

@@ -92,6 +92,18 @@ function escapeLike(term: string): string {
   return term.replace(/[\\%_]/g, (m) => `\\${m}`)
 }
 
+// Collapse scheme / www / trailing slash / case so 'https://X.com/' and
+// 'x.com' are treated as the same site. Stored URLs and dedup keys both use
+// this canonical form, which is what prevents duplicate listings.
+export function normalizePortfolioUrl(raw: string): string {
+  let u = (raw || '').trim()
+  u = u.replace(/^[a-zA-Z][a-zA-Z0-9+.-]*:\/\//, '')
+  u = u.replace(/^\/+/, '')
+  u = u.replace(/^www\./i, '')
+  const lowerHost = u.toLowerCase()
+  return lowerHost.endsWith('/') ? lowerHost.slice(0, -1) : lowerHost
+}
+
 type PortfolioQuery = ReturnType<ReturnType<DBClient['from']>['select']>
 
 function applyFilters(base: PortfolioQuery, f: PortfolioFilters): PortfolioQuery {
@@ -305,19 +317,55 @@ export async function createSubmission(input: {
   result?: unknown
 }): Promise<Submission> {
   const client = getAdminClient()
-  const { data, error } = await client
+  const canonical = normalizePortfolioUrl(input.portfolioUrl)
+
+  // If a submission for the same canonical URL already exists, reuse it
+  // instead of piling up duplicates in the admin queue.
+  const { data: exist } = await client
     .from('submissions')
-    .insert({ portfolio_url: input.portfolioUrl, submitter_name: input.submitterName ?? null, submitter_email: input.submitterEmail ?? null, result: input.result ?? null })
-    .select('*')
-    .single()
-  if (error) throw new Error(error.message)
-  return mapSubmission(data as unknown as Row)
+    .select('id,status')
+    .eq('portfolio_url', canonical)
+    .limit(1)
+  if (!(exist && exist.length > 0)) {
+    const { data, error } = await client
+      .from('submissions')
+      .insert({ portfolio_url: canonical, submitter_name: input.submitterName ?? null, submitter_email: input.submitterEmail ?? null, result: input.result ?? null })
+      .select('*')
+      .single()
+    if (error) throw new Error(error.message)
+    return mapSubmission(data as unknown as Row)
+  }
+
+  // Upgrade the existing submission if it was rejected, but never duplicate it.
+  const existingRow = exist[0] as Row
+  if (String(existingRow.status) === 'rejected') {
+    await client
+      .from('submissions')
+      .update({ status: 'pending', submitter_name: input.submitterName ?? null, submitter_email: input.submitterEmail ?? null })
+      .eq('id', String(existingRow.id))
+  }
+  const refreshed = await getSubmissionById(String(existingRow.id))
+  if (refreshed) return refreshed
+  return {
+    id: String(existingRow.id),
+    portfolioUrl: canonical,
+    submitterName: input.submitterName ?? null,
+    submitterEmail: input.submitterEmail ?? null,
+    status: 'pending',
+    result: input.result ?? null,
+    createdAt: String(existingRow.created_at ?? new Date().toISOString()),
+    processedAt: null,
+  }
 }
 
-export async function listSubmissions(page = 1, pageSize = 15, status?: string): Promise<Paginated<Submission>> {
+export async function listSubmissions(page = 1, pageSize = 15, status?: string, q?: string): Promise<Paginated<Submission>> {
   const client = getAdminClient()
   let base = client.from('submissions').select('*', { count: 'exact' })
   if (status && status !== 'all') base = base.eq('status', status)
+  if (q) {
+    const term = escapeLike(q)
+    base = base.or(`portfolio_url.ilike.%${term}%,submitter_name.ilike.%${term}%,submitter_email.ilike.%${term}%`)
+  }
   base = base.order('created_at', { ascending: false }).range((page - 1) * pageSize, page * pageSize - 1)
   const { data, count, error } = await base
   if (error) throw new Error(error.message)
@@ -442,30 +490,32 @@ function enrichSubmission(slug: string) {
 }
 
 export async function createPortfolioFromSubmission(s: { portfolioUrl: string; name: string; description: string | null }): Promise<string> {
-  const url = (s.portfolioUrl || '').trim().replace(/\/+$/, '')
+  const url = normalizePortfolioUrl(s.portfolioUrl)
   const client = getAdminClient()
 
-  // dedup by portfolio_url — if the site already exists, upgrade it instead of
+  // dedup by normalized portfolio_url — if the site already exists (even under a
+  // slightly different scheme / trailing slash / www), upgrade it instead of
   // creating a duplicate entry (which previously caused double listings).
-  const { data: existing, error: exErr } = await client
+  const host = url.split('/')[0]
+  const { data: candidates, error: exErr } = await client
     .from('portfolios')
-    .select('id,status,verified')
-    .eq('portfolio_url', url)
-    .limit(1)
+    .select('id,status,verified,portfolio_url')
+    .like('portfolio_url', `%${escapeLike(host)}%`)
+    .limit(50)
   if (exErr) throw new Error(exErr.message)
-  if (existing && existing.length > 0) {
-    const ex = existing[0] as Row
+  const match = ((candidates as unknown as Row[]) ?? []).find(
+    (r) => normalizePortfolioUrl(String(r.portfolio_url)) === url,
+  )
+  if (match) {
     const patch: Record<string, unknown> = { updated_at: new Date().toISOString() }
-    if (String(ex.status) !== 'approved') patch.status = 'approved'
-    if (!ex.verified) patch.verified = true
-    await client.from('portfolios').update(patch).eq('id', String(ex.id))
-    return String(ex.id)
+    if (String(match.status) !== 'approved') patch.status = 'approved'
+    if (!match.verified) patch.verified = true
+    await client.from('portfolios').update(patch).eq('id', String(match.id))
+    return String(match.id)
   }
 
   // create a new, fully enriched portfolio so it displays stack + a score
   const slugBase = url
-    .replace(/^https?:\/\//, '')
-    .replace(/^www\./, '')
     .split('/')[0]
     .toLowerCase()
     .replace(/[^a-z0-9-]/g, '-')
