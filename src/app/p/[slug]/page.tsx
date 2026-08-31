@@ -6,6 +6,8 @@ import { ScoreRing } from '@/components/ScoreRing'
 import { ScoreBar } from '@/components/ScoreBadge'
 import { getPortfolioBySlug, getSimilar } from '@/lib/repository'
 import { getScoreBreakdown, scoreLabel } from '@/lib/scoring'
+import { ShareScore } from '@/components/ShareScore'
+import { EmbedBadge } from '@/components/EmbedBadge'
 import { absoluteUrl, cn, getHealthColor, getHealthLabel, hostnameOf } from '@/lib/utils'
 
 interface Props {
@@ -145,6 +147,14 @@ export default async function PortfolioDetailPage({ params }: Props) {
                     GitHub {ownerGitHub && <span className={cn(isOwner ? 'text-amber-100' : 'text-slate-500')}>{ownerGitHub}</span>}
                   </a>
                 )}
+                <ShareScore
+                  score={overall}
+                  portfolioName={p.name}
+                  portfolioUrl={p.portfolioUrl}
+                  pageUrl={`https://gitdevfolio.vercel.app/p/${p.slug}`}
+                  compact
+                />
+                <EmbedBadge slug={p.slug} />
               </div>
             </div>
           </div>

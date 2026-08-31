@@ -691,6 +691,24 @@ export async function editorPicks(limit = 6): Promise<PortfolioWithScore[]> {
   return ((data as unknown as Row[]) ?? []).map((r) => withScore(mapPortfolio(r), scoreRow(r)))
 }
 
+// ---------------- leaderboards by tech/category ----------------
+
+export async function topByField(field: 'technologies' | 'categories', term: string, limit = 5): Promise<PortfolioWithScore[]> {
+  const client = getAdminClient()
+  const { data, error } = await client
+    .from('portfolios')
+    .select(PORTFOLIO_SELECT + ',scores(' + SCORE_SELECT + ')')
+    .eq('status', 'approved')
+    .contains(field, [term])
+    .order('overall_score', { referencedTable: 'scores', ascending: false })
+    .limit(50)
+  if (error) throw new Error(error.message)
+  return ((data as unknown as Row[]) ?? [])
+    .sort((a, b) => scoreOf(b) - scoreOf(a))
+    .slice(0, limit)
+    .map((r) => withScore(mapPortfolio(r), scoreRow(r)))
+}
+
 // ---------------- top liked ----------------
 
 export async function topLiked(limit = 50, page = 1, pageSize = 50): Promise<Paginated<PortfolioWithScore>> {

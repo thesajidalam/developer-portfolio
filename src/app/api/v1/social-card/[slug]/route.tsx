@@ -74,6 +74,10 @@ export async function GET(_request: NextRequest, { params }: { params: Promise<{
 
   <text x="48" y="540" font-family="Inter,system-ui,sans-serif" font-size="26" fill="#64748b">${p.health === 'healthy' ? '● Healthy' : p.health === 'needs_attention' ? '● Needs attention' : '● Status unknown'}</text>
   <text x="48" y="596" font-family="Inter,system-ui,sans-serif" font-size="22" fill="#475569">Scored across Performance · Accessibility · SEO · Design · Content</text>
+
+  <rect x="850" y="540" width="302" height="62" rx="31" fill="url(#glow)"/>
+  <text x="1001" y="579" text-anchor="middle" font-family="Inter,system-ui,sans-serif" font-weight="700" font-size="26" fill="#ffffff">Check my score</text>
+  <text x="1001" y="612" text-anchor="middle" font-family="Inter,system-ui,sans-serif" font-size="19" fill="#c7d2fe">gitdevfolio.vercel.app</text>
 </svg>`
 
   return new NextResponse(svg, {

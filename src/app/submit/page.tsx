@@ -64,10 +64,11 @@ export default function SubmitPage() {
   }
 
   if (status === 'success') {
+    const embedSnippet = `<iframe src="https://gitdevfolio.vercel.app/api/v1/embeds/${encodeURIComponent(url.trim())}" width="140" height="60" frameborder="0" title="DevFolio score badge"></iframe>`
     return (
       <div className="relative overflow-hidden">
         <div className="bg-aurora pointer-events-none absolute inset-0" />
-        <div className="relative mx-auto max-w-xl px-4 py-24 text-center sm:px-6">
+        <div className="relative mx-auto max-w-xl px-4 py-16 text-center sm:px-6">
           <div className="relative">
             <div className="confetti-wrapper">
               {Array.from({ length: 24 }).map((_, i) => (
@@ -87,13 +88,40 @@ export default function SubmitPage() {
             </div>
           </div>
           <h1 className="animate-hero delay-1 mt-6 text-3xl font-bold text-white">Thanks for submitting!</h1>
-          <p className="animate-hero delay-2 mt-3 text-slate-400">
+          <p className="animate-hero delay-2 mx-auto mt-3 max-w-md text-slate-400">
             Your portfolio (<span className="text-slate-200">{url}</span>) has been queued for review. Once approved,
             it will be scored and appear in the directory.
           </p>
+
+          <div className="animate-hero delay-3 mt-8 rounded-2xl border border-white/10 bg-white/[0.03] p-5 text-left backdrop-blur-xl">
+            <h2 className="text-sm font-semibold text-white">Grab your DevFolio badge</h2>
+            <p className="mt-1 text-xs text-slate-500">
+              Once approved, embed your score on your site. Copy this snippet any time:
+            </p>
+            <div className="mt-3 flex items-stretch gap-2">
+              <code className="min-w-0 flex-1 truncate rounded-lg border border-white/10 bg-black/40 px-3 py-2 text-[11px] text-slate-300">
+                {embedSnippet}
+              </code>
+              <button
+                type="button"
+                onClick={async () => {
+                  try {
+                    await navigator.clipboard.writeText(embedSnippet)
+                    alert('Badge snippet copied to clipboard!')
+                  } catch {
+                    alert('Could not copy automatically. Select the code above.')
+                  }
+                }}
+                className="shrink-0 rounded-lg bg-gradient-to-r from-indigo-500 to-sky-500 px-3 py-2 text-xs font-semibold text-white transition-all hover:scale-105 active:scale-95"
+              >
+                Copy
+              </button>
+            </div>
+          </div>
+
           <Link
             href="/"
-            className="shine animate-hero delay-3 mt-8 inline-block rounded-xl bg-gradient-to-r from-indigo-500 to-sky-500 px-6 py-3 text-sm font-semibold text-white shadow-lg shadow-indigo-500/30 transition-all hover:scale-105 hover:shadow-xl hover:shadow-indigo-500/40 active:scale-95"
+            className="shine animate-hero delay-3 mt-6 inline-block rounded-xl bg-gradient-to-r from-indigo-500 to-sky-500 px-6 py-3 text-sm font-semibold text-white shadow-lg shadow-indigo-500/30 transition-all hover:scale-105 hover:shadow-xl hover:shadow-indigo-500/40 active:scale-95"
           >
             Back to gallery
           </Link>

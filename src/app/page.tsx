@@ -4,11 +4,11 @@ import { PortfolioCard } from '@/components/PortfolioCard'
 import { ScoreBadge } from '@/components/ScoreBadge'
 import { Reveal } from '@/components/Reveal'
 import { LoadMore } from '@/components/LoadMore'
-import { listPortfolios, portfolioOfDay } from '@/lib/repository'
+import { listPortfolios, portfolioOfDay, topByField } from '@/lib/repository'
 import { getTrendingPortfolios, getTotalCount } from '@/lib/discovery'
 import { PortfolioFiltersSchema } from '@/lib/validations'
 import type { PortfolioFilters } from '@/lib/types'
-import { cn, absoluteUrl } from '@/lib/utils'
+import { cn, absoluteUrl, hostnameOf } from '@/lib/utils'
 
 export const metadata: Metadata = {
   title: 'Discover Developer Portfolios',
@@ -45,7 +45,7 @@ export default async function HomePage({ searchParams }: { searchParams: Promise
 
   const filters = parsed.success ? parsed.data : { page: 1, pageSize: 12 }
 
-  const [total, trending, topCandidates, gallery, potd] = await Promise.all([
+  const [total, trending, topCandidates, gallery, potd, topReact, topNext] = await Promise.all([
     getTotalCount(),
     getTrendingPortfolios(8),
     listPortfolios({ sort: 'score', page: 1, pageSize: 24 }),
@@ -59,6 +59,8 @@ export default async function HomePage({ searchParams }: { searchParams: Promise
       pageSize: filters.pageSize,
     }),
     portfolioOfDay(),
+    topByField('technologies', 'React', 5),
+    topByField('technologies', 'Next.js', 5),
   ])
 
   // Never spotlight a degenerate entry (0 score / unknown health / no name).
@@ -278,6 +280,61 @@ export default async function HomePage({ searchParams }: { searchParams: Promise
             {trending.map((p, i) => (
               <Reveal key={p.id} delay={(i % 4) * 60}>
                 <PortfolioCard p={p} />
+              </Reveal>
+            ))}
+          </div>
+        </section>
+      )}
+
+      {/* ---- leaderboards ---------------------------------------------- */}
+      {(topReact.length > 0 || topNext.length > 0) && (
+        <section className="mx-auto max-w-7xl px-4 pb-16 sm:px-6">
+          <Reveal className="mb-6 flex items-center justify-between">
+            <h2 className="text-3xl font-bold tracking-tight text-white">Top ranked by stack</h2>
+            <Link href="/rankings" className="text-sm font-semibold text-sky-400 transition-colors hover:text-sky-300">
+              Full rankings →
+            </Link>
+          </Reveal>
+          <div className="grid grid-cols-1 gap-6 lg:grid-cols-2">
+            {[
+              { title: 'React portfolios', tech: 'React', items: topReact },
+              { title: 'Next.js portfolios', tech: 'Next.js', items: topNext },
+            ].map((board) => (
+              <Reveal key={board.title}>
+                <div className="rounded-2xl border border-white/10 bg-white/[0.03] p-5 backdrop-blur-xl">
+                  <div className="mb-4 flex items-center justify-between">
+                    <h3 className="text-lg font-semibold text-white">{board.title}</h3>
+                    <Link
+                      href={`/?tech=${encodeURIComponent(board.tech)}`}
+                      className="text-xs font-semibold text-slate-400 transition-colors hover:text-sky-400"
+                    >
+                      See all →
+                    </Link>
+                  </div>
+                  <ol className="space-y-1">
+                    {board.items.map((p, i) => (
+                      <li key={p.id}>
+                        <Link
+                          href={`/p/${p.slug}`}
+                          className="group flex items-center gap-3 rounded-xl px-2 py-2 transition-colors hover:bg-white/[0.04]"
+                        >
+                          <span className={cn('flex h-6 w-6 shrink-0 items-center justify-center rounded-md text-xs font-bold', i === 0 ? 'bg-amber-500/20 text-amber-300' : i === 1 ? 'bg-slate-400/15 text-slate-200' : i === 2 ? 'bg-orange-500/15 text-orange-300' : 'bg-white/[0.04] text-slate-500')}>
+                            {i + 1}
+                          </span>
+                          <div className="min-w-0 flex-1">
+                            <span className="block truncate font-medium text-slate-200 group-hover:text-white">{p.name}</span>
+                            <span className="block truncate text-xs text-slate-500">{p.title || hostnameOf(p.portfolioUrl)}</span>
+                          </div>
+                          {p.score && (
+                            <span className="shrink-0 rounded-md bg-emerald-500/10 px-2 py-0.5 text-xs font-bold text-emerald-400">
+                              {Math.round(p.score.overallScore)}
+                            </span>
+                          )}
+                        </Link>
+                      </li>
+                    ))}
+                  </ol>
+                </div>
               </Reveal>
             ))}
           </div>
