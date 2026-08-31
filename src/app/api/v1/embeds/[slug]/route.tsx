@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { getPortfolioBySlug, voteCount } from '@/lib/repository'
-import { hostnameOf } from '@/lib/utils'
+import { hostnameOf, absoluteUrl } from '@/lib/utils'
 
 export const runtime = 'nodejs'
 export const dynamic = 'force-dynamic'
@@ -59,7 +59,7 @@ export async function GET(_request: NextRequest, { params }: { params: Promise<{
       <span>DevFolio Score</span>
       <span>${votes} votes · ${p.health === 'healthy' ? 'Healthy' : 'Other'}</span>
     </div>
-    <a class="link" href="${esc(p.portfolioUrl)}" target="_blank" rel="noopener noreferrer">Visit portfolio</a>
+    <a class="link" href="${esc(absoluteUrl(p.portfolioUrl))}" target="_blank" rel="noopener noreferrer">Visit portfolio</a>
   </div>
 </body>
 </html>`

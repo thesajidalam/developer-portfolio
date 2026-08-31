@@ -6,7 +6,7 @@ import { ScoreRing } from '@/components/ScoreRing'
 import { ScoreBar } from '@/components/ScoreBadge'
 import { getPortfolioBySlug, getSimilar } from '@/lib/repository'
 import { getScoreBreakdown, scoreLabel } from '@/lib/scoring'
-import { cn, getHealthColor, getHealthLabel, hostnameOf } from '@/lib/utils'
+import { absoluteUrl, cn, getHealthColor, getHealthLabel, hostnameOf } from '@/lib/utils'
 
 interface Props {
   params: Promise<{ slug: string }>
@@ -118,7 +118,7 @@ export default async function PortfolioDetailPage({ params }: Props) {
               <span className={cn('block text-2xl font-bold', label.color, isOwner && 'text-amber-200')}>{label.label}</span>
               <div className="flex flex-col gap-2">
                 <a
-                  href={p.portfolioUrl}
+                  href={absoluteUrl(p.portfolioUrl)}
                   target="_blank"
                   rel="noopener noreferrer"
                   className={cn(
@@ -132,7 +132,7 @@ export default async function PortfolioDetailPage({ params }: Props) {
                 </a>
                 {p.githubUrl && (
                   <a
-                    href={p.githubUrl}
+                    href={absoluteUrl(p.githubUrl)}
                     target="_blank"
                     rel="noopener noreferrer"
                     className={cn(

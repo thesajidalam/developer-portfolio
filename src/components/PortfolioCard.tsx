@@ -4,7 +4,7 @@ import { useState } from 'react'
 import Link from 'next/link'
 import type { PortfolioWithScore } from '@/lib/types'
 import { ScoreBadge } from '@/components/ScoreBadge'
-import { cn, getHealthColor, hostnameOf, initials } from '@/lib/utils'
+import { absoluteUrl, cn, getHealthColor, hostnameOf, initials } from '@/lib/utils'
 
 export function Avatar({ p, size = 'md' }: { p: PortfolioWithScore; size?: 'sm' | 'md' | 'lg' }) {
   const cls = size === 'lg' ? 'h-16 w-16 text-xl' : size === 'sm' ? 'h-8 w-8 text-xs' : 'h-11 w-11 text-sm'
@@ -124,7 +124,7 @@ export function PortfolioCard({ p, className }: { p: PortfolioWithScore; classNa
         <div className="flex items-center gap-2">
           <LikeButton p={p} />
           <a
-            href={p.portfolioUrl}
+            href={absoluteUrl(p.portfolioUrl)}
             target="_blank"
             rel="noopener noreferrer"
             className="inline-flex items-center gap-1 rounded-lg border border-white/10 bg-white/[0.03] px-2.5 py-1.5 text-xs font-medium text-indigo-300 transition-all duration-200 hover:border-indigo-500/50 hover:bg-white/[0.06] hover:text-white"

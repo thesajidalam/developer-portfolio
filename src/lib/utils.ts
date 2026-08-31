@@ -65,8 +65,18 @@ export function hostnameOf(url: string): string {
   try {
     return new URL(url).hostname.replace(/^www\./, '')
   } catch {
-    return url
+    // tolerate scheme-less urls
+    return url.split('/')[0].replace(/^www\./, '')
   }
+}
+
+// Guarantee an outbound portfolio URL has a scheme, otherwise the browser treats
+// scheme-less hrefs as relative links on the current host and 404s.
+export function absoluteUrl(raw: string): string {
+  const u = (raw || '').trim()
+  if (!u) return u
+  if (/^[a-zA-Z][a-zA-Z0-9+.-]*:\/\//.test(u)) return u
+  return `https://${u}`
 }
 
 export function initials(name: string): string {
