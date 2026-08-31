@@ -1,4 +1,4 @@
-﻿'use client'
+'use client'
 
 import { useState } from 'react'
 import Link from 'next/link'
@@ -39,7 +39,7 @@ export function Avatar({ p, size = 'md' }: { p: PortfolioWithScore; size?: 'sm' 
     return <img src={p.avatarUrl} alt={p.name} className={cn(cls, 'rounded-full object-cover ring-1 ring-slate-800')} referrerPolicy="no-referrer" />
   }
   return (
-    <div className={cn(cls, 'flex items-center justify-center rounded-full bg-gradient-to-br from-violet-500 to-fuchsia-500 font-bold text-white ring-1 ring-slate-800')}>
+    <div className={cn(cls, 'flex items-center justify-center rounded-full bg-gradient-to-br from-indigo-500 to-blue-500 font-bold text-white ring-1 ring-slate-800')}>
       {initials(p.name)}
     </div>
   )
@@ -78,12 +78,12 @@ function LikeButton({ p, likeCount = 0 }: { p: PortfolioWithScore; likeCount?: n
       className={cn(
         'inline-flex items-center gap-1.5 rounded-lg border px-2.5 py-1.5 text-xs font-medium transition-all duration-200',
         liked
-          ? 'border-violet-500/50 bg-violet-500/15 text-violet-300'
-          : 'border-white/10 bg-white/[0.03] text-slate-300 hover:border-violet-500/50 hover:bg-white/[0.06] hover:text-white',
+          ? 'border-indigo-500/50 bg-indigo-500/15 text-indigo-300'
+          : 'border-white/10 bg-white/[0.03] text-slate-300 hover:border-indigo-500/50 hover:bg-white/[0.06] hover:text-white',
       )}
     >
-      <span aria-hidden className={cn('text-sm leading-none transition-transform duration-200', liked && 'animate-bounce')}>{liked ? 'â™¥' : 'â™¡'}</span>
-      <span>Like{votes > 0 ? ` Â· ${votes}` : ''}</span>
+      <span aria-hidden className={cn('text-sm leading-none transition-transform duration-200', liked && 'animate-bounce')}>{liked ? '♥' : '♡'}</span>
+      <span>Like{votes > 0 ? ` · ${votes}` : ''}</span>
     </button>
   )
 }
@@ -109,7 +109,7 @@ function ShareButton({ p }: { p: PortfolioWithScore }) {
         onClick={share}
         aria-label="Copy link to this portfolio"
         title="Copy link"
-        className="inline-flex items-center gap-1.5 rounded-lg border border-white/10 bg-white/[0.03] px-2.5 py-1.5 text-xs font-medium text-slate-300 transition-all duration-200 hover:hover:border-violet-500/50 hover:bg-white/[0.06] hover:text-white"
+        className="inline-flex items-center gap-1.5 rounded-lg border border-white/10 bg-white/[0.03] px-2.5 py-1.5 text-xs font-medium text-slate-300 transition-all duration-200 hover:hover:border-indigo-500/50 hover:bg-white/[0.06] hover:text-white"
       >
         <svg aria-hidden viewBox="0 0 20 20" fill="currentColor" className="h-3.5 w-3.5">
           <path d="M11 3a1 1 0 100 2h2.586l-6.293 6.293a1 1 0 101.414 1.414L15 6.414V9a1 1 0 102 0V4a1 1 0 00-1-1h-5zM5 5a2 2 0 00-2 2v8a2 2 0 002 2h8a2 2 0 002-2v-3a1 1 0 10-2 0v3H5V7h3a1 1 0 100-2H5z" />
@@ -169,25 +169,25 @@ export function PortfolioCard({ p, likeCount = 0, className }: { p: PortfolioWit
   return (
     <div
       className={cn(
-        'group relative flex flex-col overflow-hidden rounded-2xl border border-white/10 bg-[#0b1020]/70 p-4 transition-all duration-300 ease-out hover:-translate-y-1.5 hover:border-violet-500/40 hover:shadow-2xl hover:shadow-violet-500/15',
+        'group relative flex flex-col overflow-hidden rounded-2xl border border-white/10 bg-[#101627]/70 p-4 transition-all duration-300 ease-out hover:-translate-y-1.5 hover:border-indigo-500/40 hover:shadow-2xl hover:shadow-indigo-500/15',
         className,
       )}
     >
-      <div className="pointer-events-none absolute inset-x-8 -top-16 h-24 rounded-full bg-violet-500/0 blur-2xl transition-all duration-500 group-hover:bg-violet-500/15" />
+      <div className="pointer-events-none absolute inset-x-8 -top-16 h-24 rounded-full bg-indigo-500/0 blur-2xl transition-all duration-500 group-hover:bg-indigo-500/15" />
       <Link href={`/p/${p.slug}`} className="flex min-w-0 items-start justify-between gap-3">
         <div className="flex min-w-0 items-center gap-3">
           <Avatar p={p} />
           <div className="min-w-0">
             <div className="flex items-center gap-1.5">
-              <h3 className="truncate font-semibold text-white group-hover:text-violet-300">{p.name}</h3>
+              <h3 className="truncate font-semibold text-white group-hover:text-indigo-300">{p.name}</h3>
               {p.verified && (
-                <span aria-label="verified" className="text-violet-400" title="Verified">
-                  âœ“
+                <span aria-label="verified" className="text-indigo-400" title="Verified">
+                  ✓
                 </span>
               )}
               {p.featured && (
                 <span aria-label="featured" className="text-amber-400" title="Featured">
-                  â˜…
+                  ★
                 </span>
               )}
             </div>
@@ -210,7 +210,7 @@ export function PortfolioCard({ p, likeCount = 0, className }: { p: PortfolioWit
           </span>
         ))}
         {(p.categories ?? []).slice(0, 2).map((c) => (
-          <span key={c} className="rounded-md border border-violet-500/20 bg-violet-500/10 px-2 py-0.5 text-[11px] font-medium text-violet-300">
+          <span key={c} className="rounded-md border border-indigo-500/20 bg-indigo-500/10 px-2 py-0.5 text-[11px] font-medium text-indigo-300">
             {c}
           </span>
         ))}
@@ -220,9 +220,9 @@ export function PortfolioCard({ p, likeCount = 0, className }: { p: PortfolioWit
         <div className="flex items-center gap-3">
           <span className="inline-flex items-center gap-1.5 text-xs text-slate-500">
             <span className={cn('h-2 w-2 rounded-full', getHealthColor(p.health))} />
-            {p.health === 'healthy' ? 'Healthy' : p.health === 'needs_attention' ? 'Attention' : p.health === 'down' ? 'Offline' : 'â€”'}
+            {p.health === 'healthy' ? 'Healthy' : p.health === 'needs_attention' ? 'Attention' : p.health === 'down' ? 'Offline' : '—'}
           </span>
-          <span className="text-xs font-medium text-violet-300">{p.experienceLevel}</span>
+          <span className="text-xs font-medium text-indigo-300">{p.experienceLevel}</span>
         </div>
         <div className="flex items-center gap-2">
           <LikeButton p={p} likeCount={likeCount} />
@@ -232,9 +232,9 @@ export function PortfolioCard({ p, likeCount = 0, className }: { p: PortfolioWit
             href={absoluteUrl(p.portfolioUrl)}
             target="_blank"
             rel="noopener noreferrer"
-            className="inline-flex items-center gap-1 rounded-lg border border-white/10 bg-white/[0.03] px-2.5 py-1.5 text-xs font-medium text-violet-300 transition-all duration-200 hover:border-violet-500/50 hover:bg-white/[0.06] hover:text-white"
+            className="inline-flex items-center gap-1 rounded-lg border border-white/10 bg-white/[0.03] px-2.5 py-1.5 text-xs font-medium text-indigo-300 transition-all duration-200 hover:border-indigo-500/50 hover:bg-white/[0.06] hover:text-white"
           >
-            Visit site <span aria-hidden>â†—</span>
+            Visit site <span aria-hidden>↗</span>
           </a>
         </div>
       </div>

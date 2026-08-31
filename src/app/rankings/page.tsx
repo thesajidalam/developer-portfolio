@@ -1,4 +1,4 @@
-﻿import Link from 'next/link'
+import Link from 'next/link'
 import type { Metadata } from 'next'
 import { Avatar } from '@/components/PortfolioCard'
 import { ScoreRing } from '@/components/ScoreRing'
@@ -24,21 +24,21 @@ const MEDAL_STYLES: Record<number, { ring: string; badge: string; label: string;
     ring: 'border-amber-400/60 bg-gradient-to-br from-amber-500/10 to-transparent',
     badge: 'bg-amber-500/15 text-amber-300',
     label: 'Gold',
-    emoji: 'ðŸ¥‡',
+    emoji: '🥇',
     glow: 'shadow-amber-500/20',
   },
   2: {
     ring: 'border-slate-300/50 bg-gradient-to-br from-slate-300/10 to-transparent',
     badge: 'bg-slate-300/15 text-slate-200',
     label: 'Silver',
-    emoji: 'ðŸ¥ˆ',
+    emoji: '🥈',
     glow: 'shadow-slate-300/15',
   },
   3: {
     ring: 'border-amber-700/50 bg-gradient-to-br from-amber-700/10 to-transparent',
     badge: 'bg-amber-700/15 text-amber-400',
     label: 'Bronze',
-    emoji: 'ðŸ¥‰',
+    emoji: '🥉',
     glow: 'shadow-amber-700/15',
   },
 }
@@ -89,8 +89,8 @@ export default async function RankingsPage({
                 className={cn(
                   'rounded-full border px-4 py-2 text-sm font-medium transition-all',
                   isActive
-                    ? 'border-violet-500/60 bg-violet-500/15 text-violet-300 shadow-lg shadow-violet-500/10'
-                    : 'border-white/10 bg-white/[0.03] text-slate-400 hover:border-violet-500/40 hover:bg-white/[0.05] hover:text-white',
+                    ? 'border-indigo-500/60 bg-indigo-500/15 text-indigo-300 shadow-lg shadow-indigo-500/10'
+                    : 'border-white/10 bg-white/[0.03] text-slate-400 hover:border-indigo-500/40 hover:bg-white/[0.05] hover:text-white',
                 )}
               >
                 {tab.label}
@@ -119,7 +119,7 @@ export default async function RankingsPage({
                     {medal?.label}
                   </span>
                   <Avatar p={p} size="lg" />
-                  <h3 className="mt-3 truncate font-semibold text-white group-hover:text-violet-300">{p.name}</h3>
+                  <h3 className="mt-3 truncate font-semibold text-white group-hover:text-indigo-300">{p.name}</h3>
                   <span className="mt-0.5 block truncate text-xs text-slate-500">{hostnameOf(p.portfolioUrl)}</span>
                   <div className="mt-3">
                     <ScoreRing score={p.score?.overallScore ?? 0} size={72} label="overall" />
@@ -134,59 +134,61 @@ export default async function RankingsPage({
           </div>
         )}
 
-        <div className="animate-hero overflow-x-auto rounded-2xl border border-white/10 bg-white/[0.03] shadow-2xl shadow-violet-500/5 backdrop-blur-xl">
-          <table className="w-full min-w-max">
-            <thead>
-              <tr className="border-b border-white/5">
-                <th className="px-5 py-3 text-left text-[11px] font-medium uppercase tracking-wide text-slate-500">#</th>
-                <th className="px-5 py-3 text-left text-[11px] font-medium uppercase tracking-wide text-slate-500">Portfolio</th>
-                <th className="hidden px-5 py-3 text-left text-[11px] font-medium uppercase tracking-wide text-slate-500 sm:table-cell">Stack</th>
-                <th className="hidden px-5 py-3 text-left text-[11px] font-medium uppercase tracking-wide text-slate-500 md:table-cell">Health</th>
-                <th className="px-5 py-3 text-right text-[11px] font-medium uppercase tracking-wide text-slate-500">Score</th>
-                <th className="px-5 py-3 text-right text-[11px] font-medium uppercase tracking-wide text-slate-500">Likes</th>
-              </tr>
-            </thead>
-            <tbody>
-              {rest.map((p, i) => {
-                const rank = i + 4 + (page - 1) * PAGE_SIZE
-                return (
-                  <tr key={p.id} className="border-t border-white/5 transition-colors hover:bg-white/[0.02]">
-                    <td className="px-5 py-3 text-sm text-slate-500">{rank}</td>
-                    <td className="px-5 py-3">
-                      <Link href={`/p/${p.slug}`} className="flex items-center gap-3">
-                        <Avatar p={p} size="sm" />
-                        <div className="min-w-0">
-                          <span className="truncate font-medium text-white hover:text-violet-300">{p.name}</span>
-                          <span className="ml-2 hidden text-xs text-slate-500 sm:inline">{hostnameOf(p.portfolioUrl)}</span>
+        <div className="animate-hero rounded-2xl border border-white/10 bg-white/[0.03] shadow-2xl shadow-indigo-500/5 backdrop-blur-xl">
+          <div className="w-full overflow-x-auto">
+            <table className="w-full table-fixed">
+              <thead>
+                <tr className="border-b border-white/5">
+                  <th className="w-10 px-3 py-3 text-left text-[11px] font-medium uppercase tracking-wide text-slate-500">#</th>
+                  <th className="w-[34%] px-3 py-3 text-left text-[11px] font-medium uppercase tracking-wide text-slate-500">Portfolio</th>
+                  <th className="hidden w-[24%] px-3 py-3 text-left text-[11px] font-medium uppercase tracking-wide text-slate-500 lg:table-cell">Stack</th>
+                  <th className="hidden w-[16%] px-3 py-3 text-left text-[11px] font-medium uppercase tracking-wide text-slate-500 sm:table-cell">Health</th>
+                  <th className="w-20 px-3 py-3 text-right text-[11px] font-medium uppercase tracking-wide text-slate-500">Score</th>
+                  <th className="w-16 px-3 py-3 text-right text-[11px] font-medium uppercase tracking-wide text-slate-500">Likes</th>
+                </tr>
+              </thead>
+              <tbody>
+                {rest.map((p, i) => {
+                  const rank = i + 4 + (page - 1) * PAGE_SIZE
+                  return (
+                    <tr key={p.id} className="border-t border-white/5 transition-colors hover:bg-white/[0.02]">
+                      <td className="px-3 py-3 text-sm text-slate-500">{rank}</td>
+                      <td className="px-3 py-3">
+                        <Link href={`/p/${p.slug}`} className="flex items-center gap-3">
+                          <Avatar p={p} size="sm" />
+                          <div className="min-w-0 max-w-full">
+                            <span className="block truncate font-medium text-white hover:text-indigo-300">{p.name}</span>
+                            <span className="block truncate text-xs text-slate-500">{hostnameOf(p.portfolioUrl)}</span>
+                          </div>
+                        </Link>
+                      </td>
+                      <td className="hidden px-3 py-3 lg:table-cell">
+                        <div className="flex flex-wrap gap-1">
+                          {(p.technologies ?? []).slice(0, 3).map((t) => (
+                            <span key={t} className="truncate rounded-md border border-white/5 bg-white/[0.04] px-1.5 py-0.5 text-[10px] font-medium text-slate-400">
+                              {t}
+                            </span>
+                          ))}
                         </div>
-                      </Link>
-                    </td>
-                    <td className="hidden px-5 py-3 sm:table-cell">
-                      <div className="flex flex-wrap gap-1">
-                        {(p.technologies ?? []).slice(0, 3).map((t) => (
-                          <span key={t} className="rounded-md border border-white/5 bg-white/[0.04] px-1.5 py-0.5 text-[10px] font-medium text-slate-400">
-                            {t}
-                          </span>
-                        ))}
-                      </div>
-                    </td>
-                    <td className="hidden px-5 py-3 md:table-cell">
-                      <span className="inline-flex items-center gap-1.5 text-xs text-slate-500">
-                        <span className={cn('h-2 w-2 rounded-full', getHealthColor(p.health))} />
-                        {p.health === 'healthy' ? 'Healthy' : p.health === 'needs_attention' ? 'Attention' : p.health === 'down' ? 'Offline' : 'â€”'}
-                      </span>
-                    </td>
-                    <td className="px-5 py-3 text-right">
-                      <ScoreBadge score={p.score?.overallScore ?? 0} />
-                    </td>
-                    <td className="px-5 py-3 text-right text-sm text-slate-400">
-                      {likeCounts.get(p.id) ?? 0}
-                    </td>
-                  </tr>
-                )
-              })}
-            </tbody>
-          </table>
+                      </td>
+                      <td className="hidden px-3 py-3 sm:table-cell">
+                        <span className="inline-flex items-center gap-1.5 text-xs text-slate-500">
+                          <span className={cn('h-2 w-2 flex-none rounded-full', getHealthColor(p.health))} />
+                          {p.health === 'healthy' ? 'Healthy' : p.health === 'needs_attention' ? 'Attention' : p.health === 'down' ? 'Offline' : <>&mdash;</>}
+                        </span>
+                      </td>
+                      <td className="px-3 py-3 text-right">
+                        <ScoreBadge score={p.score?.overallScore ?? 0} />
+                      </td>
+                      <td className="px-3 py-3 text-right text-sm text-slate-400">
+                        {likeCounts.get(p.id) ?? 0}
+                      </td>
+                    </tr>
+                  )
+                })}
+              </tbody>
+            </table>
+          </div>
         </div>
 
         <div className="mt-10 flex items-center justify-between gap-4">
@@ -198,26 +200,26 @@ export default async function RankingsPage({
               <Link
                 href={`/rankings?sort=${sortParam}&page=${page - 1}`}
                 scroll={false}
-                className="rounded-lg border border-white/10 bg-white/[0.03] px-4 py-2 text-sm font-medium text-slate-300 transition-colors hover:border-violet-500/50 hover:text-white"
+                className="rounded-lg border border-white/10 bg-white/[0.03] px-4 py-2 text-sm font-medium text-slate-300 transition-colors hover:border-indigo-500/50 hover:text-white"
               >
-                â† Previous
+                ← Previous
               </Link>
             ) : (
               <span className="cursor-not-allowed rounded-lg border border-white/5 px-4 py-2 text-sm font-medium text-slate-600">
-                â† Previous
+                ← Previous
               </span>
             )}
             {page < result.meta.totalPages ? (
               <Link
                 href={`/rankings?sort=${sortParam}&page=${page + 1}`}
                 scroll={false}
-                className="shine rounded-lg bg-gradient-to-r from-violet-500 to-fuchsia-500 px-4 py-2 text-sm font-semibold text-white shadow-lg shadow-violet-500/25 transition-all hover:scale-[1.03] hover:shadow-xl hover:shadow-violet-500/40 active:scale-95"
+                className="shine rounded-lg bg-gradient-to-r from-indigo-500 to-blue-500 px-4 py-2 text-sm font-semibold text-white shadow-lg shadow-indigo-500/25 transition-all hover:scale-[1.03] hover:shadow-xl hover:shadow-indigo-500/40 active:scale-95"
               >
-                Next â†’
+                Next →
               </Link>
             ) : (
               <span className="cursor-not-allowed rounded-lg border border-white/5 px-4 py-2 text-sm font-medium text-slate-600">
-                Next â†’
+                Next →
               </span>
             )}
           </div>

@@ -15,11 +15,11 @@ function esc(s: string): string {
 }
 
 function scoreHex(score: number): string {
-  if (score >= 90) return '#bef264'
-  if (score >= 75) return '#6ee7b7'
-  if (score >= 60) return '#fde047'
-  if (score >= 40) return '#fdba74'
-  return '#fca5a5'
+  if (score >= 90) return '#34d399'
+  if (score >= 75) return '#22c55e'
+  if (score >= 60) return '#fbbf24'
+  if (score >= 40) return '#fb923c'
+  return '#f87171'
 }
 
 export async function GET(_request: NextRequest, { params }: { params: Promise<{ slug: string }> }) {
@@ -47,19 +47,19 @@ export async function GET(_request: NextRequest, { params }: { params: Promise<{
   const svg = `<svg width="1200" height="630" viewBox="0 0 1200 630" xmlns="http://www.w3.org/2000/svg">
   <defs>
     <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
-      <stop offset="0%" stop-color="#0b0b10"/>
-      <stop offset="100%" stop-color="#171126"/>
+      <stop offset="0%" stop-color="#0a0e1a"/>
+      <stop offset="100%" stop-color="#101627"/>
     </linearGradient>
     <linearGradient id="glow" x1="0" y1="0" x2="1" y2="1">
-      <stop offset="0%" stop-color="#8b5cf6"/>
-      <stop offset="100%" stop-color="#d946ef"/>
+      <stop offset="0%" stop-color="#4f6ef7"/>
+      <stop offset="100%" stop-color="#3b82f6"/>
     </linearGradient>
   </defs>
   <rect width="1200" height="630" fill="url(#bg)"/>
-  <circle cx="1040" cy="120" r="260" fill="#8b5cf6" opacity="0.14"/>
-  <circle cx="120" cy="560" r="220" fill="#a3e635" opacity="0.08"/>
+  <circle cx="1040" cy="120" r="260" fill="#4f6ef7" opacity="0.16"/>
+  <circle cx="120" cy="560" r="220" fill="#3b82f6" opacity="0.10"/>
 
-  <text x="48" y="60" font-family="Inter,system-ui,sans-serif" font-weight="800" font-size="26" fill="#a78bfa" letter-spacing="1">DEVFOLIO</text>
+  <text x="48" y="60" font-family="Inter,system-ui,sans-serif" font-weight="800" font-size="26" fill="#7c93fa" letter-spacing="1">DEVFOLIO</text>
 
   <text x="48" y="250" font-family="Inter,system-ui,sans-serif" font-weight="700" font-size="64" fill="#ffffff">${name}</text>
   <text x="48" y="306" font-family="Inter,system-ui,sans-serif" font-size="34" fill="#94a3b8">${host}</text>
@@ -77,7 +77,7 @@ export async function GET(_request: NextRequest, { params }: { params: Promise<{
 
   <rect x="850" y="540" width="302" height="62" rx="31" fill="url(#glow)"/>
   <text x="1001" y="579" text-anchor="middle" font-family="Inter,system-ui,sans-serif" font-weight="700" font-size="26" fill="#ffffff">Check my score</text>
-  <text x="1001" y="612" text-anchor="middle" font-family="Inter,system-ui,sans-serif" font-size="19" fill="#c7d2fe">gitdevfolio.vercel.app</text>
+  <text x="1001" y="612" text-anchor="middle" font-family="Inter,system-ui,sans-serif" font-size="19" fill="#bfdbfe">gitdevfolio.vercel.app</text>
 </svg>`
 
   return new NextResponse(svg, {

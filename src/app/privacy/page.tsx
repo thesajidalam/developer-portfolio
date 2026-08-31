@@ -1,20 +1,20 @@
-﻿import type { Metadata } from 'next'
+import type { Metadata } from 'next'
 import Link from 'next/link'
 
 export const metadata: Metadata = {
   title: 'Privacy policy',
   description:
-    'How DevFolio handles your data â€” private by default, transparent by design.',
+    'How DevFolio handles your data — private by default, transparent by design.',
 }
 
 const sections = [
   {
     title: 'What we store',
-    body: 'When you submit a portfolio, we store the details you provide â€” your name, the URL of your portfolio, and any optional contact details â€” so that your listing can be created and kept up to date. We store the minimum needed to run the directory, and nothing more.',
+    body: 'When you submit a portfolio, we store the details you provide — your name, the URL of your portfolio, and any optional contact details — so that your listing can be created and kept up to date. We store the minimum needed to run the directory, and nothing more.',
   },
   {
-    title: 'Ratings are public â€” your details are not',
-    body: 'Scores, ranks and computed metrics are shown openly on DevFolio because transparency is the heart of the service â€” anyone can see how a rating was reached. Your private details, however, are never published and are only ever used to manage your listing.',
+    title: 'Ratings are public — your details are not',
+    body: 'Scores, ranks and computed metrics are shown openly on DevFolio because transparency is the heart of the service — anyone can see how a rating was reached. Your private details, however, are never published and are only ever used to manage your listing.',
   },
   {
     title: 'Your data is never sold',
@@ -30,7 +30,7 @@ const sections = [
   },
   {
     title: 'Contact',
-    body: 'If you have any questions about how DevFolio protects your data, reach out through the GitHub profile linked in the footer â€” we respond promptly.',
+    body: 'If you have any questions about how DevFolio protects your data, reach out through the GitHub profile linked in the footer — we respond promptly.',
   },
 ]
 
@@ -39,7 +39,7 @@ export default function PrivacyPolicyPage() {
     <section className="relative overflow-hidden bg-aurora">
       <div className="pointer-events-none absolute inset-0 bg-grid" />
       <div className="relative mx-auto max-w-3xl px-4 py-20 sm:px-6 sm:py-28">
-        <p className="animate-hero mb-3 text-xs font-semibold uppercase tracking-[0.25em] text-lime-300">
+        <p className="animate-hero mb-3 text-xs font-semibold uppercase tracking-[0.25em] text-indigo-300">
           Privacy policy
         </p>
         <h1 className="animate-hero delay-1 text-3xl font-bold tracking-tight text-white sm:text-5xl">
@@ -57,10 +57,10 @@ export default function PrivacyPolicyPage() {
           {sections.map((s, i) => (
             <div
               key={s.title}
-              className="glass rounded-2xl p-6 transition-colors hover:border-violet-500/30 sm:p-7"
+              className="glass rounded-2xl p-6 transition-colors hover:border-indigo-500/30 sm:p-7"
             >
               <div className="flex items-start gap-4">
-                <span className="mt-0.5 flex h-7 w-7 shrink-0 items-center justify-center rounded-lg bg-gradient-to-br from-violet-500 to-fuchsia-400 text-xs font-bold text-white">
+                <span className="mt-0.5 flex h-7 w-7 shrink-0 items-center justify-center rounded-lg bg-gradient-to-br from-indigo-500 to-blue-400 text-xs font-bold text-white">
                   {i + 1}
                 </span>
                 <div>
@@ -75,15 +75,15 @@ export default function PrivacyPolicyPage() {
         <div className="animate-hero delay-4 mt-12 flex flex-wrap items-center gap-4">
           <Link
             href="/submit"
-            className="shine rounded-lg bg-gradient-to-r from-violet-500 to-fuchsia-500 px-5 py-2.5 text-sm font-semibold text-white shadow-lg shadow-violet-500/25 transition-all hover:scale-[1.03] hover:shadow-xl active:scale-95"
+            className="shine rounded-lg bg-gradient-to-r from-indigo-500 to-blue-500 px-5 py-2.5 text-sm font-semibold text-white shadow-lg shadow-indigo-500/25 transition-all hover:scale-[1.03] hover:shadow-xl active:scale-95"
           >
             Add your portfolio
           </Link>
           <Link
             href="/"
-            className="rounded-lg border border-white/10 bg-white/[0.03] px-5 py-2.5 text-sm font-medium text-slate-300 transition-colors hover:border-violet-500/50 hover:text-white"
+            className="rounded-lg border border-white/10 bg-white/[0.03] px-5 py-2.5 text-sm font-medium text-slate-300 transition-colors hover:border-indigo-500/50 hover:text-white"
           >
-            â† Back to gallery
+            ← Back to gallery
           </Link>
         </div>
       </div>

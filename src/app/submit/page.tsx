@@ -1,4 +1,4 @@
-﻿'use client'
+'use client'
 
 import Link from 'next/link'
 import { useState } from 'react'
@@ -7,7 +7,7 @@ import { cn } from '@/lib/utils'
 type Status = 'idle' | 'loading' | 'success' | 'error'
 
 const inputClass =
-  'w-full rounded-xl border border-white/10 bg-white/[0.04] px-3.5 py-2.5 text-sm text-slate-200 outline-none transition-all placeholder:text-slate-500 focus:border-violet-500/60 focus:bg-white/[0.06]'
+  'w-full rounded-xl border border-white/10 bg-white/[0.04] px-3.5 py-2.5 text-sm text-slate-200 outline-none transition-all placeholder:text-slate-500 focus:border-indigo-500/60 focus:bg-white/[0.06]'
 
 export default function SubmitPage() {
   const [step, setStep] = useState(1)
@@ -84,7 +84,7 @@ export default function SubmitPage() {
               ))}
             </div>
             <div className="animate-hero mx-auto flex h-16 w-16 items-center justify-center rounded-2xl bg-gradient-to-br from-emerald-500/20 to-emerald-500/5 text-3xl text-emerald-400 ring-1 ring-emerald-500/30">
-              âœ“
+              ✓
             </div>
           </div>
           <h1 className="animate-hero delay-1 mt-6 text-3xl font-bold text-white">Thanks for submitting!</h1>
@@ -112,7 +112,7 @@ export default function SubmitPage() {
                     alert('Could not copy automatically. Select the code above.')
                   }
                 }}
-                className="shrink-0 rounded-lg bg-gradient-to-r from-violet-500 to-fuchsia-500 px-3 py-2 text-xs font-semibold text-white transition-all hover:scale-105 active:scale-95"
+                className="shrink-0 rounded-lg bg-gradient-to-r from-indigo-500 to-blue-500 px-3 py-2 text-xs font-semibold text-white transition-all hover:scale-105 active:scale-95"
               >
                 Copy
               </button>
@@ -121,7 +121,7 @@ export default function SubmitPage() {
 
           <Link
             href="/"
-            className="shine animate-hero delay-3 mt-6 inline-block rounded-xl bg-gradient-to-r from-violet-500 to-fuchsia-500 px-6 py-3 text-sm font-semibold text-white shadow-lg shadow-violet-500/30 transition-all hover:scale-105 hover:shadow-xl hover:shadow-violet-500/40 active:scale-95"
+            className="shine animate-hero delay-3 mt-6 inline-block rounded-xl bg-gradient-to-r from-indigo-500 to-blue-500 px-6 py-3 text-sm font-semibold text-white shadow-lg shadow-indigo-500/30 transition-all hover:scale-105 hover:shadow-xl hover:shadow-indigo-500/40 active:scale-95"
           >
             Back to gallery
           </Link>
@@ -164,11 +164,11 @@ export default function SubmitPage() {
                   step > s.num
                     ? 'bg-emerald-500/20 text-emerald-400 ring-1 ring-emerald-500/30'
                     : step === s.num
-                      ? 'bg-gradient-to-r from-violet-500 to-fuchsia-500 text-white shadow-lg shadow-violet-500/25'
+                      ? 'bg-gradient-to-r from-indigo-500 to-blue-500 text-white shadow-lg shadow-indigo-500/25'
                       : 'bg-white/[0.04] text-slate-500 ring-1 ring-white/10'
                 }`}
               >
-                {step > s.num ? 'âœ“' : s.num}
+                {step > s.num ? '✓' : s.num}
               </div>
               <span className={`hidden text-xs font-medium sm:inline ${step === s.num ? 'text-white' : 'text-slate-500'}`}>
                 {s.title}
@@ -180,7 +180,7 @@ export default function SubmitPage() {
           ))}
         </div>
 
-        <form onSubmit={handleSubmit} className="animate-hero delay-2 space-y-5 rounded-2xl border border-white/10 bg-white/[0.03] p-6 shadow-2xl shadow-violet-500/5 backdrop-blur-xl">
+        <form onSubmit={handleSubmit} className="animate-hero delay-2 space-y-5 rounded-2xl border border-white/10 bg-white/[0.03] p-6 shadow-2xl shadow-indigo-500/5 backdrop-blur-xl">
           {step === 1 && (
             <div>
               <label htmlFor="url" className="mb-1.5 block text-sm font-medium text-slate-300">
@@ -285,7 +285,7 @@ export default function SubmitPage() {
               <button
                 type="button"
                 onClick={() => setStep(step - 1)}
-                className="rounded-xl border border-white/10 bg-white/[0.03] px-4 py-2.5 text-sm font-medium text-slate-300 transition-all hover:border-violet-500/50 hover:text-white"
+                className="rounded-xl border border-white/10 bg-white/[0.03] px-4 py-2.5 text-sm font-medium text-slate-300 transition-all hover:border-indigo-500/50 hover:text-white"
               >
                 Back
               </button>
@@ -294,7 +294,7 @@ export default function SubmitPage() {
               <button
                 type="button"
                 onClick={nextStep}
-                className="shine flex-1 rounded-xl bg-gradient-to-r from-violet-500 to-fuchsia-500 px-6 py-2.5 text-sm font-semibold text-white shadow-lg shadow-violet-500/30 transition-all hover:scale-[1.02] hover:shadow-xl hover:shadow-violet-500/40 active:scale-95"
+                className="shine flex-1 rounded-xl bg-gradient-to-r from-indigo-500 to-blue-500 px-6 py-2.5 text-sm font-semibold text-white shadow-lg shadow-indigo-500/30 transition-all hover:scale-[1.02] hover:shadow-xl hover:shadow-indigo-500/40 active:scale-95"
               >
                 Continue
               </button>
@@ -302,7 +302,7 @@ export default function SubmitPage() {
               <button
                 type="submit"
                 disabled={status === 'loading'}
-                className="shine flex-1 rounded-xl bg-gradient-to-r from-violet-500 to-fuchsia-500 px-6 py-2.5 text-sm font-semibold text-white shadow-lg shadow-violet-500/30 transition-all hover:scale-[1.02] hover:shadow-xl hover:shadow-violet-500/40 disabled:cursor-not-allowed disabled:opacity-50 disabled:hover:scale-100 active:scale-95"
+                className="shine flex-1 rounded-xl bg-gradient-to-r from-indigo-500 to-blue-500 px-6 py-2.5 text-sm font-semibold text-white shadow-lg shadow-indigo-500/30 transition-all hover:scale-[1.02] hover:shadow-xl hover:shadow-indigo-500/40 disabled:cursor-not-allowed disabled:opacity-50 disabled:hover:scale-100 active:scale-95"
               >
                 {status === 'loading' ? 'Submitting...' : 'Submit for review'}
               </button>
@@ -319,7 +319,7 @@ export default function SubmitPage() {
               { step: '3', title: 'You appear', desc: 'Get scored and listed in the directory.' },
             ].map((s) => (
               <div key={s.step} className="rounded-2xl border border-white/10 bg-white/[0.03] p-5 text-center backdrop-blur-sm">
-                <div className="mx-auto mb-3 flex h-10 w-10 items-center justify-center rounded-xl bg-gradient-to-br from-violet-500/20 to-fuchsia-500/10 text-sm font-bold text-violet-300 ring-1 ring-violet-500/20">
+                <div className="mx-auto mb-3 flex h-10 w-10 items-center justify-center rounded-xl bg-gradient-to-br from-indigo-500/20 to-blue-500/10 text-sm font-bold text-indigo-300 ring-1 ring-indigo-500/20">
                   {s.step}
                 </div>
                 <h3 className="text-sm font-semibold text-white">{s.title}</h3>

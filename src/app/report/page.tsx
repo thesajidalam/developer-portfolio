@@ -1,11 +1,11 @@
-﻿'use client'
+'use client'
 
 import { useSearchParams } from 'next/navigation'
 import { Suspense, useState } from 'react'
 import { cn } from '@/lib/utils'
 
 const inputClass =
-  'w-full rounded-xl border border-white/10 bg-white/[0.04] px-3.5 py-2.5 text-sm text-slate-200 outline-none transition-all placeholder:text-slate-500 focus:border-violet-500/60 focus:bg-white/[0.06]'
+  'w-full rounded-xl border border-white/10 bg-white/[0.04] px-3.5 py-2.5 text-sm text-slate-200 outline-none transition-all placeholder:text-slate-500 focus:border-indigo-500/60 focus:bg-white/[0.06]'
 
 function ReportForm() {
   const searchParams = useSearchParams()
@@ -62,11 +62,11 @@ function ReportForm() {
 
   return (
     <div className="mx-auto max-w-lg px-4 py-16 sm:px-6">
-      <div className="relative overflow-hidden rounded-3xl border border-white/10 bg-white/[0.03] p-8 shadow-2xl shadow-violet-500/10 backdrop-blur-xl">
-        <div className="pointer-events-none absolute -top-16 -right-16 h-48 w-48 rounded-full bg-violet-500/25 blur-3xl" />
+      <div className="relative overflow-hidden rounded-3xl border border-white/10 bg-white/[0.03] p-8 shadow-2xl shadow-indigo-500/10 backdrop-blur-xl">
+        <div className="pointer-events-none absolute -top-16 -right-16 h-48 w-48 rounded-full bg-indigo-500/25 blur-3xl" />
 
-        <a href="/" className="text-sm text-violet-300 transition-colors hover:text-violet-200">
-          â† Back to gallery
+        <a href="/" className="text-sm text-indigo-300 transition-colors hover:text-indigo-200">
+          ← Back to gallery
         </a>
         <h1 className="mt-4 text-2xl font-bold text-white">Report a broken link</h1>
         <p className="mt-2 text-sm text-slate-400">
@@ -150,9 +150,9 @@ function ReportForm() {
           <button
             type="submit"
             disabled={status === 'loading'}
-            className="shine w-full rounded-xl bg-gradient-to-r from-violet-500 to-fuchsia-500 px-4 py-3 text-sm font-semibold text-white shadow-lg shadow-violet-500/25 transition-all hover:scale-[1.02] disabled:cursor-not-allowed disabled:opacity-50 disabled:hover:scale-100"
+            className="shine w-full rounded-xl bg-gradient-to-r from-indigo-500 to-blue-500 px-4 py-3 text-sm font-semibold text-white shadow-lg shadow-indigo-500/25 transition-all hover:scale-[1.02] disabled:cursor-not-allowed disabled:opacity-50 disabled:hover:scale-100"
           >
-            {status === 'loading' ? 'Submittingâ€¦' : 'Submit report'}
+            {status === 'loading' ? 'Submitting…' : 'Submit report'}
           </button>
         </form>
       </div>
@@ -166,7 +166,7 @@ export default function ReportPage() {
       fallback={
         <div className="mx-auto max-w-lg px-4 py-16 sm:px-6">
           <div className="rounded-3xl border border-white/10 bg-white/[0.03] p-8">
-            <p className="text-sm text-slate-400">Loadingâ€¦</p>
+            <p className="text-sm text-slate-400">Loading…</p>
           </div>
         </div>
       }

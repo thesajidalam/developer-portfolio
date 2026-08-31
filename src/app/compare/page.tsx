@@ -1,4 +1,4 @@
-﻿'use client'
+'use client'
 
 import { useEffect, useState } from 'react'
 import { useRouter } from 'next/navigation'
@@ -104,7 +104,7 @@ export default function ComparePage() {
 
         {quickPicks.length > 0 && selected.length === 0 && (
           <div className="animate-hero delay-1 mb-8">
-            <p className="mb-3 text-sm font-medium text-slate-400">Quick picks â€” top 5 by score</p>
+            <p className="mb-3 text-sm font-medium text-slate-400">Quick picks — top 5 by score</p>
             <div className="flex flex-wrap gap-2">
               {quickPicks.map((p) => (
                 <button
@@ -114,8 +114,8 @@ export default function ComparePage() {
                   className={cn(
                     'inline-flex items-center gap-2 rounded-full border px-3 py-1.5 text-sm font-medium transition-all',
                     selected.some((s) => s.id === p.id)
-                      ? 'border-violet-500/60 bg-violet-500/15 text-violet-300'
-                      : 'border-white/10 bg-white/[0.04] text-slate-300 hover:border-violet-500/40 hover:bg-white/[0.06] hover:text-white',
+                      ? 'border-indigo-500/60 bg-indigo-500/15 text-indigo-300'
+                      : 'border-white/10 bg-white/[0.04] text-slate-300 hover:border-indigo-500/40 hover:bg-white/[0.06] hover:text-white',
                   )}
                 >
                   <Avatar p={p} size="sm" />
@@ -138,10 +138,10 @@ export default function ComparePage() {
             value={query}
             onChange={(e) => setQuery(e.target.value)}
             placeholder="Search portfolios by name, technology, or domain..."
-            className="w-full rounded-2xl border border-white/10 bg-white/[0.04] py-3.5 pl-12 pr-4 text-sm text-slate-200 outline-none transition-all placeholder:text-slate-500 focus:border-violet-500/60 focus:bg-white/[0.06]"
+            className="w-full rounded-2xl border border-white/10 bg-white/[0.04] py-3.5 pl-12 pr-4 text-sm text-slate-200 outline-none transition-all placeholder:text-slate-500 focus:border-indigo-500/60 focus:bg-white/[0.06]"
           />
           {searching && (
-            <span className="absolute right-4 top-1/2 -translate-y-1/2 text-xs text-slate-500">Searchingâ€¦</span>
+            <span className="absolute right-4 top-1/2 -translate-y-1/2 text-xs text-slate-500">Searching…</span>
           )}
         </div>
 
@@ -159,8 +159,8 @@ export default function ComparePage() {
                   className={cn(
                     'flex w-full items-center gap-3 rounded-xl border p-3 text-left backdrop-blur-sm transition-all',
                     isSelected
-                      ? 'border-violet-500/60 bg-violet-500/10'
-                      : 'border-white/10 bg-white/[0.03] hover:border-violet-500/40 hover:bg-white/[0.05]',
+                      ? 'border-indigo-500/60 bg-indigo-500/10'
+                      : 'border-white/10 bg-white/[0.03] hover:border-indigo-500/40 hover:bg-white/[0.05]',
                     atMax && 'cursor-not-allowed opacity-50',
                   )}
                 >
@@ -170,8 +170,8 @@ export default function ComparePage() {
                     <div className="truncate text-xs text-slate-500">{hostnameOf(p.portfolioUrl)}</div>
                   </div>
                   <ScoreBadge score={p.score?.overallScore ?? 0} />
-                  <span className={cn('text-sm font-bold', isSelected ? 'text-emerald-400' : 'text-violet-400')}>
-                    {isSelected ? 'âœ“' : '+'}
+                  <span className={cn('text-sm font-bold', isSelected ? 'text-emerald-400' : 'text-indigo-400')}>
+                    {isSelected ? '✓' : '+'}
                   </span>
                 </button>
               )
@@ -204,7 +204,7 @@ export default function ComparePage() {
               {selected.map((p) => (
                 <span
                   key={p.id}
-                  className="inline-flex items-center gap-2 rounded-full border border-violet-500/40 bg-violet-500/10 pl-1 pr-2 text-sm font-medium text-violet-300"
+                  className="inline-flex items-center gap-2 rounded-full border border-indigo-500/40 bg-indigo-500/10 pl-1 pr-2 text-sm font-medium text-indigo-300"
                 >
                   <Avatar p={p} size="sm" />
                   {p.name}
@@ -214,7 +214,7 @@ export default function ComparePage() {
                     aria-label={`Remove ${p.name}`}
                     className="ml-0.5 rounded-full px-1 text-xs text-slate-400 transition-colors hover:bg-white/10 hover:text-white"
                   >
-                    âœ•
+                    ✕
                   </button>
                 </span>
               ))}
@@ -231,9 +231,9 @@ export default function ComparePage() {
             type="button"
             onClick={createLink}
             disabled={!canCreate || creating}
-            className="shine w-full max-w-md rounded-2xl bg-gradient-to-r from-violet-500 to-fuchsia-500 px-6 py-3.5 text-sm font-semibold text-white shadow-lg shadow-violet-500/30 transition-all hover:scale-[1.02] hover:shadow-xl hover:shadow-violet-500/40 disabled:cursor-not-allowed disabled:opacity-50 disabled:hover:scale-100 active:scale-95"
+            className="shine w-full max-w-md rounded-2xl bg-gradient-to-r from-indigo-500 to-blue-500 px-6 py-3.5 text-sm font-semibold text-white shadow-lg shadow-indigo-500/30 transition-all hover:scale-[1.02] hover:shadow-xl hover:shadow-indigo-500/40 disabled:cursor-not-allowed disabled:opacity-50 disabled:hover:scale-100 active:scale-95"
           >
-            {creating ? 'Creatingâ€¦' : `Compare Now â†’`}
+            {creating ? 'Creating…' : `Compare Now →`}
           </button>
           {selected.length > 0 && selected.length < MIN && (
             <p className="text-xs text-slate-500">Select at least {MIN} portfolios to compare.</p>

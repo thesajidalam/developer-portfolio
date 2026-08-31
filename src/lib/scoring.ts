@@ -69,7 +69,7 @@ export function getScoreBreakdown(
 }
 
 export function scoreLabel(score: number): { label: string; color: string } {
-  if (score >= 90) return { label: 'Exceptional', color: 'text-lime-400' }
+  if (score >= 90) return { label: 'Exceptional', color: 'text-emerald-400' }
   if (score >= 75) return { label: 'Excellent', color: 'text-emerald-400' }
   if (score >= 60) return { label: 'Good', color: 'text-amber-400' }
   if (score >= 40) return { label: 'Fair', color: 'text-orange-400' }

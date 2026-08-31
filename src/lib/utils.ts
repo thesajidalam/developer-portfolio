@@ -15,7 +15,7 @@ export function slugify(text: string): string {
 }
 
 export function getScoreColor(score: number): string {
-  if (score >= 90) return 'text-lime-400'
+  if (score >= 90) return 'text-emerald-400'
   if (score >= 75) return 'text-emerald-400'
   if (score >= 60) return 'text-amber-400'
   if (score >= 40) return 'text-orange-400'
@@ -23,8 +23,8 @@ export function getScoreColor(score: number): string {
 }
 
 export function getScoreBg(score: number): string {
-  if (score >= 90) return 'bg-lime-400/10'
-  if (score >= 75) return 'bg-emerald-400/10'
+  if (score >= 90) return 'bg-emerald-400/10'
+  if (score >= 75) return 'bg-green-500/10'
   if (score >= 60) return 'bg-amber-400/10'
   if (score >= 40) return 'bg-orange-400/10'
   return 'bg-red-400/10'

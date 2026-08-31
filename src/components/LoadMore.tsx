@@ -1,4 +1,4 @@
-﻿'use client'
+'use client'
 
 import { useState } from 'react'
 import type { PortfolioFilters, PortfolioWithScore } from '@/lib/types'
@@ -59,7 +59,7 @@ export function LoadMore({ initial, total, initialPage, pageSize, filters }: Loa
           <p className="mt-2 text-sm text-slate-500">Try adjusting your filters or clearing your search.</p>
           <a
             href="/"
-            className="shine mt-6 inline-block rounded-xl bg-gradient-to-r from-violet-500 to-fuchsia-500 px-5 py-2.5 text-sm font-semibold text-white shadow-lg shadow-violet-500/25 transition-all hover:scale-105 active:scale-95"
+            className="shine mt-6 inline-block rounded-xl bg-gradient-to-r from-indigo-500 to-blue-500 px-5 py-2.5 text-sm font-semibold text-white shadow-lg shadow-indigo-500/25 transition-all hover:scale-105 active:scale-95"
           >
             Clear filters
           </a>
@@ -72,9 +72,9 @@ export function LoadMore({ initial, total, initialPage, pageSize, filters }: Loa
             type="button"
             onClick={loadMore}
             disabled={loading}
-            className="shine rounded-xl bg-gradient-to-r from-violet-500 to-fuchsia-500 px-6 py-3 text-sm font-semibold text-white shadow-lg shadow-violet-500/25 transition-all hover:scale-[1.03] hover:shadow-xl hover:shadow-violet-500/40 active:scale-95 disabled:cursor-not-allowed disabled:opacity-60"
+            className="shine rounded-xl bg-gradient-to-r from-indigo-500 to-blue-500 px-6 py-3 text-sm font-semibold text-white shadow-lg shadow-indigo-500/25 transition-all hover:scale-[1.03] hover:shadow-xl hover:shadow-indigo-500/40 active:scale-95 disabled:cursor-not-allowed disabled:opacity-60"
           >
-            {loading ? 'Loadingâ€¦' : 'Load more'}
+            {loading ? 'Loading…' : 'Load more'}
           </button>
           <span className="text-xs text-slate-500">
             Showing {items.length.toLocaleString()} of {total.toLocaleString()} portfolios

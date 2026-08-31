@@ -23,7 +23,7 @@ export async function GET(_request: NextRequest, { params }: { params: Promise<{
 
   const overall = p.score?.overallScore ?? 0
   const color =
-    overall >= 90 ? '#bef264' : overall >= 75 ? '#6ee7b7' : overall >= 60 ? '#fde047' : overall >= 40 ? '#fdba74' : '#fca5a5'
+    overall >= 90 ? '#34d399' : overall >= 75 ? '#22c55e' : overall >= 60 ? '#fbbf24' : overall >= 40 ? '#fb923c' : '#f87171'
   const votes = await voteCount(p.id).catch(() => 0)
 
   const html = `<!DOCTYPE html>
@@ -33,16 +33,16 @@ export async function GET(_request: NextRequest, { params }: { params: Promise<{
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <style>
     *{box-sizing:border-box;margin:0;padding:0}
-    body{background:#0b0b10;color:#f1f5f9;font-family:system-ui,-apple-system,'Segoe UI',Roboto,sans-serif;height:100vh;display:flex;align-items:center;justify-content:center}
-    .card{background:#101018;border:1px solid #23232e;border-radius:16px;padding:20px 24px;width:320px}
+    body{background:#0a0e1a;color:#e8ecf4;font-family:system-ui,-apple-system,'Segoe UI',Roboto,sans-serif;height:100vh;display:flex;align-items:center;justify-content:center}
+    .card{background:#101627;border:1px solid #233047;border-radius:16px;padding:20px 24px;width:320px}
     .row{display:flex;align-items:center;justify-content:space-between;gap:16px}
     .name{font-size:18px;font-weight:700;line-height:1.2}
-    .host{font-size:13px;color:#8b8b98;margin-top:2px}
+    .host{font-size:13px;color:#8b9bb4;margin-top:2px}
     .score{font-size:38px;font-weight:800;line-height:1}
-    .bar{height:8px;border-radius:99px;background:#23232e;margin-top:14px;overflow:hidden}
-    .fill{height:100%;border-radius:99px;background:linear-gradient(90deg,#8b5cf6,#d946ef)}
-    .meta{display:flex;justify-content:space-between;margin-top:10px;font-size:12px;color:#8b8b98}
-    .link{display:block;margin-top:14px;text-align:center;padding:8px 0;border-radius:10px;background:#7c3aed;color:#fff;text-decoration:none;font-size:13px;font-weight:600}
+    .bar{height:8px;border-radius:99px;background:#233047;margin-top:14px;overflow:hidden}
+    .fill{height:100%;border-radius:99px;background:linear-gradient(90deg,#4f6ef7,#3b82f6)}
+    .meta{display:flex;justify-content:space-between;margin-top:10px;font-size:12px;color:#8b9bb4}
+    .link{display:block;margin-top:14px;text-align:center;padding:8px 0;border-radius:10px;background:#4f6ef7;color:#fff;text-decoration:none;font-size:13px;font-weight:600}
   </style>
 </head>
 <body>

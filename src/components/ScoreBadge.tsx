@@ -22,14 +22,14 @@ export function ScoreBadge({ score, className }: { score: number; className?: st
 const BAR_GRADIENTS: Record<string, string> = {
   'bg-red-400/10': 'from-red-400 to-orange-400',
   'bg-orange-400/10': 'from-orange-400 to-amber-400',
-  'bg-amber-400/10': 'from-amber-400 to-lime-400',
-  'bg-emerald-400/10': 'from-emerald-400 to-lime-400',
-  'bg-lime-400/10': 'from-lime-400 to-emerald-300',
+  'bg-amber-400/10': 'from-amber-400 to-emerald-400',
+  'bg-green-500/10': 'from-green-500 to-emerald-400',
+  'bg-emerald-400/10': 'from-emerald-400 to-emerald-300',
 }
 
 export function ScoreBar({ label, value, color }: { label: string; value: number; color?: string }) {
   const c = color ?? getScoreColor(value)
-  const grad = BAR_GRADIENTS[getScoreBg(value) as string] ?? 'from-violet-500 to-violet-300'
+  const grad = BAR_GRADIENTS[getScoreBg(value) as string] ?? 'from-indigo-500 to-indigo-300'
   return (
     <div className="space-y-1">
       <div className="flex items-center justify-between text-xs">

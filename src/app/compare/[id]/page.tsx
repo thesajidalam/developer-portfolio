@@ -40,7 +40,7 @@ export default async function CompareDetailPage({ params }: { params: Promise<{ 
           <p className="animate-hero delay-1 mt-3 text-slate-400">This comparison needs at least two portfolios to render a table.</p>
           <Link
             href="/compare"
-            className="shine animate-hero delay-2 mt-8 inline-block rounded-xl border border-white/10 bg-white/[0.03] px-5 py-2.5 text-sm font-medium text-slate-300 transition-all hover:border-violet-500/50 hover:text-white"
+            className="shine animate-hero delay-2 mt-8 inline-block rounded-xl border border-white/10 bg-white/[0.03] px-5 py-2.5 text-sm font-medium text-slate-300 transition-all hover:border-indigo-500/50 hover:text-white"
           >
             Back to compare
           </Link>
@@ -69,7 +69,7 @@ export default async function CompareDetailPage({ params }: { params: Promise<{ 
           </div>
           <Link
             href="/compare"
-            className="rounded-xl border border-white/10 bg-white/[0.03] px-4 py-2 text-sm font-medium text-slate-300 transition-all hover:border-violet-500/50 hover:text-white"
+            className="rounded-xl border border-white/10 bg-white/[0.03] px-4 py-2 text-sm font-medium text-slate-300 transition-all hover:border-indigo-500/50 hover:text-white"
           >
             Back to compare
           </Link>
@@ -94,7 +94,7 @@ export default async function CompareDetailPage({ params }: { params: Promise<{ 
                   'rounded-2xl border bg-white/[0.03] p-5 backdrop-blur-xl transition-all',
                   isOverallWinner
                     ? 'border-emerald-500/40 shadow-xl shadow-emerald-500/10'
-                    : 'border-white/10 shadow-2xl shadow-violet-500/5',
+                    : 'border-white/10 shadow-2xl shadow-indigo-500/5',
                 )}
               >
                 <div className="mb-4 flex items-center gap-3">

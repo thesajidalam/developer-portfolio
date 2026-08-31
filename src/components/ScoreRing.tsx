@@ -3,11 +3,11 @@
 import { useId } from 'react'
 
 function ringColor(score: number): { from: string; to: string; text: string } {
-  if (score >= 90) return { from: '#bef264', to: '#65a30d', text: '#bef264' }
-  if (score >= 75) return { from: '#6ee7b7', to: '#059669', text: '#6ee7b7' }
-  if (score >= 60) return { from: '#fde047', to: '#ca8a04', text: '#fde047' }
-  if (score >= 40) return { from: '#fdba74', to: '#ea580c', text: '#fdba74' }
-  return { from: '#fca5a5', to: '#dc2626', text: '#fca5a5' }
+  if (score >= 90) return { from: '#34d399', to: '#059669', text: '#34d399' }
+  if (score >= 75) return { from: '#22c55e', to: '#15803d', text: '#22c55e' }
+  if (score >= 60) return { from: '#fbbf24', to: '#b45309', text: '#fbbf24' }
+  if (score >= 40) return { from: '#fb923c', to: '#ea580c', text: '#fb923c' }
+  return { from: '#f87171', to: '#dc2626', text: '#f87171' }
 }
 
 export function ScoreRing({ score, size = 64, label }: { score: number; size?: number; label?: string }) {
@@ -29,7 +29,7 @@ export function ScoreRing({ score, size = 64, label }: { score: number; size?: n
           </linearGradient>
         </defs>
         {/* soft track */}
-        <circle cx={size / 2} cy={size / 2} r={R} fill="none" stroke="rgba(148,148,160,0.14)" strokeWidth={stroke} />
+        <circle cx={size / 2} cy={size / 2} r={R} fill="none" stroke="rgba(148,163,184,0.16)" strokeWidth={stroke} />
         {/* progress ring with gradient + glow */}
         <circle
           cx={size / 2}

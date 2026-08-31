@@ -67,7 +67,7 @@ export default async function PortfolioDetailPage({ params }: Props) {
             'animate-hero delay-1 relative overflow-hidden rounded-2xl border p-6 backdrop-blur-xl sm:p-8',
             isOwner
               ? 'border-amber-400/30 bg-gradient-to-br from-[#151021] to-[#0c0e18] shadow-2xl shadow-amber-500/10'
-              : 'border-white/10 bg-white/[0.03] shadow-2xl shadow-violet-500/5',
+              : 'border-white/10 bg-white/[0.03] shadow-2xl shadow-indigo-500/5',
           )}
         >
         {isOwner && (
@@ -91,7 +91,7 @@ export default async function PortfolioDetailPage({ params }: Props) {
                   <span
                     className={cn(
                       'rounded-md px-2 py-0.5 text-xs font-medium',
-                      isOwner ? 'bg-amber-400/15 text-amber-200' : 'bg-violet-500/10 text-violet-300',
+                      isOwner ? 'bg-amber-400/15 text-amber-200' : 'bg-indigo-500/10 text-indigo-300',
                     )}
                   >
                     ✓ Verified
@@ -127,7 +127,7 @@ export default async function PortfolioDetailPage({ params }: Props) {
                     'shine inline-flex items-center justify-center rounded-xl px-4 py-2 text-sm font-semibold text-white shadow-lg transition-all hover:scale-[1.03] hover:shadow-xl active:scale-95',
                     isOwner
                       ? 'bg-gradient-to-r from-amber-400 to-amber-600 shadow-amber-500/30 hover:shadow-amber-500/50'
-                      : 'bg-gradient-to-r from-violet-500 to-fuchsia-500 shadow-violet-500/30 hover:shadow-violet-500/40',
+                      : 'bg-gradient-to-r from-indigo-500 to-blue-500 shadow-indigo-500/30 hover:shadow-indigo-500/40',
                   )}
                 >
                   Visit site ↗
@@ -141,7 +141,7 @@ export default async function PortfolioDetailPage({ params }: Props) {
                       'inline-flex items-center justify-center gap-1.5 rounded-xl border px-4 py-2 text-sm font-medium transition-all hover:bg-white/[0.06]',
                       isOwner
                         ? 'border-amber-400/40 bg-amber-400/10 text-amber-200 hover:border-amber-400/70'
-                        : 'border-white/10 bg-white/[0.03] text-slate-300 hover:border-violet-500/50 hover:text-white',
+                        : 'border-white/10 bg-white/[0.03] text-slate-300 hover:border-indigo-500/50 hover:text-white',
                     )}
                   >
                     GitHub {ownerGitHub && <span className={cn(isOwner ? 'text-amber-100' : 'text-slate-500')}>{ownerGitHub}</span>}
@@ -169,7 +169,7 @@ export default async function PortfolioDetailPage({ params }: Props) {
             </span>
           ))}
           {p.categories.map((c) => (
-            <span key={c} className="rounded-md bg-violet-500/10 px-2.5 py-1 text-xs font-medium text-violet-300">
+            <span key={c} className="rounded-md bg-indigo-500/10 px-2.5 py-1 text-xs font-medium text-indigo-300">
               {c}
             </span>
           ))}
