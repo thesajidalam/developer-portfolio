@@ -1,4 +1,4 @@
-import Link from 'next/link'
+﻿import Link from 'next/link'
 import type { Metadata } from 'next'
 import { Avatar } from '@/components/PortfolioCard'
 import { ScoreRing } from '@/components/ScoreRing'
@@ -24,21 +24,21 @@ const MEDAL_STYLES: Record<number, { ring: string; badge: string; label: string;
     ring: 'border-amber-400/60 bg-gradient-to-br from-amber-500/10 to-transparent',
     badge: 'bg-amber-500/15 text-amber-300',
     label: 'Gold',
-    emoji: '🥇',
+    emoji: 'ðŸ¥‡',
     glow: 'shadow-amber-500/20',
   },
   2: {
     ring: 'border-slate-300/50 bg-gradient-to-br from-slate-300/10 to-transparent',
     badge: 'bg-slate-300/15 text-slate-200',
     label: 'Silver',
-    emoji: '🥈',
+    emoji: 'ðŸ¥ˆ',
     glow: 'shadow-slate-300/15',
   },
   3: {
     ring: 'border-amber-700/50 bg-gradient-to-br from-amber-700/10 to-transparent',
     badge: 'bg-amber-700/15 text-amber-400',
     label: 'Bronze',
-    emoji: '🥉',
+    emoji: 'ðŸ¥‰',
     glow: 'shadow-amber-700/15',
   },
 }
@@ -89,8 +89,8 @@ export default async function RankingsPage({
                 className={cn(
                   'rounded-full border px-4 py-2 text-sm font-medium transition-all',
                   isActive
-                    ? 'border-indigo-500/60 bg-indigo-500/15 text-indigo-300 shadow-lg shadow-indigo-500/10'
-                    : 'border-white/10 bg-white/[0.03] text-slate-400 hover:border-indigo-500/40 hover:bg-white/[0.05] hover:text-white',
+                    ? 'border-violet-500/60 bg-violet-500/15 text-violet-300 shadow-lg shadow-violet-500/10'
+                    : 'border-white/10 bg-white/[0.03] text-slate-400 hover:border-violet-500/40 hover:bg-white/[0.05] hover:text-white',
                 )}
               >
                 {tab.label}
@@ -119,7 +119,7 @@ export default async function RankingsPage({
                     {medal?.label}
                   </span>
                   <Avatar p={p} size="lg" />
-                  <h3 className="mt-3 truncate font-semibold text-white group-hover:text-indigo-300">{p.name}</h3>
+                  <h3 className="mt-3 truncate font-semibold text-white group-hover:text-violet-300">{p.name}</h3>
                   <span className="mt-0.5 block truncate text-xs text-slate-500">{hostnameOf(p.portfolioUrl)}</span>
                   <div className="mt-3">
                     <ScoreRing score={p.score?.overallScore ?? 0} size={72} label="overall" />
@@ -134,7 +134,7 @@ export default async function RankingsPage({
           </div>
         )}
 
-        <div className="animate-hero overflow-x-auto rounded-2xl border border-white/10 bg-white/[0.03] shadow-2xl shadow-indigo-500/5 backdrop-blur-xl">
+        <div className="animate-hero overflow-x-auto rounded-2xl border border-white/10 bg-white/[0.03] shadow-2xl shadow-violet-500/5 backdrop-blur-xl">
           <table className="w-full min-w-max">
             <thead>
               <tr className="border-b border-white/5">
@@ -156,7 +156,7 @@ export default async function RankingsPage({
                       <Link href={`/p/${p.slug}`} className="flex items-center gap-3">
                         <Avatar p={p} size="sm" />
                         <div className="min-w-0">
-                          <span className="truncate font-medium text-white hover:text-indigo-300">{p.name}</span>
+                          <span className="truncate font-medium text-white hover:text-violet-300">{p.name}</span>
                           <span className="ml-2 hidden text-xs text-slate-500 sm:inline">{hostnameOf(p.portfolioUrl)}</span>
                         </div>
                       </Link>
@@ -173,7 +173,7 @@ export default async function RankingsPage({
                     <td className="hidden px-5 py-3 md:table-cell">
                       <span className="inline-flex items-center gap-1.5 text-xs text-slate-500">
                         <span className={cn('h-2 w-2 rounded-full', getHealthColor(p.health))} />
-                        {p.health === 'healthy' ? 'Healthy' : p.health === 'needs_attention' ? 'Attention' : p.health === 'down' ? 'Offline' : '—'}
+                        {p.health === 'healthy' ? 'Healthy' : p.health === 'needs_attention' ? 'Attention' : p.health === 'down' ? 'Offline' : 'â€”'}
                       </span>
                     </td>
                     <td className="px-5 py-3 text-right">
@@ -198,26 +198,26 @@ export default async function RankingsPage({
               <Link
                 href={`/rankings?sort=${sortParam}&page=${page - 1}`}
                 scroll={false}
-                className="rounded-lg border border-white/10 bg-white/[0.03] px-4 py-2 text-sm font-medium text-slate-300 transition-colors hover:border-indigo-500/50 hover:text-white"
+                className="rounded-lg border border-white/10 bg-white/[0.03] px-4 py-2 text-sm font-medium text-slate-300 transition-colors hover:border-violet-500/50 hover:text-white"
               >
-                ← Previous
+                â† Previous
               </Link>
             ) : (
               <span className="cursor-not-allowed rounded-lg border border-white/5 px-4 py-2 text-sm font-medium text-slate-600">
-                ← Previous
+                â† Previous
               </span>
             )}
             {page < result.meta.totalPages ? (
               <Link
                 href={`/rankings?sort=${sortParam}&page=${page + 1}`}
                 scroll={false}
-                className="shine rounded-lg bg-gradient-to-r from-indigo-500 to-sky-500 px-4 py-2 text-sm font-semibold text-white shadow-lg shadow-indigo-500/25 transition-all hover:scale-[1.03] hover:shadow-xl hover:shadow-indigo-500/40 active:scale-95"
+                className="shine rounded-lg bg-gradient-to-r from-violet-500 to-fuchsia-500 px-4 py-2 text-sm font-semibold text-white shadow-lg shadow-violet-500/25 transition-all hover:scale-[1.03] hover:shadow-xl hover:shadow-violet-500/40 active:scale-95"
               >
-                Next →
+                Next â†’
               </Link>
             ) : (
               <span className="cursor-not-allowed rounded-lg border border-white/5 px-4 py-2 text-sm font-medium text-slate-600">
-                Next →
+                Next â†’
               </span>
             )}
           </div>

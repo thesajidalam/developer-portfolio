@@ -3,11 +3,18 @@
 @tailwind utilities;
 
 :root {
-  --background: #06070f;
-  --foreground: #f4f6fb;
+  --background: #09090c;
+  --surface: #0e0e14;
+  --foreground: #f4f4f8;
   color-scheme: dark;
-  --indigo: #7066ff;
-  --sky: #22d3ee;
+  /* Primary: refined violet */
+  --violet: #8b5cf6;
+  --violet-soft: #a78bfa;
+  --violet-soft-2: #c084fc;
+  /* Score / success accent: electric lime -> emerald */
+  --lime: #a3e635;
+  --emerald: #34d399;
+  --lime-deep: #65a30d;
 }
 
 * {
@@ -38,16 +45,16 @@ textarea {
 }
 select option,
 select optgroup {
-  background-color: #0b1020;
-  color: #e7ecf7;
+  background-color: #0e0e14;
+  color: #eceaf1;
 }
 select option:disabled {
-  color: #64748b;
+  color: #6b7280;
 }
 
 /* ---- premium focus rings -------------------------------------------------- */
 :focus-visible {
-  outline: 2px solid rgb(112 102 255 / 0.7);
+  outline: 2px solid rgb(139 92 246 / 0.7);
   outline-offset: 2px;
   border-radius: 4px;
 }
@@ -56,7 +63,7 @@ button:focus-visible,
 input:focus-visible,
 select:focus-visible,
 textarea:focus-visible {
-  outline-color: rgb(34 211 238 / 0.6);
+  outline-color: rgb(163 230 53 / 0.6);
 }
 
 /* ---- premium scrollbar -------------------------------------------------- */
@@ -65,18 +72,18 @@ textarea:focus-visible {
   height: 10px;
 }
 ::-webkit-scrollbar-track {
-  background: #0a0e1a;
+  background: #0a0a0f;
 }
 ::-webkit-scrollbar-thumb {
-  background: linear-gradient(180deg, rgb(112 102 255 / 0.65), rgb(34 211 238 / 0.5));
+  background: linear-gradient(180deg, rgb(139 92 246 / 0.65), rgb(163 230 53 / 0.45));
   border-radius: 999px;
-  border: 2px solid #0a0e1a;
+  border: 2px solid #0a0a0f;
 }
 ::-webkit-scrollbar-thumb:hover {
-  background: linear-gradient(180deg, rgb(112 102 255 / 0.9), rgb(34 211 238 / 0.7));
+  background: linear-gradient(180deg, rgb(139 92 246 / 0.9), rgb(163 230 53 / 0.65));
 }
 ::selection {
-  background: rgb(112 102 255 / 0.4);
+  background: rgb(139 92 246 / 0.45);
   color: #fff;
 }
 
@@ -84,9 +91,9 @@ textarea:focus-visible {
 @layer utilities {
   .bg-aurora {
     background:
-      radial-gradient(900px circle at 12% -10%, rgb(112 102 255 / 0.22), transparent 42%),
-      radial-gradient(1000px circle at 95% -5%, rgb(34 211 238 / 0.14), transparent 45%),
-      radial-gradient(700px circle at 50% 120%, rgb(167 139 250 / 0.10), transparent 50%);
+      radial-gradient(900px circle at 12% -10%, rgb(139 92 246 / 0.20), transparent 42%),
+      radial-gradient(1000px circle at 95% -5%, rgb(163 230 53 / 0.10), transparent 45%),
+      radial-gradient(700px circle at 50% 120%, rgb(192 132 252 / 0.10), transparent 50%);
   }
 
   .bg-grid {
@@ -139,22 +146,22 @@ textarea:focus-visible {
 /* ---- premium interactive surfaces ------------------------------------------ */
 @layer utilities {
   .glass {
-    background: rgb(11 16 32 / 0.55);
+    background: rgb(14 14 20 / 0.55);
     backdrop-filter: blur(16px) saturate(140%);
     -webkit-backdrop-filter: blur(16px) saturate(140%);
-    border: 1px solid rgb(148 163 184 / 0.12);
+    border: 1px solid rgb(148 148 160 / 0.12);
   }
   .glass-strong {
-    background: rgb(8 11 22 / 0.78);
+    background: rgb(10 10 16 / 0.78);
     backdrop-filter: blur(20px) saturate(150%);
     -webkit-backdrop-filter: blur(20px) saturate(150%);
-    border: 1px solid rgb(148 163 184 / 0.14);
+    border: 1px solid rgb(148 148 160 / 0.14);
   }
 }
 
 /* animated gradient text */
 .text-gradient {
-  background: linear-gradient(90deg, #a5b4fc, #38bdf8, #c4b5fd, #a5b4fc);
+  background: linear-gradient(90deg, #a78bfa, #e9fdd8, #c4b5fd, #a78bfa);
   background-size: 300% auto;
   -webkit-background-clip: text;
   background-clip: text;
@@ -240,7 +247,7 @@ textarea:focus-visible {
 /* ---- keyboard navigation focus rings ---------------------------------------- */
 :focus-visible {
   outline: 2px solid transparent !important;
-  box-shadow: 0 0 0 2px var(--background), 0 0 0 4px #7066ff !important;
+  box-shadow: 0 0 0 2px var(--background), 0 0 0 4px #8b5cf6 !important;
   border-radius: 6px;
 }
 a:focus-visible,
@@ -249,31 +256,31 @@ input:focus-visible,
 select:focus-visible,
 textarea:focus-visible {
   outline: 2px solid transparent !important;
-  box-shadow: 0 0 0 2px var(--background), 0 0 0 4px #22d3ee !important;
+  box-shadow: 0 0 0 2px var(--background), 0 0 0 4px #a3e635 !important;
 }
 
 /* ---- thin themed scrollbar -------------------------------------------------- */
 * {
   scrollbar-width: thin;
-  scrollbar-color: rgb(112 102 255 / 0.55) #0a0e1a;
+  scrollbar-color: rgb(139 92 246 / 0.55) #0a0a0f;
 }
 ::-webkit-scrollbar {
   width: 8px;
   height: 8px;
 }
 ::-webkit-scrollbar-track {
-  background: #0a0e1a;
+  background: #0a0a0f;
 }
 ::-webkit-scrollbar-thumb {
-  background: linear-gradient(180deg, rgb(112 102 255 / 0.55), rgb(34 211 238 / 0.45));
+  background: linear-gradient(180deg, rgb(139 92 246 / 0.55), rgb(163 230 53 / 0.45));
   border-radius: 999px;
-  border: 2px solid #0a0e1a;
+  border: 2px solid #0a0a0f;
 }
 ::-webkit-scrollbar-thumb:hover {
-  background: linear-gradient(180deg, rgb(112 102 255 / 0.8), rgb(34 211 238 / 0.65));
+  background: linear-gradient(180deg, rgb(139 92 246 / 0.8), rgb(163 230 53 / 0.65));
 }
 ::-webkit-scrollbar-corner {
-  background: #0a0e1a;
+  background: #0a0a0f;
 }
 
 /* ---- hide scrollbars while keeping scroll ----------------------------------- */

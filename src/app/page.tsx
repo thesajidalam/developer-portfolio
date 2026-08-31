@@ -1,4 +1,4 @@
-import Link from 'next/link'
+﻿import Link from 'next/link'
 import type { Metadata } from 'next'
 import { PortfolioCard } from '@/components/PortfolioCard'
 import { ScoreBadge } from '@/components/ScoreBadge'
@@ -30,7 +30,7 @@ function buildQuery(params: PortfolioFilters): string {
 }
 
 const SELECT_CLASS =
-  'h-11 w-full rounded-xl border border-white/10 bg-[#0a1120]/80 px-3.5 text-sm text-slate-200 outline-none transition-all focus:border-indigo-500/60 focus:ring-2 focus:ring-indigo-500/20 sm:w-auto [&>option]:bg-[#0a1120]'
+  'h-11 w-full rounded-xl border border-white/10 bg-[#0a1120]/80 px-3.5 text-sm text-slate-200 outline-none transition-all focus:border-violet-500/60 focus:ring-2 focus:ring-violet-500/20 sm:w-auto [&>option]:bg-[#0a1120]'
 
 export default async function HomePage({ searchParams }: { searchParams: Promise<{ [key: string]: string | string[] | undefined }> }) {
   const sp = await searchParams
@@ -90,17 +90,17 @@ export default async function HomePage({ searchParams }: { searchParams: Promise
         <div className="bg-grid absolute inset-0" />
 
         {/* drifting orbs */}
-        <div className="pointer-events-none absolute -top-24 right-[-6rem] h-80 w-80 rounded-full bg-indigo-500/25 blur-3xl animate-float-slow" />
-        <div className="pointer-events-none absolute top-32 left-[-5rem] h-72 w-72 rounded-full bg-sky-400/20 blur-3xl animate-float-slow [animation-delay:3s]" />
+        <div className="pointer-events-none absolute -top-24 right-[-6rem] h-80 w-80 rounded-full bg-violet-500/25 blur-3xl animate-float-slow" />
+        <div className="pointer-events-none absolute top-32 left-[-5rem] h-72 w-72 rounded-full bg-fuchsia-500/15 blur-3xl animate-float-slow [animation-delay:3s]" />
 
         <div className="relative mx-auto max-w-7xl px-4 pt-20 pb-24 sm:px-6 sm:pt-28 sm:pb-32">
           <div className="flex flex-col gap-12 lg:flex-row lg:items-center">
             {/* copy */}
             <div className="flex-1">
-              <p className="animate-hero mb-5 inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/[0.04] px-3.5 py-1.5 text-xs font-medium tracking-wide text-indigo-200">
+              <p className="animate-hero mb-5 inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/[0.04] px-3.5 py-1.5 text-xs font-medium tracking-wide text-violet-200">
                 <span className="relative flex h-2 w-2">
-                  <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-indigo-400 opacity-75" />
-                  <span className="relative inline-flex h-2 w-2 rounded-full bg-indigo-400" />
+                  <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-violet-400 opacity-75" />
+                  <span className="relative inline-flex h-2 w-2 rounded-full bg-violet-400" />
                 </span>
                 A living directory of standout portfolios
               </p>
@@ -118,16 +118,16 @@ export default async function HomePage({ searchParams }: { searchParams: Promise
               <div className="animate-hero delay-3 mt-8 flex flex-wrap items-center gap-3">
                 <Link
                   href="#gallery"
-                  className="shine rounded-xl bg-gradient-to-r from-indigo-500 to-sky-500 px-6 py-3 text-sm font-semibold text-white shadow-lg shadow-indigo-500/30 transition-all hover:scale-[1.03] hover:shadow-xl hover:shadow-indigo-500/50 active:scale-95"
+                  className="shine rounded-xl bg-gradient-to-r from-violet-500 to-fuchsia-500 px-6 py-3 text-sm font-semibold text-white shadow-lg shadow-violet-500/30 transition-all hover:scale-[1.03] hover:shadow-xl hover:shadow-violet-500/50 active:scale-95"
                 >
                   Browse the gallery
                 </Link>
                 <Link
                   href="/rankings"
-                  className="group inline-flex items-center gap-2 rounded-xl border border-white/10 bg-white/[0.04] px-6 py-3 text-sm font-semibold text-slate-200 transition-all hover:border-indigo-500/50 hover:bg-white/[0.06] hover:text-white"
+                  className="group inline-flex items-center gap-2 rounded-xl border border-white/10 bg-white/[0.04] px-6 py-3 text-sm font-semibold text-slate-200 transition-all hover:border-violet-500/50 hover:bg-white/[0.06] hover:text-white"
                 >
                   View rankings
-                  <span className="inline-block transition-transform group-hover:translate-x-1">→</span>
+                  <span className="inline-block transition-transform group-hover:translate-x-1">â†’</span>
                 </Link>
               </div>
 
@@ -148,7 +148,7 @@ export default async function HomePage({ searchParams }: { searchParams: Promise
                 </div>
                 <div>
                   <div className="text-3xl font-bold text-white">
-                    <span className="text-gradient">∞</span>
+                    <span className="text-gradient">âˆž</span>
                   </div>
                   <div className="mt-1 text-xs uppercase tracking-widest text-slate-500">Inspiration</div>
                 </div>
@@ -157,13 +157,13 @@ export default async function HomePage({ searchParams }: { searchParams: Promise
 
             {/* floating top-portfolio card */}
             <div className="hidden flex-1 justify-center lg:flex">
-              <div className="reveal reveal-visible relative w-full max-w-sm rounded-2xl border border-white/10 bg-white/[0.03] p-6 shadow-2xl shadow-indigo-500/10 backdrop-blur-xl">
+              <div className="reveal reveal-visible relative w-full max-w-sm rounded-2xl border border-white/10 bg-white/[0.03] p-6 shadow-2xl shadow-violet-500/10 backdrop-blur-xl">
                 <div className="mb-4 flex items-center justify-between">
                   <span className="text-sm font-semibold text-slate-300">Top portfolio</span>
-                  <span className="rounded-full bg-indigo-500/15 px-2.5 py-0.5 text-xs font-semibold text-indigo-300">★★★★★</span>
+                  <span className="rounded-full bg-violet-500/15 px-2.5 py-0.5 text-xs font-semibold text-violet-300">â˜…â˜…â˜…â˜…â˜…</span>
                 </div>
                 <div className="flex items-center gap-4">
-                  <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-gradient-to-br from-indigo-500 to-sky-400 text-xl font-bold text-white shadow-lg shadow-indigo-500/30">
+                  <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-gradient-to-br from-violet-500 to-fuchsia-400 text-xl font-bold text-white shadow-lg shadow-violet-500/30">
                     {topPortfolio?.name?.charAt(0) ?? 'D'}
                   </div>
                   <div>
@@ -188,7 +188,7 @@ export default async function HomePage({ searchParams }: { searchParams: Promise
                         </div>
                         <div className="h-1.5 w-full overflow-hidden rounded-full bg-white/10">
                           <div
-                            className="h-full rounded-full bg-gradient-to-r from-indigo-500 to-sky-400"
+                            className="h-full rounded-full bg-gradient-to-r from-violet-500 to-fuchsia-400"
                             style={{ width: `${value}%` }}
                           />
                         </div>
@@ -199,23 +199,23 @@ export default async function HomePage({ searchParams }: { searchParams: Promise
                 {topPortfolio?.slug && (
                   <Link
                     href={`/p/${topPortfolio.slug}`}
-                    className="group mt-5 flex items-center justify-between rounded-xl border border-white/10 bg-white/[0.04] px-4 py-3 text-sm transition-all hover:border-indigo-500/50 hover:bg-white/[0.06]"
+                    className="group mt-5 flex items-center justify-between rounded-xl border border-white/10 bg-white/[0.04] px-4 py-3 text-sm transition-all hover:border-violet-500/50 hover:bg-white/[0.06]"
                   >
                     <span className="text-slate-300">
                       See why <span className="font-semibold text-white">{topPortfolio.name}</span> ranks here
                     </span>
-                    <span className="inline-block text-indigo-400 transition-transform group-hover:translate-x-1">→</span>
+                    <span className="inline-block text-violet-400 transition-transform group-hover:translate-x-1">â†’</span>
                   </Link>
                 )}
-                <div className="mt-4 rounded-xl border border-dashed border-indigo-500/30 bg-indigo-500/5 p-3.5 text-center">
+                <div className="mt-4 rounded-xl border border-dashed border-violet-500/30 bg-violet-500/5 p-3.5 text-center">
                   <p className="text-xs text-slate-400">
-                    <span className="font-semibold text-indigo-300">Your portfolio could be the next pick.</span>
+                    <span className="font-semibold text-violet-300">Your portfolio could be the next pick.</span>
                   </p>
                   <Link
                     href="/submit"
-                    className="mt-1 inline-block text-xs font-semibold text-sky-400 transition-colors hover:text-sky-300"
+                    className="mt-1 inline-block text-xs font-semibold text-lime-300 transition-colors hover:text-lime-200"
                   >
-                    Add yours → it only takes a minute
+                    Add yours â†’ it only takes a minute
                   </Link>
                 </div>
               </div>
@@ -253,7 +253,7 @@ export default async function HomePage({ searchParams }: { searchParams: Promise
                     href={`/p/${potd.slug}`}
                     className="group mt-6 inline-flex items-center gap-2 rounded-xl border border-amber-500/40 bg-amber-500/10 px-5 py-2.5 text-sm font-semibold text-amber-200 transition-all hover:border-amber-400/60 hover:bg-amber-500/20"
                   >
-                    View <span className="inline-block transition-transform group-hover:translate-x-1">→</span>
+                    View <span className="inline-block transition-transform group-hover:translate-x-1">â†’</span>
                   </Link>
                 </div>
                 <div className="flex items-center sm:flex-col sm:items-end sm:justify-center">
@@ -291,8 +291,8 @@ export default async function HomePage({ searchParams }: { searchParams: Promise
         <section className="mx-auto max-w-7xl px-4 pb-16 sm:px-6">
           <Reveal className="mb-6 flex items-center justify-between">
             <h2 className="text-3xl font-bold tracking-tight text-white">Top ranked by stack</h2>
-            <Link href="/rankings" className="text-sm font-semibold text-sky-400 transition-colors hover:text-sky-300">
-              Full rankings →
+            <Link href="/rankings" className="text-sm font-semibold text-lime-300 transition-colors hover:text-lime-200">
+              Full rankings â†’
             </Link>
           </Reveal>
           <div className="grid grid-cols-1 gap-6 lg:grid-cols-2">
@@ -306,9 +306,9 @@ export default async function HomePage({ searchParams }: { searchParams: Promise
                     <h3 className="text-lg font-semibold text-white">{board.title}</h3>
                     <Link
                       href={`/?tech=${encodeURIComponent(board.tech)}`}
-                      className="text-xs font-semibold text-slate-400 transition-colors hover:text-sky-400"
+                      className="text-xs font-semibold text-slate-400 transition-colors hover:text-lime-300"
                     >
-                      See all →
+                      See all â†’
                     </Link>
                   </div>
                   <ol className="space-y-1">
@@ -360,8 +360,8 @@ export default async function HomePage({ searchParams }: { searchParams: Promise
                   className={cn(
                     'shrink-0 rounded-full border px-3.5 py-1.5 text-xs font-medium transition-all duration-200',
                     active
-                      ? 'border-indigo-500/60 bg-indigo-500/15 text-indigo-200 shadow-lg shadow-indigo-500/10'
-                      : 'border-white/10 bg-white/[0.03] text-slate-300 hover:border-indigo-500/40 hover:bg-white/[0.06] hover:text-white hover:shadow-lg hover:shadow-indigo-500/10',
+                      ? 'border-violet-500/60 bg-violet-500/15 text-violet-200 shadow-lg shadow-violet-500/10'
+                      : 'border-white/10 bg-white/[0.03] text-slate-300 hover:border-violet-500/40 hover:bg-white/[0.06] hover:text-white hover:shadow-lg hover:shadow-violet-500/10',
                   )}
                 >
                   {t}
@@ -372,10 +372,10 @@ export default async function HomePage({ searchParams }: { searchParams: Promise
         </Reveal>
 
         <Reveal>
-          <form method="get" action="/" className="glass relative overflow-hidden rounded-2xl border border-white/10 bg-white/[0.03] p-5 shadow-xl shadow-indigo-500/5 backdrop-blur-xl">
-            <div className="pointer-events-none absolute -top-24 right-0 h-40 w-40 rounded-full bg-indigo-500/10 blur-3xl" />
+          <form method="get" action="/" className="glass relative overflow-hidden rounded-2xl border border-white/10 bg-white/[0.03] p-5 shadow-xl shadow-violet-500/5 backdrop-blur-xl">
+            <div className="pointer-events-none absolute -top-24 right-0 h-40 w-40 rounded-full bg-violet-500/10 blur-3xl" />
 
-            {/* primary search — the hero of the filter bar */}
+            {/* primary search â€” the hero of the filter bar */}
             <div className="relative">
               <svg
                 className="pointer-events-none absolute left-3.5 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-500"
@@ -388,9 +388,9 @@ export default async function HomePage({ searchParams }: { searchParams: Promise
                 type="search"
                 name="search"
                 defaultValue={filters.search ?? ''}
-                placeholder="Search portfolios by name, role, or URL…"
+                placeholder="Search portfolios by name, role, or URLâ€¦"
                 aria-label="Search portfolios by name, role, or URL"
-                className="h-12 w-full rounded-xl border border-white/10 bg-[#0a1120]/80 pl-10 pr-4 text-sm text-slate-200 outline-none transition-all placeholder:text-slate-500 focus:border-indigo-500/60 focus:ring-2 focus:ring-indigo-500/20"
+                className="h-12 w-full rounded-xl border border-white/10 bg-[#0a1120]/80 pl-10 pr-4 text-sm text-slate-200 outline-none transition-all placeholder:text-slate-500 focus:border-violet-500/60 focus:ring-2 focus:ring-violet-500/20"
               />
             </div>
 
@@ -404,7 +404,7 @@ export default async function HomePage({ searchParams }: { searchParams: Promise
                   defaultValue={filters.tech ?? ''}
                   placeholder="e.g. React"
                   aria-label="Filter by technology"
-                  className="h-11 w-full rounded-xl border border-white/10 bg-[#0a1120]/80 pl-16 pr-3.5 text-sm text-slate-200 outline-none transition-all placeholder:text-slate-500 focus:border-indigo-500/60 focus:ring-2 focus:ring-indigo-500/20"
+                  className="h-11 w-full rounded-xl border border-white/10 bg-[#0a1120]/80 pl-16 pr-3.5 text-sm text-slate-200 outline-none transition-all placeholder:text-slate-500 focus:border-violet-500/60 focus:ring-2 focus:ring-violet-500/20"
                 />
               </div>
               <div className="relative">
@@ -415,7 +415,7 @@ export default async function HomePage({ searchParams }: { searchParams: Promise
                   defaultValue={filters.category ?? ''}
                   placeholder="e.g. Design"
                   aria-label="Filter by category"
-                  className="h-11 w-full rounded-xl border border-white/10 bg-[#0a1120]/80 pl-20 pr-3.5 text-sm text-slate-200 outline-none transition-all placeholder:text-slate-500 focus:border-indigo-500/60 focus:ring-2 focus:ring-indigo-500/20"
+                  className="h-11 w-full rounded-xl border border-white/10 bg-[#0a1120]/80 pl-20 pr-3.5 text-sm text-slate-200 outline-none transition-all placeholder:text-slate-500 focus:border-violet-500/60 focus:ring-2 focus:ring-violet-500/20"
                 />
               </div>
               <select name="experience" defaultValue={filters.experience ?? ''} aria-label="Filter by experience level" className={SELECT_CLASS}>
@@ -434,13 +434,13 @@ export default async function HomePage({ searchParams }: { searchParams: Promise
               <div className="flex gap-2">
                 <button
                   type="submit"
-                  className="shine h-11 flex-1 rounded-xl bg-gradient-to-r from-indigo-500 to-sky-500 px-4 text-sm font-semibold text-white shadow-lg shadow-indigo-500/25 transition-all hover:scale-[1.02] hover:shadow-xl hover:shadow-indigo-500/40 active:scale-95"
+                  className="shine h-11 flex-1 rounded-xl bg-gradient-to-r from-violet-500 to-fuchsia-500 px-4 text-sm font-semibold text-white shadow-lg shadow-violet-500/25 transition-all hover:scale-[1.02] hover:shadow-xl hover:shadow-violet-500/40 active:scale-95"
                 >
                   Apply
                 </button>
                 <Link
                   href="/"
-                  className="h-11 rounded-xl border border-white/10 bg-white/[0.03] px-4 py-2.5 text-sm font-medium text-slate-300 transition-colors hover:border-indigo-500/50 hover:text-white"
+                  className="h-11 rounded-xl border border-white/10 bg-white/[0.03] px-4 py-2.5 text-sm font-medium text-slate-300 transition-colors hover:border-violet-500/50 hover:text-white"
                 >
                   Reset
                 </Link>
@@ -450,7 +450,7 @@ export default async function HomePage({ searchParams }: { searchParams: Promise
         </Reveal>
 
         <Reveal className="mb-6 flex items-center gap-2 text-sm text-slate-500">
-          Showing <span className="rounded-lg bg-indigo-500/10 px-2 py-0.5 font-semibold text-indigo-300">{gallery.meta.total.toLocaleString()}</span> portfolios
+          Showing <span className="rounded-lg bg-violet-500/10 px-2 py-0.5 font-semibold text-violet-300">{gallery.meta.total.toLocaleString()}</span> portfolios
         </Reveal>
 
         <LoadMore

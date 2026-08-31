@@ -15,17 +15,19 @@ export function slugify(text: string): string {
 }
 
 export function getScoreColor(score: number): string {
-  if (score >= 90) return 'text-emerald-500'
-  if (score >= 70) return 'text-yellow-500'
-  if (score >= 50) return 'text-orange-500'
-  return 'text-red-500'
+  if (score >= 90) return 'text-lime-400'
+  if (score >= 75) return 'text-emerald-400'
+  if (score >= 60) return 'text-amber-400'
+  if (score >= 40) return 'text-orange-400'
+  return 'text-red-400'
 }
 
 export function getScoreBg(score: number): string {
-  if (score >= 90) return 'bg-emerald-500/10'
-  if (score >= 70) return 'bg-yellow-500/10'
-  if (score >= 50) return 'bg-orange-500/10'
-  return 'bg-red-500/10'
+  if (score >= 90) return 'bg-lime-400/10'
+  if (score >= 75) return 'bg-emerald-400/10'
+  if (score >= 60) return 'bg-amber-400/10'
+  if (score >= 40) return 'bg-orange-400/10'
+  return 'bg-red-400/10'
 }
 
 export function getHealthColor(health: string): string {

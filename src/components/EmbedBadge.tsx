@@ -1,4 +1,4 @@
-'use client'
+﻿'use client'
 
 import { useState } from 'react'
 
@@ -33,7 +33,7 @@ export function EmbedBadge({ slug }: EmbedBadgeProps) {
       <button
         type="button"
         onClick={() => setOpen((o) => !o)}
-        className="inline-flex items-center gap-1.5 rounded-xl border border-white/10 bg-white/[0.03] px-4 py-2 text-sm font-medium text-slate-300 transition-all hover:border-indigo-500/50 hover:text-white"
+        className="inline-flex items-center gap-1.5 rounded-xl border border-white/10 bg-white/[0.03] px-4 py-2 text-sm font-medium text-slate-300 transition-all hover:border-violet-500/50 hover:text-white"
         aria-haspopup="true"
         aria-expanded={open}
       >
@@ -55,7 +55,7 @@ export function EmbedBadge({ slug }: EmbedBadgeProps) {
             <button
               type="button"
               onClick={copy}
-              className="mt-3 w-full rounded-lg bg-gradient-to-r from-indigo-500 to-sky-500 px-3 py-2 text-xs font-semibold text-white transition-all hover:scale-[1.02] active:scale-95"
+              className="mt-3 w-full rounded-lg bg-gradient-to-r from-violet-500 to-fuchsia-500 px-3 py-2 text-xs font-semibold text-white transition-all hover:scale-[1.02] active:scale-95"
             >
               {copied ? 'Copied!' : 'Copy snippet'}
             </button>
