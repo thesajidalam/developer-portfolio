@@ -2,11 +2,13 @@ import { getAdminClient } from '@/lib/supabase'
 import { createHash } from 'node:crypto'
 import type {
   HealthCheck,
+  LinkReport,
   Paginated,
   Portfolio,
   PortfolioFilters,
   PortfolioWithScore,
   Score,
+  SiteAnalytics,
   Submission,
 } from '@/lib/types'
 
@@ -627,5 +629,223 @@ export async function getComparison(id: string): Promise<string[] | null> {
     return Array.isArray(arr) ? arr.map(String) : null
   } catch {
     return null
+  }
+}
+
+// ---------------- votes (batch) ----------------
+
+export async function portfolioLikeCounts(ids: string[]): Promise<Map<string, number>> {
+  const client = getAdminClient()
+  if (ids.length === 0) return new Map()
+  const { data, error } = await client
+    .from('votes')
+    .select('portfolio_id')
+    .in('portfolio_id', ids)
+  if (error) throw new Error(error.message)
+  const counts = new Map<string, number>()
+  for (const r of (data as unknown as Row[]) ?? []) {
+    const pid = String(r.portfolio_id)
+    counts.set(pid, (counts.get(pid) ?? 0) + 1)
+  }
+  return counts
+}
+
+// ---------------- portfolio of the day ----------------
+
+export async function portfolioOfDay(): Promise<PortfolioWithScore | null> {
+  const client = getAdminClient()
+  const today = new Date()
+  const seed = today.getFullYear() * 10000 + (today.getMonth() + 1) * 100 + today.getDate()
+  const { count } = await client
+    .from('portfolios')
+    .select('id', { count: 'exact', head: true })
+    .eq('status', 'approved')
+    .not('overall_score', 'is', null)
+  const total = count ?? 1
+  const offset = seed % total
+  const { data, error } = await client
+    .from('portfolios')
+    .select(PORTFOLIO_SELECT + ',scores(' + SCORE_SELECT + ')')
+    .eq('status', 'approved')
+    .not('health', 'eq', 'down')
+    .not('health', 'eq', 'unknown')
+    .range(offset, offset)
+  if (error) throw new Error(error.message)
+  const rows = (data as unknown as Row[]) ?? []
+  if (rows.length === 0) return null
+  return withScore(mapPortfolio(rows[0]), scoreRow(rows[0]))
+}
+
+// ---------------- editor picks ----------------
+
+export async function editorPicks(limit = 6): Promise<PortfolioWithScore[]> {
+  const client = getAdminClient()
+  const { data, error } = await client
+    .from('portfolios')
+    .select(PORTFOLIO_SELECT + ',scores(' + SCORE_SELECT + ')')
+    .eq('status', 'approved')
+    .eq('featured', true)
+    .order('updated_at', { ascending: false })
+    .limit(limit)
+  if (error) throw new Error(error.message)
+  return ((data as unknown as Row[]) ?? []).map((r) => withScore(mapPortfolio(r), scoreRow(r)))
+}
+
+// ---------------- top liked ----------------
+
+export async function topLiked(limit = 50, page = 1, pageSize = 50): Promise<Paginated<PortfolioWithScore>> {
+  const client = getAdminClient()
+  const offset = (page - 1) * pageSize
+
+  const { data: votes, error: vErr } = await client
+    .from('votes')
+    .select('portfolio_id')
+  if (vErr) throw new Error(vErr.message)
+
+  const counts = new Map<string, number>()
+  for (const v of (votes as unknown as Row[]) ?? []) {
+    const pid = String(v.portfolio_id)
+    counts.set(pid, (counts.get(pid) ?? 0) + 1)
+  }
+
+  const sorted = [...counts.entries()].sort((a, b) => b[1] - a[1])
+  const topIds = sorted.slice(offset, offset + pageSize).map(([id]) => id)
+
+  if (topIds.length === 0) {
+    return { data: [], meta: { total: sorted.length, page, pageSize, totalPages: Math.max(1, Math.ceil(sorted.length / pageSize)) } }
+  }
+
+  const { data, error } = await client
+    .from('portfolios')
+    .select(PORTFOLIO_SELECT + ',scores(' + SCORE_SELECT + ')')
+    .in('id', topIds)
+    .eq('status', 'approved')
+  if (error) throw new Error(error.message)
+
+  const byId = new Map<string, Row>()
+  for (const r of (data as unknown as Row[]) ?? []) byId.set(String(r.id), r)
+  const result = topIds
+    .map((id) => byId.get(id))
+    .filter(Boolean)
+    .map((r) => withScore(mapPortfolio(r!), scoreRow(r!)))
+
+  return { data: result, meta: { total: sorted.length, page, pageSize, totalPages: Math.max(1, Math.ceil(sorted.length / pageSize)) } }
+}
+
+// ---------------- reports ----------------
+
+export async function createLinkReport(input: {
+  portfolioUrl: string
+  portfolioName?: string
+  reporterName?: string
+  reporterEmail?: string
+  reason?: string
+}): Promise<LinkReport> {
+  const client = getAdminClient()
+  const { data, error } = await client
+    .from('submissions')
+    .insert({
+      portfolio_url: input.portfolioUrl,
+      submitter_name: input.reporterName ?? null,
+      submitter_email: input.reporterEmail ?? null,
+      status: 'reported',
+      result: { reason: input.reason ?? null, portfolioName: input.portfolioName ?? null, type: 'link_report' },
+    })
+    .select('*')
+    .single()
+  if (error) throw new Error(error.message)
+  const r = data as unknown as Row
+  return {
+    id: String(r.id),
+    portfolioUrl: String(r.portfolio_url),
+    portfolioName: (r.result as Record<string, unknown>)?.portfolioName as string ?? null,
+    reporterName: r.submitter_name ? String(r.submitter_name) : null,
+    reporterEmail: r.submitter_email ? String(r.submitter_email) : null,
+    reason: (r.result as Record<string, unknown>)?.reason as string ?? null,
+    status: String(r.status),
+    createdAt: String(r.created_at),
+  }
+}
+
+export async function listReports(page = 1, pageSize = 20): Promise<Paginated<LinkReport>> {
+  const client = getAdminClient()
+  const base = client
+    .from('submissions')
+    .select('*', { count: 'exact' })
+    .eq('status', 'reported')
+    .order('created_at', { ascending: false })
+    .range((page - 1) * pageSize, page * pageSize - 1)
+  const { data, count, error } = await base
+  if (error) throw new Error(error.message)
+  return {
+    data: ((data as unknown as Row[]) ?? []).map((r) => ({
+      id: String(r.id),
+      portfolioUrl: String(r.portfolio_url),
+      portfolioName: (r.result as Record<string, unknown>)?.portfolioName as string ?? null,
+      reporterName: r.submitter_name ? String(r.submitter_name) : null,
+      reporterEmail: r.submitter_email ? String(r.submitter_email) : null,
+      reason: (r.result as Record<string, unknown>)?.reason as string ?? null,
+      status: String(r.status),
+      createdAt: String(r.created_at),
+    })),
+    meta: { total: count ?? 0, page, pageSize, totalPages: Math.max(1, Math.ceil((count ?? 0) / pageSize)) },
+  }
+}
+
+// ---------------- newsletter emails ----------------
+
+export async function listSubmittersEmails(): Promise<string[]> {
+  const client = getAdminClient()
+  const { data, error } = await client
+    .from('submissions')
+    .select('submitter_email')
+    .not('submitter_email', 'is', null)
+    .neq('submitter_email', '')
+  if (error) throw new Error(error.message)
+  const emails = [...new Set(((data as unknown as Row[]) ?? []).map((r) => String(r.submitter_email).toLowerCase()))]
+  return emails
+}
+
+// ---------------- analytics ----------------
+
+export async function getAnalytics(): Promise<SiteAnalytics> {
+  const client = getAdminClient()
+  const [portfoliosRes, submissionsRes, votesRes, scoresRes] = await Promise.all([
+    client.from('portfolios').select('status,health,technologies,categories', { count: 'exact' }),
+    client.from('submissions').select('id,submitter_email', { count: 'exact' }),
+    client.from('votes').select('id', { count: 'exact' }),
+    client.from('scores').select('overall_score'),
+  ])
+  const portfolios = (portfoliosRes.data as unknown as Row[]) ?? []
+  const totalVotes = votesRes.count ?? 0
+  const totalSubmissions = submissionsRes.count ?? 0
+  const scoreValues = ((scoresRes.data as unknown as Row[]) ?? []).map((r) => Number(r.overall_score) || 0)
+
+  const techMap = new Map<string, number>()
+  const catMap = new Map<string, number>()
+  const healthMap = new Map<string, number>()
+  for (const p of portfolios) {
+    for (const t of (p.technologies as string[] ?? [])) techMap.set(t, (techMap.get(t) ?? 0) + 1)
+    for (const c of (p.categories as string[] ?? [])) catMap.set(c, (catMap.get(c) ?? 0) + 1)
+    const h = String(p.health ?? 'unknown')
+    healthMap.set(h, (healthMap.get(h) ?? 0) + 1)
+  }
+
+  const emails = [...new Set(((submissionsRes.data as unknown as Row[]) ?? []).map((r) => String(r.submitter_email ?? '')).filter(Boolean))]
+
+  return {
+    totalPortfolios: portfolios.length,
+    totalApproved: portfolios.filter((p) => p.status === 'approved').length,
+    totalPending: portfolios.filter((p) => p.status === 'pending').length,
+    totalRejected: portfolios.filter((p) => p.status === 'rejected').length,
+    totalSubmissions,
+    totalVotes,
+    totalReports: 0,
+    totalEmails: emails.length,
+    avgScore: scoreValues.length > 0 ? Math.round(scoreValues.reduce((a, b) => a + b, 0) / scoreValues.length) : 0,
+    techDistribution: [...techMap.entries()].map(([tech, count]) => ({ tech, count })).sort((a, b) => b.count - a.count).slice(0, 20),
+    categoryDistribution: [...catMap.entries()].map(([category, count]) => ({ category, count })).sort((a, b) => b.count - a.count),
+    healthDistribution: [...healthMap.entries()].map(([health, count]) => ({ health, count })),
+    recentPortfolios: [],
   }
 }

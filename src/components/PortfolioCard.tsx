@@ -6,6 +6,32 @@ import type { PortfolioWithScore } from '@/lib/types'
 import { ScoreBadge } from '@/components/ScoreBadge'
 import { absoluteUrl, cn, getHealthColor, hostnameOf, initials } from '@/lib/utils'
 
+const BOOKMARKS_KEY = 'devfolio_bookmarks'
+
+function loadBookmarks(): Set<string> {
+  try {
+    const raw = localStorage.getItem(BOOKMARKS_KEY)
+    if (!raw) return new Set()
+    const parsed = JSON.parse(raw)
+    if (Array.isArray(parsed)) return new Set(parsed.map(String))
+    if (parsed && typeof parsed === 'object' && typeof (parsed as { values?: unknown }).values === 'object') {
+      const vals = (parsed as { values?: ArrayLike<unknown> }).values
+      if (vals && typeof vals === 'object') return new Set(Array.from(vals as ArrayLike<unknown>, String))
+    }
+    return new Set()
+  } catch {
+    return new Set()
+  }
+}
+
+function saveBookmarks(set: Set<string>): void {
+  try {
+    localStorage.setItem(BOOKMARKS_KEY, JSON.stringify([...set]))
+  } catch {
+    // ignore storage errors
+  }
+}
+
 export function Avatar({ p, size = 'md' }: { p: PortfolioWithScore; size?: 'sm' | 'md' | 'lg' }) {
   const cls = size === 'lg' ? 'h-16 w-16 text-xl' : size === 'sm' ? 'h-8 w-8 text-xs' : 'h-11 w-11 text-sm'
   if (p.avatarUrl) {
@@ -19,8 +45,8 @@ export function Avatar({ p, size = 'md' }: { p: PortfolioWithScore; size?: 'sm' 
   )
 }
 
-function LikeButton({ p }: { p: PortfolioWithScore }) {
-  const [votes, setVotes] = useState(0)
+function LikeButton({ p, likeCount = 0 }: { p: PortfolioWithScore; likeCount?: number }) {
+  const [votes, setVotes] = useState(likeCount)
   const [liked, setLiked] = useState(false)
   const [busy, setBusy] = useState(false)
 
@@ -62,7 +88,84 @@ function LikeButton({ p }: { p: PortfolioWithScore }) {
   )
 }
 
-export function PortfolioCard({ p, className }: { p: PortfolioWithScore; className?: string }) {
+function ShareButton({ p }: { p: PortfolioWithScore }) {
+  const [copied, setCopied] = useState(false)
+
+  async function share() {
+    try {
+      const url = `${window.location.origin}/p/${p.slug}`
+      await navigator.clipboard.writeText(url)
+      setCopied(true)
+      window.setTimeout(() => setCopied(false), 1500)
+    } catch {
+      // ignore clipboard errors
+    }
+  }
+
+  return (
+    <div className="relative">
+      <button
+        type="button"
+        onClick={share}
+        aria-label="Copy link to this portfolio"
+        title="Copy link"
+        className="inline-flex items-center gap-1.5 rounded-lg border border-white/10 bg-white/[0.03] px-2.5 py-1.5 text-xs font-medium text-slate-300 transition-all duration-200 hover:border-sky-500/50 hover:bg-white/[0.06] hover:text-white"
+      >
+        <svg aria-hidden viewBox="0 0 20 20" fill="currentColor" className="h-3.5 w-3.5">
+          <path d="M11 3a1 1 0 100 2h2.586l-6.293 6.293a1 1 0 101.414 1.414L15 6.414V9a1 1 0 102 0V4a1 1 0 00-1-1h-5zM5 5a2 2 0 00-2 2v8a2 2 0 002 2h8a2 2 0 002-2v-3a1 1 0 10-2 0v3H5V7h3a1 1 0 100-2H5z" />
+        </svg>
+      </button>
+      {copied && (
+        <span className="absolute left-1/2 top-full z-20 mt-1.5 -translate-x-1/2 whitespace-nowrap rounded-md bg-emerald-500/90 px-2 py-1 text-[10px] font-semibold text-white shadow-lg">
+          Copied!
+        </span>
+      )}
+    </div>
+  )
+}
+
+function BookmarkButton({ p }: { p: PortfolioWithScore }) {
+  const [saved, setSaved] = useState<boolean>(() => {
+    if (typeof window === 'undefined') return false
+    return loadBookmarks().has(p.id)
+  })
+
+  function toggle() {
+    setSaved((prev) => {
+      const next = !prev
+      const set = loadBookmarks()
+      if (next) set.add(p.id)
+      else set.delete(p.id)
+      saveBookmarks(set)
+      return next
+    })
+  }
+
+  return (
+    <button
+      type="button"
+      onClick={toggle}
+      aria-label={saved ? 'Remove from saved' : 'Save portfolio'}
+      title={saved ? 'Remove from saved' : 'Save portfolio'}
+      className={cn(
+        'inline-flex items-center gap-1.5 rounded-lg border px-2.5 py-1.5 text-xs font-medium transition-all duration-200',
+        saved
+          ? 'border-rose-500/50 bg-rose-500/15 text-rose-300'
+          : 'border-white/10 bg-white/[0.03] text-slate-300 hover:border-rose-500/50 hover:bg-white/[0.06] hover:text-white',
+      )}
+    >
+      <svg aria-hidden viewBox="0 0 20 20" fill="currentColor" className={cn('h-3.5 w-3.5 transition-transform', saved && 'animate-bounce')}>
+        <path
+          fillRule="evenodd"
+          d="M3.172 5.172a4 4 0 015.656 0L10 6.343l1.172-1.171a4 4 0 115.656 5.656L10 17.657l-6.828-6.829a4 4 0 010-5.656z"
+          clipRule="evenodd"
+        />
+      </svg>
+    </button>
+  )
+}
+
+export function PortfolioCard({ p, likeCount = 0, className }: { p: PortfolioWithScore; likeCount?: number; className?: string }) {
   return (
     <div
       className={cn(
@@ -122,7 +225,9 @@ export function PortfolioCard({ p, className }: { p: PortfolioWithScore; classNa
           <span className="text-xs font-medium text-indigo-300">{p.experienceLevel}</span>
         </div>
         <div className="flex items-center gap-2">
-          <LikeButton p={p} />
+          <LikeButton p={p} likeCount={likeCount} />
+          <BookmarkButton p={p} />
+          <ShareButton p={p} />
           <a
             href={absoluteUrl(p.portfolioUrl)}
             target="_blank"

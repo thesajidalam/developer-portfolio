@@ -222,9 +222,65 @@ textarea:focus-visible {
     animation-duration: 0.001ms !important;
     animation-iteration-count: 1 !important;
     transition-duration: 0.001ms !important;
+    scroll-behavior: auto !important;
   }
   .reveal {
     opacity: 1;
     transform: none;
   }
+  .animate-hero,
+  .animate-float-slow,
+  .animate-pulse-glow,
+  .skeleton,
+  .text-gradient {
+    animation: none !important;
+  }
+}
+
+/* ---- keyboard navigation focus rings ---------------------------------------- */
+:focus-visible {
+  outline: 2px solid transparent !important;
+  box-shadow: 0 0 0 2px var(--background), 0 0 0 4px #7066ff !important;
+  border-radius: 6px;
+}
+a:focus-visible,
+button:focus-visible,
+input:focus-visible,
+select:focus-visible,
+textarea:focus-visible {
+  outline: 2px solid transparent !important;
+  box-shadow: 0 0 0 2px var(--background), 0 0 0 4px #22d3ee !important;
+}
+
+/* ---- thin themed scrollbar -------------------------------------------------- */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: rgb(112 102 255 / 0.55) #0a0e1a;
+}
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+::-webkit-scrollbar-track {
+  background: #0a0e1a;
+}
+::-webkit-scrollbar-thumb {
+  background: linear-gradient(180deg, rgb(112 102 255 / 0.55), rgb(34 211 238 / 0.45));
+  border-radius: 999px;
+  border: 2px solid #0a0e1a;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: linear-gradient(180deg, rgb(112 102 255 / 0.8), rgb(34 211 238 / 0.65));
+}
+::-webkit-scrollbar-corner {
+  background: #0a0e1a;
+}
+
+/* ---- hide scrollbars while keeping scroll ----------------------------------- */
+.no-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
 }

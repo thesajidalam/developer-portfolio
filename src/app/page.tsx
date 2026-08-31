@@ -1,17 +1,22 @@
 import Link from 'next/link'
 import type { Metadata } from 'next'
 import { PortfolioCard } from '@/components/PortfolioCard'
+import { ScoreBadge } from '@/components/ScoreBadge'
 import { Reveal } from '@/components/Reveal'
-import { listPortfolios } from '@/lib/repository'
+import { LoadMore } from '@/components/LoadMore'
+import { listPortfolios, portfolioOfDay } from '@/lib/repository'
 import { getTrendingPortfolios, getTotalCount } from '@/lib/discovery'
 import { PortfolioFiltersSchema } from '@/lib/validations'
 import type { PortfolioFilters } from '@/lib/types'
+import { cn, absoluteUrl } from '@/lib/utils'
 
 export const metadata: Metadata = {
   title: 'Discover Developer Portfolios',
   description:
     'Explore DevFolio\u2019s gallery of curated developer portfolios, filtered by technology, category and experience, and ranked by a transparent six-dimension score.',
 }
+
+const POPULAR_TECHS = ['React', 'Next.js', 'Vue', 'TypeScript', 'Tailwind CSS', 'Python', 'Node.js', 'Laravel', 'Flutter', 'Django']
 
 function buildQuery(params: PortfolioFilters): string {
   const search = new URLSearchParams()
@@ -22,57 +27,6 @@ function buildQuery(params: PortfolioFilters): string {
   if (params.sort) search.set('sort', params.sort)
   search.set('page', String(params.page ?? 1))
   return search.toString()
-}
-
-function Pagination({
-  page,
-  totalPages,
-  filters,
-}: {
-  page: number
-  totalPages: number
-  filters: PortfolioFilters
-}) {
-  const prevPage = Math.max(1, page - 1)
-  const nextPage = Math.min(totalPages, page + 1)
-  const prevHref = page > 1 ? `/?${buildQuery({ ...filters, page: prevPage })}` : null
-  const nextHref = page < totalPages ? `/?${buildQuery({ ...filters, page: nextPage })}` : null
-
-  return (
-    <div className="mt-10 flex items-center justify-between gap-4">
-      <span className="text-sm text-slate-500">
-        Page {page} of {totalPages}
-      </span>
-      <div className="flex items-center gap-2">
-        {prevHref ? (
-          <Link
-            href={prevHref}
-            scroll={false}
-            className="rounded-lg border border-white/10 bg-white/[0.03] px-4 py-2 text-sm font-medium text-slate-300 transition-colors hover:border-indigo-500/50 hover:text-white"
-          >
-            ← Previous
-          </Link>
-        ) : (
-          <span className="cursor-not-allowed rounded-lg border border-white/5 px-4 py-2 text-sm font-medium text-slate-600">
-            ← Previous
-          </span>
-        )}
-        {nextHref ? (
-          <Link
-            href={nextHref}
-            scroll={false}
-            className="shine rounded-lg bg-gradient-to-r from-indigo-500 to-sky-500 px-4 py-2 text-sm font-semibold text-white shadow-lg shadow-indigo-500/25 transition-all hover:scale-[1.03] hover:shadow-xl hover:shadow-indigo-500/40 active:scale-95"
-          >
-            Next →
-          </Link>
-        ) : (
-          <span className="cursor-not-allowed rounded-lg border border-white/5 px-4 py-2 text-sm font-medium text-slate-600">
-            Next →
-          </span>
-        )}
-      </div>
-    </div>
-  )
 }
 
 const SELECT_CLASS =
@@ -91,7 +45,7 @@ export default async function HomePage({ searchParams }: { searchParams: Promise
 
   const filters = parsed.success ? parsed.data : { page: 1, pageSize: 12 }
 
-  const [total, trending, topCandidates, gallery] = await Promise.all([
+  const [total, trending, topCandidates, gallery, potd] = await Promise.all([
     getTotalCount(),
     getTrendingPortfolios(8),
     listPortfolios({ sort: 'score', page: 1, pageSize: 24 }),
@@ -104,6 +58,7 @@ export default async function HomePage({ searchParams }: { searchParams: Promise
       page: filters.page,
       pageSize: filters.pageSize,
     }),
+    portfolioOfDay(),
   ])
 
   // Never spotlight a degenerate entry (0 score / unknown health / no name).
@@ -116,6 +71,14 @@ export default async function HomePage({ searchParams }: { searchParams: Promise
         p.health !== 'down' &&
         Boolean(p.name),
     ) ?? topCandidates.data[0] ?? null
+
+  const galleryFilters = {
+    search: filters.search,
+    tech: filters.tech,
+    category: filters.category,
+    experience: filters.experience,
+    sort: filters.sort,
+  }
 
   return (
     <>
@@ -165,6 +128,11 @@ export default async function HomePage({ searchParams }: { searchParams: Promise
                   <span className="inline-block transition-transform group-hover:translate-x-1">→</span>
                 </Link>
               </div>
+
+              <p className="animate-hero delay-4 mt-6 inline-flex items-center gap-2 text-xs text-slate-500">
+                <kbd className="rounded-md border border-white/10 bg-white/[0.04] px-1.5 py-0.5 font-mono text-[11px] text-slate-300">/</kbd>
+                Press <span className="font-semibold text-slate-300">/</span> to search
+              </p>
 
               {/* stat strip */}
               <div className="animate-hero delay-4 mt-12 flex flex-wrap gap-8 border-t border-white/10 pt-8">
@@ -254,6 +222,48 @@ export default async function HomePage({ searchParams }: { searchParams: Promise
         </div>
       </section>
 
+      {/* ---- portfolio of the day ------------------------------------------- */}
+      {potd && (
+        <section className="mx-auto max-w-7xl px-4 pt-16 sm:px-6">
+          <Reveal>
+            <div className="relative overflow-hidden rounded-3xl border border-amber-500/20 bg-gradient-to-br from-[#150f04]/40 via-[#0b1020]/60 to-[#0b1020]/60 p-6 shadow-2xl shadow-amber-500/5 sm:p-8">
+              <div className="pointer-events-none absolute -right-20 -top-24 h-72 w-72 rounded-full bg-amber-500/15 blur-3xl" />
+              <div className="pointer-events-none absolute -bottom-24 -left-16 h-64 w-64 rounded-full bg-amber-500/10 blur-3xl" />
+
+              <div className="relative flex flex-col gap-6 sm:flex-row sm:items-center">
+                <div className="flex-1">
+                  <span className="inline-flex items-center gap-1.5 rounded-full border border-amber-500/40 bg-amber-500/10 px-3 py-1 text-xs font-bold uppercase tracking-widest text-amber-300">
+                    <span className="h-1.5 w-1.5 rounded-full bg-amber-400 animate-pulse-glow" />
+                    Portfolio of the Day
+                  </span>
+                  <h2 className="mt-4 text-2xl font-bold tracking-tight text-white sm:text-3xl">{potd.name}</h2>
+                  <p className="mt-3 max-w-xl text-sm leading-relaxed text-slate-300">
+                    {potd.description || potd.title || 'A standout developer portfolio worth studying.'}
+                  </p>
+                  <div className="mt-4 flex flex-wrap gap-1.5">
+                    {(potd.technologies ?? []).slice(0, 6).map((t) => (
+                      <span key={t} className="rounded-md border border-white/10 bg-white/[0.04] px-2 py-0.5 text-[11px] font-medium text-slate-200">
+                        {t}
+                      </span>
+                    ))}
+                  </div>
+                  <Link
+                    href={`/p/${potd.slug}`}
+                    className="group mt-6 inline-flex items-center gap-2 rounded-xl border border-amber-500/40 bg-amber-500/10 px-5 py-2.5 text-sm font-semibold text-amber-200 transition-all hover:border-amber-400/60 hover:bg-amber-500/20"
+                  >
+                    View <span className="inline-block transition-transform group-hover:translate-x-1">→</span>
+                  </Link>
+                </div>
+                <div className="flex items-center sm:flex-col sm:items-end sm:justify-center">
+                  {potd.score ? <ScoreBadge score={potd.score.overallScore} className="h-16 w-16 text-xl ring-1 ring-amber-500/30" /> : <ScoreBadge score={0} className="h-16 w-16 text-xl ring-1 ring-amber-500/30" />}
+                  <span className="mt-2 text-xs uppercase tracking-widest text-slate-500">Score</span>
+                </div>
+              </div>
+            </div>
+          </Reveal>
+        </section>
+      )}
+
       {/* ---- trending ------------------------------------------------------ */}
       {trending.length > 0 && (
         <section className="mx-auto max-w-7xl px-4 py-16 sm:px-6">
@@ -281,6 +291,29 @@ export default async function HomePage({ searchParams }: { searchParams: Promise
           <p className="mt-1.5 text-sm text-slate-500">Filter and sort the directory to find portfolios worth studying.</p>
         </Reveal>
 
+        {/* quick tech filter chips */}
+        <Reveal className="mb-6">
+          <div className="flex gap-2 overflow-x-auto pb-2">
+            {POPULAR_TECHS.map((t) => {
+              const active = filters.tech?.toLowerCase() === t.toLowerCase()
+              return (
+                <Link
+                  key={t}
+                  href={`/?tech=${encodeURIComponent(t)}`}
+                  className={cn(
+                    'shrink-0 rounded-full border px-3.5 py-1.5 text-xs font-medium transition-all duration-200',
+                    active
+                      ? 'border-indigo-500/60 bg-indigo-500/15 text-indigo-200 shadow-lg shadow-indigo-500/10'
+                      : 'border-white/10 bg-white/[0.03] text-slate-300 hover:border-indigo-500/40 hover:bg-white/[0.06] hover:text-white hover:shadow-lg hover:shadow-indigo-500/10',
+                  )}
+                >
+                  {t}
+                </Link>
+              )
+            })}
+          </div>
+        </Reveal>
+
         <Reveal>
           <form method="get" action="/" className="glass relative overflow-hidden rounded-2xl border border-white/10 bg-white/[0.03] p-5 shadow-xl shadow-indigo-500/5 backdrop-blur-xl">
             <div className="pointer-events-none absolute -top-24 right-0 h-40 w-40 rounded-full bg-indigo-500/10 blur-3xl" />
@@ -299,6 +332,7 @@ export default async function HomePage({ searchParams }: { searchParams: Promise
                 name="search"
                 defaultValue={filters.search ?? ''}
                 placeholder="Search portfolios by name, role, or URL…"
+                aria-label="Search portfolios by name, role, or URL"
                 className="h-12 w-full rounded-xl border border-white/10 bg-[#0a1120]/80 pl-10 pr-4 text-sm text-slate-200 outline-none transition-all placeholder:text-slate-500 focus:border-indigo-500/60 focus:ring-2 focus:ring-indigo-500/20"
               />
             </div>
@@ -312,6 +346,7 @@ export default async function HomePage({ searchParams }: { searchParams: Promise
                   name="tech"
                   defaultValue={filters.tech ?? ''}
                   placeholder="e.g. React"
+                  aria-label="Filter by technology"
                   className="h-11 w-full rounded-xl border border-white/10 bg-[#0a1120]/80 pl-16 pr-3.5 text-sm text-slate-200 outline-none transition-all placeholder:text-slate-500 focus:border-indigo-500/60 focus:ring-2 focus:ring-indigo-500/20"
                 />
               </div>
@@ -322,16 +357,17 @@ export default async function HomePage({ searchParams }: { searchParams: Promise
                   name="category"
                   defaultValue={filters.category ?? ''}
                   placeholder="e.g. Design"
+                  aria-label="Filter by category"
                   className="h-11 w-full rounded-xl border border-white/10 bg-[#0a1120]/80 pl-20 pr-3.5 text-sm text-slate-200 outline-none transition-all placeholder:text-slate-500 focus:border-indigo-500/60 focus:ring-2 focus:ring-indigo-500/20"
                 />
               </div>
-              <select name="experience" defaultValue={filters.experience ?? ''} className={SELECT_CLASS}>
+              <select name="experience" defaultValue={filters.experience ?? ''} aria-label="Filter by experience level" className={SELECT_CLASS}>
                 <option value="">Any experience</option>
                 <option value="beginner">Beginner</option>
                 <option value="mid">Mid-level</option>
                 <option value="senior">Senior</option>
               </select>
-              <select name="sort" defaultValue={filters.sort ?? 'newest'} className={SELECT_CLASS}>
+              <select name="sort" defaultValue={filters.sort ?? 'newest'} aria-label="Sort portfolios" className={SELECT_CLASS}>
                 <option value="newest">Newest</option>
                 <option value="oldest">Oldest</option>
                 <option value="score">Top score</option>
@@ -360,30 +396,13 @@ export default async function HomePage({ searchParams }: { searchParams: Promise
           Showing <span className="rounded-lg bg-indigo-500/10 px-2 py-0.5 font-semibold text-indigo-300">{gallery.meta.total.toLocaleString()}</span> portfolios
         </Reveal>
 
-        {gallery.data.length > 0 ? (
-          <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
-            {gallery.data.map((p, i) => (
-              <Reveal key={p.id} delay={(i % 4) * 50}>
-                <PortfolioCard p={p} />
-              </Reveal>
-            ))}
-          </div>
-        ) : (
-          <div className="rounded-2xl border border-dashed border-white/10 bg-white/[0.02] p-16 text-center">
-            <p className="text-lg font-medium text-white">No portfolios found</p>
-            <p className="mt-2 text-sm text-slate-500">Try adjusting your filters or clearing your search.</p>
-            <Link
-              href="/"
-              className="shine mt-6 inline-block rounded-xl bg-gradient-to-r from-indigo-500 to-sky-500 px-5 py-2.5 text-sm font-semibold text-white shadow-lg shadow-indigo-500/25 transition-all hover:scale-105 active:scale-95"
-            >
-              Clear filters
-            </Link>
-          </div>
-        )}
-
-        <Reveal>
-          <Pagination page={gallery.meta.page} totalPages={Math.max(1, gallery.meta.totalPages)} filters={filters} />
-        </Reveal>
+        <LoadMore
+          initial={gallery.data}
+          total={gallery.meta.total}
+          initialPage={filters.page ?? 1}
+          pageSize={filters.pageSize ?? 12}
+          filters={galleryFilters}
+        />
       </section>
     </>
   )

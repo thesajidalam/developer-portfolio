@@ -1,12 +1,12 @@
 'use client'
 
 import { useCallback, useEffect, useRef, useState } from 'react'
-import type { Paginated, Portfolio, Submission } from '@/lib/types'
+import type { LinkReport, Paginated, Portfolio, SiteAnalytics, Submission } from '@/lib/types'
 import { cn, formatDate, getHealthColor, getHealthLabel, hostnameOf } from '@/lib/utils'
 
 const PAGE_SIZE = 20
 
-type Tab = 'portfolios' | 'submissions'
+type Tab = 'portfolios' | 'submissions' | 'reports' | 'newsletter' | 'analytics' | 'settings'
 type PageMeta = Paginated<Portfolio>['meta']
 type PortfolioStatus = Portfolio['status']
 
@@ -23,7 +23,9 @@ function StatusPill({ status }: { status: string }) {
       ? 'bg-emerald-500/10 text-emerald-300 ring-1 ring-emerald-500/30'
       : status === 'rejected'
         ? 'bg-red-500/10 text-red-300 ring-1 ring-red-500/30'
-        : 'bg-amber-500/10 text-amber-300 ring-1 ring-amber-500/30'
+        : status === 'reported'
+          ? 'bg-orange-500/10 text-orange-300 ring-1 ring-orange-500/30'
+          : 'bg-amber-500/10 text-amber-300 ring-1 ring-amber-500/30'
   return <span className={cn('inline-flex rounded-full px-2.5 py-0.5 text-xs font-medium capitalize', cls)}>{status}</span>
 }
 
@@ -78,6 +80,42 @@ function AdminPagination({ meta, onPrev, onNext }: { meta: PageMeta; onPrev: () 
           Next →
         </button>
       </div>
+    </div>
+  )
+}
+
+function StatCard({ label, value, accent }: { label: string; value: number | string; accent?: string }) {
+  return (
+    <div className="relative overflow-hidden rounded-2xl border border-white/10 bg-gradient-to-br from-white/[0.05] to-white/[0.01] p-5">
+      <div className={cn('pointer-events-none absolute -top-10 -right-10 h-32 w-32 rounded-full blur-3xl', accent ?? 'bg-indigo-500/20')} />
+      <p className="text-xs font-medium uppercase tracking-wide text-slate-500">{label}</p>
+      <p className="mt-2 text-3xl font-bold text-white">{typeof value === 'number' ? value.toLocaleString() : value}</p>
+    </div>
+  )
+}
+
+function DistributionBar({
+  label,
+  count,
+  max,
+  color,
+}: {
+  label: string
+  count: number
+  max: number
+  color: string
+}) {
+  const pct = max > 0 ? Math.max(4, Math.round((count / max) * 100)) : 0
+  return (
+    <div className="flex items-center gap-3">
+      <div className="w-36 shrink-0 truncate text-right text-sm text-slate-400">{label}</div>
+      <div className="h-5 flex-1 overflow-hidden rounded-full bg-white/[0.04]">
+        <div
+          className={cn('h-full rounded-full transition-all', color)}
+          style={{ width: `${pct}%` }}
+        />
+      </div>
+      <div className="w-12 shrink-0 text-left text-sm font-semibold text-slate-200">{count}</div>
     </div>
   )
 }
@@ -235,6 +273,93 @@ function SubmissionTable({
   )
 }
 
+function ReportsTable({
+  reports,
+  onDismiss,
+}: {
+  reports: LinkReport[]
+  onDismiss: (id: string) => void
+}) {
+  if (reports.length === 0) {
+    return <p className="p-10 text-center text-sm text-slate-500">No broken-link reports.</p>
+  }
+  return (
+    <div className="overflow-x-auto">
+      <table className="w-full min-w-max text-left">
+        <thead>
+          <tr className="border-b border-white/10 text-xs font-medium uppercase tracking-wide text-slate-500">
+            <th className="px-4 py-3">URL</th>
+            <th className="px-4 py-3">Reporter</th>
+            <th className="px-4 py-3">Reason</th>
+            <th className="px-4 py-3">Status</th>
+            <th className="px-4 py-3">Reported</th>
+            <th className="px-4 py-3 text-right">Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          {reports.map((r) => (
+            <tr key={r.id} className="border-b border-white/5 transition-colors last:border-0 hover:bg-white/[0.02]">
+              <td className="max-w-[14rem] truncate px-4 py-3 text-sm text-indigo-300">{r.portfolioUrl}</td>
+              <td className="px-4 py-3 text-sm text-slate-200">{r.reporterName ?? '—'}</td>
+              <td className="max-w-[18rem] truncate px-4 py-3 text-sm text-slate-400">{r.reason ?? '—'}</td>
+              <td className="px-4 py-3">
+                <StatusPill status={r.status} />
+              </td>
+              <td className="px-4 py-3 text-sm text-slate-500">{formatDate(r.createdAt)}</td>
+              <td className="px-4 py-3">
+                <div className="flex justify-end">
+                  <button
+                    type="button"
+                    onClick={() => onDismiss(r.id)}
+                    className={cn(buttonClass, 'border-red-500/30 text-red-300 hover:border-red-500/70')}
+                  >
+                    Dismiss
+                  </button>
+                </div>
+              </td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
+  )
+}
+
+function NewsletterTab({ emails, onCopy }: { emails: string[]; onCopy: (email: string) => void }) {
+  if (emails.length === 0) {
+    return <p className="p-10 text-center text-sm text-slate-500">No newsletter subscribers yet.</p>
+  }
+  return (
+    <div className="overflow-x-auto">
+      <table className="w-full text-left">
+        <thead>
+          <tr className="border-b border-white/10 text-xs font-medium uppercase tracking-wide text-slate-500">
+            <th className="px-4 py-3">Email</th>
+            <th className="px-4 py-3 text-right">Action</th>
+          </tr>
+        </thead>
+        <tbody>
+          {emails.map((email, idx) => (
+            <tr key={`${email}-${idx}`} className="border-b border-white/5 transition-colors last:border-0 hover:bg-white/[0.02]">
+              <td className="px-4 py-3 text-sm text-slate-200">{email}</td>
+              <td className="px-4 py-3 text-right">
+                <button
+                  type="button"
+                  onClick={() => onCopy(email)}
+                  className={cn(buttonClass, 'border-indigo-500/30 text-indigo-300 hover:border-indigo-500/70')}
+                  aria-label={`Copy ${email} to clipboard`}
+                >
+                  Copy
+                </button>
+              </td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
+  )
+}
+
 export default function AdminPage() {
   const [key, setKey] = useState('')
   const [unlocked, setUnlocked] = useState(false)
@@ -249,6 +374,11 @@ export default function AdminPage() {
   const [submissionPage, setSubmissionPage] = useState(1)
   const [submissionStatus, setSubmissionStatus] = useState('all')
   const [submissionQuery, setSubmissionQuery] = useState('')
+  const [reports, setReports] = useState<LinkReport[]>([])
+  const [reportMeta, setReportMeta] = useState<PageMeta | null>(null)
+  const [reportPage, setReportPage] = useState(1)
+  const [emails, setEmails] = useState<string[]>([])
+  const [analytics, setAnalytics] = useState<SiteAnalytics | null>(null)
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
   const [toast, setToast] = useState<string | null>(null)
@@ -321,6 +451,57 @@ export default function AdminPage() {
     [key],
   )
 
+  const loadReports = useCallback(
+    async (page: number, silent = false) => {
+      if (!silent) setLoading(true)
+      setError(null)
+      try {
+        const qs = new URLSearchParams({ page: String(page), pageSize: String(PAGE_SIZE) })
+        const data = await apiFetch<Paginated<LinkReport>>(`/api/v1/admin/reports?${qs.toString()}`)
+        setReports(data.data)
+        setReportMeta(data.meta)
+        setReportPage(page)
+      } catch (err) {
+        fail(err)
+      } finally {
+        if (!silent) setLoading(false)
+      }
+    },
+    [key],
+  )
+
+  const loadNewsletter = useCallback(
+    async (silent = false) => {
+      if (!silent) setLoading(true)
+      setError(null)
+      try {
+        const data = await apiFetch<{ data: string[] }>('/api/v1/admin/newsletter')
+        setEmails(data.data)
+      } catch (err) {
+        fail(err)
+      } finally {
+        if (!silent) setLoading(false)
+      }
+    },
+    [key],
+  )
+
+  const loadAnalytics = useCallback(
+    async (silent = false) => {
+      if (!silent) setLoading(true)
+      setError(null)
+      try {
+        const data = await apiFetch<{ data: SiteAnalytics }>('/api/v1/admin/analytics')
+        setAnalytics(data.data)
+      } catch (err) {
+        fail(err)
+      } finally {
+        if (!silent) setLoading(false)
+      }
+    },
+    [key],
+  )
+
   function unlock() {
     const trimmed = key.trim()
     if (!trimmed) return
@@ -332,6 +513,9 @@ export default function AdminPage() {
   function switchTab(next: Tab) {
     setError(null)
     setTab(next)
+    if (next === 'reports' && reports.length === 0) loadReports(1)
+    else if (next === 'newsletter' && emails.length === 0) loadNewsletter()
+    else if (next === 'analytics' && !analytics) loadAnalytics()
   }
 
   async function patchPortfolio(body: { id: string; status?: PortfolioStatus; featured?: boolean }) {
@@ -379,6 +563,60 @@ export default function AdminPage() {
     }
   }
 
+  async function dismissReport(id: string) {
+    if (!confirm('Dismiss this report? It will be removed from the queue.')) return
+    try {
+      await apiFetch<{ data: { deleted: boolean } }>(`/api/v1/admin/reports?id=${encodeURIComponent(id)}`, {
+        method: 'DELETE',
+      })
+      notify('Report dismissed')
+      if (reports.length === 1 && reportPage > 1) {
+        await loadReports(reportPage - 1, true)
+      } else {
+        await loadReports(reportPage, true)
+      }
+    } catch (err) {
+      fail(err)
+    }
+  }
+
+  async function copyEmail(email: string) {
+    try {
+      await navigator.clipboard.writeText(email)
+      notify(`Copied ${email}`)
+    } catch {
+      notify('Failed to copy email')
+    }
+  }
+
+  function exportCSV() {
+    if (portfolios.length === 0) {
+      notify('No data to export — load portfolios first')
+      return
+    }
+    const headers = ['Name', 'URL', 'Status', 'Health', 'Featured', 'Verified', 'Submitted']
+    const rows = portfolios.map((p) => [
+      p.name,
+      p.portfolioUrl,
+      p.status,
+      p.health,
+      p.featured ? 'yes' : 'no',
+      p.verified ? 'yes' : 'no',
+      formatDate(p.submittedAt),
+    ])
+    const csv = [headers, ...rows]
+      .map((r) => r.map((c) => `"${String(c).replace(/"/g, '""')}"`).join(','))
+      .join('\n')
+    const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' })
+    const url = URL.createObjectURL(blob)
+    const a = document.createElement('a')
+    a.href = url
+    a.download = `portfolios-${new Date().toISOString().slice(0, 10)}.csv`
+    a.click()
+    URL.revokeObjectURL(url)
+    notify('CSV exported')
+  }
+
   if (!unlocked) {
     return (
       <div className="mx-auto max-w-md px-4 py-24 sm:px-6">
@@ -395,6 +633,7 @@ export default function AdminPage() {
             }}
             placeholder="Admin key"
             autoComplete="current-password"
+            aria-label="Admin key"
             className={cn(inputClass, 'mt-5')}
           />
           {error && <p className="mt-3 rounded-lg border border-red-500/20 bg-red-500/10 px-3 py-2 text-sm text-red-300">{error}</p>}
@@ -411,6 +650,16 @@ export default function AdminPage() {
     )
   }
 
+  const maxTech = analytics && analytics.techDistribution.length > 0
+    ? Math.max(...analytics.techDistribution.map((t) => t.count))
+    : 0
+  const maxCat = analytics && analytics.categoryDistribution.length > 0
+    ? Math.max(...analytics.categoryDistribution.map((c) => c.count))
+    : 0
+  const maxHealth = analytics && analytics.healthDistribution.length > 0
+    ? Math.max(...analytics.healthDistribution.map((h) => h.count))
+    : 0
+
   return (
     <div className="mx-auto max-w-7xl px-4 py-12 sm:px-6">
       {toast && (
@@ -426,7 +675,7 @@ export default function AdminPage() {
       <div className="mb-8 flex flex-wrap items-center justify-between gap-3">
         <div>
           <h1 className="text-4xl font-bold tracking-tight text-white">Admin</h1>
-          <p className="mt-2 text-sm text-slate-400">Manage portfolios and review submissions.</p>
+          <p className="mt-2 text-sm text-slate-400">Manage portfolios, submissions, reports and more.</p>
         </div>
         <button
           type="button"
@@ -436,13 +685,21 @@ export default function AdminPage() {
             setError(null)
           }}
           className={buttonClass}
+          aria-label="Lock admin dashboard"
         >
           Lock
         </button>
       </div>
 
-      <div className="mb-6 flex items-center gap-2">
-        {(['portfolios', 'submissions'] as Tab[]).map((t) => (
+      <div className="mb-6 flex flex-wrap items-center gap-2">
+        {([
+          ['portfolios', 'Portfolios'],
+          ['submissions', 'Submissions'],
+          ['reports', 'Reports'],
+          ['newsletter', 'Newsletter'],
+          ['analytics', 'Analytics'],
+          ['settings', 'Settings'],
+        ] as [Tab, string][]).map(([t, label]) => (
           <button
             key={t}
             type="button"
@@ -454,7 +711,7 @@ export default function AdminPage() {
                 : 'border border-white/10 bg-white/[0.03] text-slate-300 hover:border-indigo-500/50 hover:text-white',
             )}
           >
-            {t === 'portfolios' ? 'Portfolios' : 'Submissions'}
+            {label}
           </button>
         ))}
       </div>
@@ -462,7 +719,7 @@ export default function AdminPage() {
       {error && <div className="mb-6 rounded-lg border border-red-500/20 bg-red-500/10 px-4 py-3 text-sm text-red-300">{error}</div>}
 
       <div className="rounded-2xl border border-white/10 bg-white/[0.02] backdrop-blur-xl">
-        {tab === 'portfolios' ? (
+        {tab === 'portfolios' && (
           <>
             <div className="flex flex-wrap items-center gap-3 border-b border-white/10 p-4">
               <div className="flex items-center gap-2">
@@ -482,6 +739,7 @@ export default function AdminPage() {
                     if (e.key === 'Enter') loadPortfolios(1, portfolioStatus, portfolioQuery)
                   }}
                   placeholder="Search portfolios, URL, tech…"
+                  aria-label="Search portfolios"
                   className={cn(inputClass, 'max-w-xs flex-1')}
                 />
                 <select
@@ -490,6 +748,7 @@ export default function AdminPage() {
                     setPortfolioStatus(e.target.value)
                     loadPortfolios(1, e.target.value, portfolioQuery)
                   }}
+                  aria-label="Filter portfolios by status"
                   className={selectClass}
                 >
                   <option value="all">All statuses</option>
@@ -521,7 +780,9 @@ export default function AdminPage() {
               />
             )}
           </>
-        ) : (
+        )}
+
+        {tab === 'submissions' && (
           <>
             <div className="flex flex-wrap items-center gap-3 border-b border-white/10 p-4">
               <div className="flex items-center gap-2">
@@ -541,6 +802,7 @@ export default function AdminPage() {
                     if (e.key === 'Enter') loadSubmissions(1, submissionStatus, submissionQuery)
                   }}
                   placeholder="Search URL, submitter, email…"
+                  aria-label="Search submissions"
                   className={cn(inputClass, 'max-w-xs flex-1')}
                 />
                 <select
@@ -549,6 +811,7 @@ export default function AdminPage() {
                     setSubmissionStatus(e.target.value)
                     loadSubmissions(1, e.target.value, submissionQuery)
                   }}
+                  aria-label="Filter submissions by status"
                   className={selectClass}
                 >
                   <option value="all">All statuses</option>
@@ -580,6 +843,165 @@ export default function AdminPage() {
               />
             )}
           </>
+        )}
+
+        {tab === 'reports' && (
+          <>
+            <div className="flex flex-wrap items-center gap-3 border-b border-white/10 p-4">
+              <div className="flex items-center gap-2">
+                <h2 className="text-lg font-semibold text-white">Broken Link Reports</h2>
+                {reportMeta && (
+                  <span className="rounded-full bg-white/[0.06] px-2.5 py-0.5 text-xs font-medium text-indigo-300 ring-1 ring-white/10">
+                    {reportMeta.total.toLocaleString()}
+                  </span>
+                )}
+              </div>
+            </div>
+
+            {loading ? (
+              <p className="py-10 text-center text-sm text-slate-500">Loading…</p>
+            ) : (
+              <ReportsTable reports={reports} onDismiss={dismissReport} />
+            )}
+
+            {reportMeta && !loading && (
+              <AdminPagination
+                meta={reportMeta}
+                onPrev={() => loadReports(Math.max(1, reportMeta.page - 1), true)}
+                onNext={() => loadReports(Math.min(reportMeta.totalPages, reportMeta.page + 1), true)}
+              />
+            )}
+          </>
+        )}
+
+        {tab === 'newsletter' && (
+          <>
+            <div className="flex flex-wrap items-center gap-3 border-b border-white/10 p-4">
+              <div className="flex items-center gap-2">
+                <h2 className="text-lg font-semibold text-white">Newsletter Subscribers</h2>
+                <span className="rounded-full bg-white/[0.06] px-2.5 py-0.5 text-xs font-medium text-indigo-300 ring-1 ring-white/10">
+                  {emails.length.toLocaleString()}
+                </span>
+              </div>
+            </div>
+
+            {loading ? (
+              <p className="py-10 text-center text-sm text-slate-500">Loading…</p>
+            ) : (
+              <NewsletterTab emails={emails} onCopy={copyEmail} />
+            )}
+          </>
+        )}
+
+        {tab === 'analytics' && (
+          <div className="p-6">
+            {loading && !analytics ? (
+              <p className="py-10 text-center text-sm text-slate-500">Loading analytics…</p>
+            ) : analytics ? (
+              <div className="space-y-8">
+                <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-7">
+                  <StatCard label="Total portfolios" value={analytics.totalPortfolios} accent="bg-indigo-500/20" />
+                  <StatCard label="Approved" value={analytics.totalApproved} accent="bg-emerald-500/20" />
+                  <StatCard label="Pending" value={analytics.totalPending} accent="bg-amber-500/20" />
+                  <StatCard label="Total votes" value={analytics.totalVotes} accent="bg-sky-500/20" />
+                  <StatCard label="Avg score" value={analytics.avgScore} accent="bg-fuchsia-500/20" />
+                  <StatCard label="Total emails" value={analytics.totalEmails} accent="bg-violet-500/20" />
+                  <StatCard label="Total reports" value={analytics.totalReports} accent="bg-orange-500/20" />
+                </div>
+
+                <div className="grid grid-cols-1 gap-6 lg:grid-cols-2">
+                  <div className="rounded-2xl border border-white/10 bg-white/[0.02] p-5">
+                    <h3 className="mb-4 text-sm font-semibold uppercase tracking-wide text-slate-400">Tech distribution</h3>
+                    <div className="space-y-2.5">
+                      {analytics.techDistribution.length === 0 ? (
+                        <p className="text-sm text-slate-500">No technology data.</p>
+                      ) : (
+                        analytics.techDistribution.map((t) => (
+                          <DistributionBar key={t.tech} label={t.tech} count={t.count} max={maxTech} color="bg-gradient-to-r from-indigo-500 to-sky-500" />
+                        ))
+                      )}
+                    </div>
+                  </div>
+
+                  <div className="rounded-2xl border border-white/10 bg-white/[0.02] p-5">
+                    <h3 className="mb-4 text-sm font-semibold uppercase tracking-wide text-slate-400">Category distribution</h3>
+                    <div className="space-y-2.5">
+                      {analytics.categoryDistribution.length === 0 ? (
+                        <p className="text-sm text-slate-500">No category data.</p>
+                      ) : (
+                        analytics.categoryDistribution.map((c) => (
+                          <DistributionBar key={c.category} label={c.category} count={c.count} max={maxCat} color="bg-gradient-to-r from-fuchsia-500 to-pink-500" />
+                        ))
+                      )}
+                    </div>
+                  </div>
+                </div>
+
+                <div className="rounded-2xl border border-white/10 bg-white/[0.02] p-5">
+                  <h3 className="mb-4 text-sm font-semibold uppercase tracking-wide text-slate-400">Health distribution</h3>
+                  <div className="space-y-2.5">
+                    {analytics.healthDistribution.length === 0 ? (
+                      <p className="text-sm text-slate-500">No health data.</p>
+                    ) : (
+                      analytics.healthDistribution.map((h) => (
+                        <DistributionBar
+                          key={h.health}
+                          label={h.health.replace('_', ' ')}
+                          count={h.count}
+                          max={maxHealth}
+                          color={
+                            h.health === 'healthy'
+                              ? 'bg-gradient-to-r from-emerald-500 to-teal-500'
+                              : h.health === 'needs_attention'
+                                ? 'bg-gradient-to-r from-amber-500 to-orange-500'
+                                : h.health === 'down'
+                                  ? 'bg-gradient-to-r from-red-500 to-rose-500'
+                                  : 'bg-gradient-to-r from-zinc-500 to-zinc-400'
+                          }
+                        />
+                      ))
+                    )}
+                  </div>
+                </div>
+              </div>
+            ) : (
+              <p className="py-10 text-center text-sm text-slate-500">Failed to load analytics.</p>
+            )}
+          </div>
+        )}
+
+        {tab === 'settings' && (
+          <div className="p-6">
+            <h2 className="text-lg font-semibold text-white">Settings & Actions</h2>
+            <p className="mt-1 text-sm text-slate-400">Manage data and dashboard behavior.</p>
+
+            <div className="mt-6 space-y-3">
+              <button
+                type="button"
+                onClick={exportCSV}
+                className="w-full rounded-xl border border-white/10 bg-white/[0.03] px-4 py-3 text-left text-sm font-medium text-slate-200 transition-all hover:border-indigo-500/50 hover:bg-white/[0.06]"
+                aria-label="Export portfolios as CSV"
+              >
+                <span className="block font-semibold text-white">Export CSV</span>
+                <span className="mt-0.5 text-xs text-slate-500">Download all loaded portfolios as a CSV file</span>
+              </button>
+
+              <button
+                type="button"
+                onClick={() => {
+                  setUnlocked(false)
+                  setKey('')
+                  setError(null)
+                  notify('Dashboard locked')
+                }}
+                className="w-full rounded-xl border border-white/10 bg-white/[0.03] px-4 py-3 text-left text-sm font-medium text-slate-200 transition-all hover:border-red-500/50 hover:bg-white/[0.06]"
+                aria-label="Lock dashboard"
+              >
+                <span className="block font-semibold text-white">Lock dashboard</span>
+                <span className="mt-0.5 text-xs text-slate-500">Require the admin key again before continuing</span>
+              </button>
+            </div>
+          </div>
         )}
       </div>
     </div>

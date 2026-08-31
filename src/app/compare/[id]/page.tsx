@@ -51,15 +51,20 @@ export default async function CompareDetailPage({ params }: { params: Promise<{ 
 
   const rows: DimensionRow[] = [...DIMENSIONS, OVERALL]
 
+  const overallValues = portfolios.map((p) => OVERALL.value(p))
+  const maxOverall = Math.max(...overallValues)
+  const overallWinnerIdx = overallValues.indexOf(maxOverall)
+  const overallWinner = portfolios[overallWinnerIdx]
+
   return (
     <div className="relative overflow-hidden">
       <div className="bg-aurora pointer-events-none absolute inset-0" />
       <div className="relative mx-auto max-w-6xl px-4 py-12 sm:px-6">
-        <div className="animate-hero mb-10 flex flex-wrap items-end justify-between gap-4">
+        <div className="animate-hero mb-6 flex flex-wrap items-end justify-between gap-4">
           <div>
             <h1 className="text-4xl font-bold tracking-tight text-white">Comparison</h1>
             <p className="mt-2 text-slate-400">
-              Side-by-side scores for {portfolios.length} portfolios. The highest value per row is highlighted.
+              Side-by-side scores for {portfolios.length} portfolios.
             </p>
           </div>
           <Link
@@ -70,55 +75,77 @@ export default async function CompareDetailPage({ params }: { params: Promise<{ 
           </Link>
         </div>
 
-        <div className="animate-hero delay-1 overflow-x-auto rounded-2xl border border-white/10 bg-white/[0.03] shadow-2xl shadow-indigo-500/5 backdrop-blur-xl">
-          <table className="w-full min-w-max">
-            <thead>
-              <tr>
-                <th className="p-5 text-left text-xs font-medium uppercase tracking-wide text-slate-500">Dimension</th>
-                {portfolios.map((p) => (
-                  <th key={p.id} className="px-5 py-6 text-center">
-                    <div className="flex flex-col items-center gap-2">
-                      <Avatar p={p} size="lg" />
-                      <div className="text-sm font-semibold text-white">{p.name}</div>
-                      <div className="text-xs text-slate-500">{hostnameOf(p.portfolioUrl)}</div>
-                      <ScoreRing score={p.score?.overallScore ?? 0} size={64} label="overall" />
-                    </div>
-                  </th>
-                ))}
-              </tr>
-            </thead>
-            <tbody>
-              {rows.map((row) => {
-                const values = portfolios.map((p) => row.value(p))
-                const max = Math.max(...values)
-                const bestIndex = values.indexOf(max)
-                return (
-                  <tr key={row.key} className="border-t border-white/5">
-                    <th
-                      scope="row"
-                      className={cn(
-                        'w-44 p-5 text-left text-sm font-semibold',
-                        row.key === 'overall' ? 'text-indigo-300' : 'text-slate-300',
+        <div className="animate-hero delay-1 mb-8 rounded-2xl border border-emerald-500/30 bg-emerald-500/5 p-6 text-center shadow-xl shadow-emerald-500/10 backdrop-blur-xl">
+          <span className="text-3xl">🏆</span>
+          <h2 className="mt-2 text-xl font-bold text-white">
+            Winner: <span className="text-emerald-400">{overallWinner.name}</span> with{' '}
+            <span className="text-emerald-400">{Math.round(maxOverall)}</span>/100
+          </h2>
+          <p className="mt-1 text-sm text-slate-400">{hostnameOf(overallWinner.portfolioUrl)}</p>
+        </div>
+
+        <div className="animate-hero delay-2 grid grid-cols-1 gap-6 md:grid-cols-2 xl:grid-cols-3">
+          {portfolios.map((p, pi) => {
+            const isOverallWinner = pi === overallWinnerIdx
+            return (
+              <div
+                key={p.id}
+                className={cn(
+                  'rounded-2xl border bg-white/[0.03] p-5 backdrop-blur-xl transition-all',
+                  isOverallWinner
+                    ? 'border-emerald-500/40 shadow-xl shadow-emerald-500/10'
+                    : 'border-white/10 shadow-2xl shadow-indigo-500/5',
+                )}
+              >
+                <div className="mb-4 flex items-center gap-3">
+                  <Avatar p={p} size="lg" />
+                  <div className="min-w-0 flex-1">
+                    <div className="flex items-center gap-2">
+                      <h3 className="truncate font-semibold text-white">{p.name}</h3>
+                      {isOverallWinner && (
+                        <span className="rounded-md bg-emerald-500/15 px-1.5 py-0.5 text-[10px] font-semibold uppercase tracking-wide text-emerald-300">
+                          Winner
+                        </span>
                       )}
-                    >
-                      {row.label}
-                    </th>
-                    {portfolios.map((p, i) => {
-                      const v = row.value(p)
-                      const isBest = i === bestIndex
-                      return (
-                        <td key={p.id} className="px-5 py-4">
-                          <div className="mx-auto w-36">
-                            <ScoreBar label={isBest ? '★ Best' : ''} value={v} color={isBest ? 'text-emerald-400' : undefined} />
-                          </div>
-                        </td>
-                      )
-                    })}
-                  </tr>
-                )
-              })}
-            </tbody>
-          </table>
+                    </div>
+                    <p className="truncate text-xs text-slate-500">{hostnameOf(p.portfolioUrl)}</p>
+                  </div>
+                </div>
+
+                <div className="mb-4 flex justify-center">
+                  <ScoreRing score={p.score?.overallScore ?? 0} size={80} label="overall" />
+                </div>
+
+                <div className="space-y-3">
+                  {rows.filter((r) => r.key !== 'overall').map((row) => {
+                    const values = portfolios.map((pp) => row.value(pp))
+                    const max = Math.max(...values)
+                    const v = row.value(p)
+                    const isBest = v === max && values.filter((x) => x === max).length === 1
+                    return (
+                      <div key={row.key}>
+                        <ScoreBar
+                          label={isBest ? `★ ${row.label}` : row.label}
+                          value={v}
+                          color={isBest ? 'text-emerald-400' : undefined}
+                        />
+                      </div>
+                    )
+                  })}
+                </div>
+
+                {(p.technologies ?? []).length > 0 && (
+                  <div className="mt-4 flex flex-wrap gap-1.5 border-t border-white/5 pt-4">
+                    {p.technologies.slice(0, 5).map((t) => (
+                      <span key={t} className="rounded-md border border-white/5 bg-white/[0.04] px-2 py-0.5 text-[10px] font-medium text-slate-400">
+                        {t}
+                      </span>
+                    ))}
+                  </div>
+                )}
+              </div>
+            )
+          })}
         </div>
       </div>
     </div>

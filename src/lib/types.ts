@@ -48,6 +48,10 @@ export interface PortfolioWithScore extends Portfolio {
   score: Score | null
 }
 
+export interface PortfolioWithScoreAndVotes extends PortfolioWithScore {
+  likeCount: number
+}
+
 export interface Submission {
   id: string
   portfolioUrl: string
@@ -70,6 +74,33 @@ export interface HealthCheck {
   details: string | null
 }
 
+export interface LinkReport {
+  id: string
+  portfolioUrl: string
+  portfolioName: string | null
+  reporterName: string | null
+  reporterEmail: string | null
+  reason: string | null
+  status: string
+  createdAt: string
+}
+
+export interface SiteAnalytics {
+  totalPortfolios: number
+  totalApproved: number
+  totalPending: number
+  totalRejected: number
+  totalSubmissions: number
+  totalVotes: number
+  totalReports: number
+  totalEmails: number
+  avgScore: number
+  techDistribution: { tech: string; count: number }[]
+  categoryDistribution: { category: string; count: number }[]
+  healthDistribution: { health: string; count: number }[]
+  recentPortfolios: { date: string; count: number }[]
+}
+
 export interface Paginated<T> {
   data: T[]
   meta: { total: number; page: number; pageSize: number; totalPages: number }
@@ -80,7 +111,7 @@ export interface PortfolioFilters {
   tech?: string
   category?: string
   experience?: string
-  sort?: 'newest' | 'oldest' | 'score' | 'name' | 'trending'
+  sort?: 'newest' | 'oldest' | 'score' | 'name' | 'trending' | 'likes'
   page?: number
   pageSize?: number
 }
