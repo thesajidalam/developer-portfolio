@@ -42,6 +42,11 @@ export default async function PortfolioDetailPage({ params }: Props) {
   const breakdown = p.score ? getScoreBreakdown(p.score) : []
   const label = scoreLabel(overall)
 
+  // The owner of DevFolio: a subtle premium/golden treatment so the person who
+  // built the site stands out from the crowd.
+  const isOwner = p.githubUrl === 'https://github.com/thesajidalam'
+  const ownerGitHub = p.githubUrl?.replace(/^https:\/\/github\.com\//, '@')
+
   return (
     <div className="relative overflow-hidden">
       <div className="bg-aurora pointer-events-none absolute inset-0" />
@@ -55,15 +60,38 @@ export default async function PortfolioDetailPage({ params }: Props) {
           </Link>
         </div>
 
-        <header className="animate-hero delay-1 rounded-2xl border border-white/10 bg-white/[0.03] p-6 shadow-2xl shadow-indigo-500/5 backdrop-blur-xl sm:p-8">
+        <header
+          className={cn(
+            'animate-hero delay-1 relative overflow-hidden rounded-2xl border p-6 backdrop-blur-xl sm:p-8',
+            isOwner
+              ? 'border-amber-400/30 bg-gradient-to-br from-[#151021] to-[#0c0e18] shadow-2xl shadow-amber-500/10'
+              : 'border-white/10 bg-white/[0.03] shadow-2xl shadow-indigo-500/5',
+          )}
+        >
+        {isOwner && (
+          <div className="pointer-events-none absolute -right-10 -top-10 h-40 w-40 rounded-full bg-amber-400/20 blur-3xl" />
+        )}
         <div className="flex flex-col gap-8 sm:flex-row sm:items-start sm:justify-between">
           <div className="flex min-w-0 items-start gap-5">
             <Avatar p={p} size="lg" />
             <div className="min-w-0">
               <div className="flex flex-wrap items-center gap-2">
                 <h1 className="text-3xl font-bold tracking-tight text-white">{p.name}</h1>
+                {isOwner && (
+                  <span className="inline-flex items-center gap-1 rounded-md bg-amber-400/15 px-2 py-0.5 text-xs font-semibold text-amber-200 ring-1 ring-amber-400/40">
+                    <svg className="h-3 w-3" viewBox="0 0 20 20" fill="currentColor">
+                      <path fillRule="evenodd" d="M10 2a1 1 0 01.894.553l1.8 3.647 4.02.584a1 1 0 01.553 1.706l-2.91 2.837.687 4.004a1 1 0 01-1.45 1.054L10 14.71l-3.594 1.89a1 1 0 01-1.45-1.054l.687-4.004-2.91-2.837a1 1 0 01.553-1.706l4.02-.584 1.8-3.647A1 1 0 0110 2z" clipRule="evenodd" />
+                    </svg>
+                    Admin · Site creator
+                  </span>
+                )}
                 {p.verified && (
-                  <span title="Verified" className="rounded-md bg-indigo-500/10 px-2 py-0.5 text-xs font-medium text-indigo-300">
+                  <span
+                    className={cn(
+                      'rounded-md px-2 py-0.5 text-xs font-medium',
+                      isOwner ? 'bg-amber-400/15 text-amber-200' : 'bg-indigo-500/10 text-indigo-300',
+                    )}
+                  >
                     ✓ Verified
                   </span>
                 )}
@@ -83,15 +111,22 @@ export default async function PortfolioDetailPage({ params }: Props) {
           </div>
 
           <div className="flex shrink-0 items-center gap-6">
-            <ScoreRing score={overall} size={140} label="Overall" />
+            <div className={cn('relative inline-flex rounded-2xl p-[1.5px]', isOwner && 'bg-gradient-to-br from-amber-300/60 to-amber-600/40')}>
+              <ScoreRing score={overall} size={140} label="Overall" />
+            </div>
             <div className="space-y-2">
-              <span className={cn('block text-2xl font-bold', label.color)}>{label.label}</span>
+              <span className={cn('block text-2xl font-bold', label.color, isOwner && 'text-amber-200')}>{label.label}</span>
               <div className="flex flex-col gap-2">
                 <a
                   href={p.portfolioUrl}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="shine inline-flex items-center justify-center rounded-xl bg-gradient-to-r from-indigo-500 to-sky-500 px-4 py-2 text-sm font-semibold text-white shadow-lg shadow-indigo-500/30 transition-all hover:scale-[1.03] hover:shadow-xl hover:shadow-indigo-500/40 active:scale-95"
+                  className={cn(
+                    'shine inline-flex items-center justify-center rounded-xl px-4 py-2 text-sm font-semibold text-white shadow-lg transition-all hover:scale-[1.03] hover:shadow-xl active:scale-95',
+                    isOwner
+                      ? 'bg-gradient-to-r from-amber-400 to-amber-600 shadow-amber-500/30 hover:shadow-amber-500/50'
+                      : 'bg-gradient-to-r from-indigo-500 to-sky-500 shadow-indigo-500/30 hover:shadow-indigo-500/40',
+                  )}
                 >
                   Visit site ↗
                 </a>
@@ -100,9 +135,14 @@ export default async function PortfolioDetailPage({ params }: Props) {
                     href={p.githubUrl}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="inline-flex items-center justify-center rounded-xl border border-white/10 bg-white/[0.03] px-4 py-2 text-sm font-medium text-slate-300 transition-all hover:border-indigo-500/50 hover:bg-white/[0.06] hover:text-white"
+                    className={cn(
+                      'inline-flex items-center justify-center gap-1.5 rounded-xl border px-4 py-2 text-sm font-medium transition-all hover:bg-white/[0.06]',
+                      isOwner
+                        ? 'border-amber-400/40 bg-amber-400/10 text-amber-200 hover:border-amber-400/70'
+                        : 'border-white/10 bg-white/[0.03] text-slate-300 hover:border-indigo-500/50 hover:text-white',
+                    )}
                   >
-                    GitHub
+                    GitHub {ownerGitHub && <span className={cn(isOwner ? 'text-amber-100' : 'text-slate-500')}>{ownerGitHub}</span>}
                   </a>
                 )}
               </div>
