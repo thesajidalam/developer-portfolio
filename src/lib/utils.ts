@@ -81,6 +81,59 @@ export function absoluteUrl(raw: string): string {
   return `https://${u}`
 }
 
+// Hosts that are natively served without a www prefix — never auto-add www for these.
+const NO_WWW_SUFFIXES = [
+  '.vercel.app',
+  '.netlify.app',
+  '.github.io',
+  '.pages.dev',
+  '.onrender.com',
+  '.herokuapp.com',
+  '.repl.co',
+  '.glitch.me',
+  '.surge.sh',
+  '.neocities.org',
+  '.runkit.io',
+]
+
+// Normalize a user-typed portfolio URL: add https:// when the scheme is missing
+// and auto-add www for bare domains (e.g. "example.com" -> "https://www.example.com").
+// Returns null when the input cannot be parsed as a URL.
+export function normalizePortfolioUrl(raw: string): string | null {
+  const input = (raw || '').trim().replace(/^"+|"+$/g, '')
+  if (!input) return null
+  const withScheme = /^[a-zA-Z][a-zA-Z0-9+.-]*:\/\//.test(input) ? input : `https://${input}`
+  let url: URL
+  try {
+    url = new URL(withScheme)
+  } catch {
+    return null
+  }
+  if (url.protocol === 'http:') url.protocol = 'https:'
+
+  const host = url.hostname.toLowerCase().replace(/\.$/, '')
+  if (!host || host === 'localhost') return null
+
+  const bareHost =
+    !host.startsWith('www.') &&
+    !/^[\d.]+$/.test(host) &&
+    host.split(':')[0].split('.').length === 2 &&
+    !NO_WWW_SUFFIXES.some((s) => host.endsWith(s))
+
+  if (bareHost || host !== url.hostname.toLowerCase()) {
+    const nextHost = bareHost ? `www.${host}` : host
+    const href = `${url.protocol}//${nextHost}${url.pathname}${url.search}${url.hash}`
+    try {
+      url = new URL(href)
+    } catch {
+      return null
+    }
+  }
+
+  const out = url.toString()
+  return url.pathname === '/' ? out.replace(/\/$/, '') : out
+}
+
 export function initials(name: string): string {
   return name
     .split(/\s+/)

@@ -119,7 +119,7 @@ export default function ComparePage() {
                   )}
                 >
                   <Avatar p={p} size="sm" />
-                  <span>{p.name}</span>
+                  <span className="truncate">{p.name}</span>
                   {p.score ? <ScoreBadge score={p.score.overallScore} /> : null}
                 </button>
               ))}

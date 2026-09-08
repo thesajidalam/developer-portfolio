@@ -109,7 +109,7 @@ function ShareButton({ p }: { p: PortfolioWithScore }) {
         onClick={share}
         aria-label="Copy link to this portfolio"
         title="Copy link"
-        className="inline-flex items-center gap-1.5 rounded-lg border border-white/10 bg-white/[0.03] px-2.5 py-1.5 text-xs font-medium text-slate-300 transition-all duration-200 hover:hover:border-indigo-500/50 hover:bg-white/[0.06] hover:text-white"
+        className="inline-flex items-center gap-1.5 rounded-lg border border-white/10 bg-white/[0.03] px-2.5 py-1.5 text-xs font-medium text-slate-300 transition-all duration-200 hover:border-indigo-500/50 hover:bg-white/[0.06] hover:text-white"
       >
         <svg aria-hidden viewBox="0 0 20 20" fill="currentColor" className="h-3.5 w-3.5">
           <path d="M11 3a1 1 0 100 2h2.586l-6.293 6.293a1 1 0 101.414 1.414L15 6.414V9a1 1 0 102 0V4a1 1 0 00-1-1h-5zM5 5a2 2 0 00-2 2v8a2 2 0 002 2h8a2 2 0 002-2v-3a1 1 0 10-2 0v3H5V7h3a1 1 0 100-2H5z" />
@@ -216,15 +216,15 @@ export function PortfolioCard({ p, likeCount = 0, className }: { p: PortfolioWit
         ))}
       </div>
 
-      <div className="mt-4 flex items-center justify-between border-t border-white/5 pt-3">
-        <div className="flex items-center gap-3">
+      <div className="mt-4 flex flex-wrap items-center justify-between gap-x-3 gap-y-2 border-t border-white/5 pt-3">
+        <div className="flex flex-wrap items-center gap-x-3 gap-y-1">
           <span className="inline-flex items-center gap-1.5 text-xs text-slate-500">
             <span className={cn('h-2 w-2 rounded-full', getHealthColor(p.health))} />
             {p.health === 'healthy' ? 'Healthy' : p.health === 'needs_attention' ? 'Attention' : p.health === 'down' ? 'Offline' : '—'}
           </span>
           <span className="text-xs font-medium text-indigo-300">{p.experienceLevel}</span>
         </div>
-        <div className="flex items-center gap-2">
+        <div className="flex flex-wrap items-center gap-2">
           <LikeButton p={p} likeCount={likeCount} />
           <BookmarkButton p={p} />
           <ShareButton p={p} />
@@ -232,7 +232,7 @@ export function PortfolioCard({ p, likeCount = 0, className }: { p: PortfolioWit
             href={absoluteUrl(p.portfolioUrl)}
             target="_blank"
             rel="noopener noreferrer"
-            className="inline-flex items-center gap-1 rounded-lg border border-white/10 bg-white/[0.03] px-2.5 py-1.5 text-xs font-medium text-indigo-300 transition-all duration-200 hover:border-indigo-500/50 hover:bg-white/[0.06] hover:text-white"
+            className="inline-flex shrink-0 items-center gap-1 rounded-lg border border-white/10 bg-white/[0.03] px-2.5 py-1.5 text-xs font-medium text-indigo-300 transition-all duration-200 hover:border-indigo-500/50 hover:bg-white/[0.06] hover:text-white"
           >
             Visit site <span aria-hidden>↗</span>
           </a>

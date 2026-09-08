@@ -1,8 +1,10 @@
 import type { Metadata, Viewport } from 'next'
+import { Suspense } from 'react'
 import './globals.css'
 import { Navbar } from '@/components/Navbar'
 import { Footer } from '@/components/Footer'
 import { SearchShortcut } from '@/components/SearchShortcut'
+import { SearchScrollRestore } from '@/components/SearchScrollRestore'
 
 export const metadata: Metadata = {
   metadataBase: new URL(process.env.NEXT_PUBLIC_BASE_URL || 'http://localhost:3000'),
@@ -40,6 +42,9 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
     <html lang="en">
       <body className="min-h-screen bg-[#06070f] text-slate-100 antialiased">
         <SearchShortcut />
+        <Suspense fallback={null}>
+          <SearchScrollRestore />
+        </Suspense>
         <Navbar />
         <main className="flex min-h-[calc(100vh-10rem)] flex-col">{children}</main>
         <Footer />

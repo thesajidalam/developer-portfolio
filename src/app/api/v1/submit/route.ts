@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { SubmissionSchema } from '@/lib/validations'
+import { normalizePortfolioUrl } from '@/lib/utils'
 import { RateLimiter, sanitizeInput, validateCSRFToken } from '@/lib/security'
 import { validateUrlSafety } from '@/lib/ssrf-protection'
 import { createSubmission } from '@/lib/repository'
@@ -30,6 +31,20 @@ export async function POST(request: NextRequest) {
     body = await request.json()
   } catch {
     return NextResponse.json({ error: 'Invalid JSON body' }, { status: 400 })
+  }
+
+  // Normalize the URL server-side too: auto-add https:// and www so scheme-less
+  // or bare-domain submissions never fail the schema check.
+  const rawUrl = (body as { url?: unknown } | null)?.url
+  if (typeof rawUrl === 'string') {
+    const normalized = normalizePortfolioUrl(rawUrl)
+    if (!normalized) {
+      return NextResponse.json(
+        { error: 'Validation failed', details: { fieldErrors: { url: ['Please enter a valid URL'] }, formErrors: [] } },
+        { status: 400 },
+      )
+    }
+    ;(body as { url?: string }).url = normalized
   }
 
   const parsed = SubmissionSchema.safeParse(body)

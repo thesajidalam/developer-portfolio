@@ -1,10 +1,11 @@
 'use client'
 
 import Link from 'next/link'
-import { useState } from 'react'
-import { cn } from '@/lib/utils'
+import { useEffect, useState } from 'react'
+import { cn, normalizePortfolioUrl } from '@/lib/utils'
 
 type Status = 'idle' | 'loading' | 'success' | 'error'
+type VerifyState = 'idle' | 'checking' | 'ok' | 'fail'
 
 const inputClass =
   'w-full rounded-xl border border-white/10 bg-white/[0.04] px-3.5 py-2.5 text-sm text-slate-200 outline-none transition-all placeholder:text-slate-500 focus:border-indigo-500/60 focus:bg-white/[0.06]'
@@ -18,15 +19,65 @@ export default function SubmitPage() {
   const [status, setStatus] = useState<Status>('idle')
   const [error, setError] = useState<string | null>(null)
   const [fieldErrors, setFieldErrors] = useState<Record<string, string>>({})
+  const [verify, setVerify] = useState<VerifyState>('idle')
+  const [verifyDetail, setVerifyDetail] = useState('')
 
-  const urlValid = url.trim() === '' || /^https?:\/\/.+\..+/.test(url.trim())
-  const urlRequired = url.trim().length > 0
+  const trimmedUrl = url.trim()
+  const normalizedUrl = trimmedUrl ? normalizePortfolioUrl(trimmedUrl) : null
+  const autoFixed = normalizedUrl !== null && trimmedUrl !== '' && normalizedUrl !== trimmedUrl
+
+  useEffect(() => {
+    if (!normalizedUrl) {
+      setVerify('idle')
+      setVerifyDetail('')
+      return
+    }
+    setVerify('checking')
+    let cancelled = false
+    const timer = setTimeout(() => {
+      fetch('/api/v1/verify-url', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ url: normalizedUrl }),
+      })
+        .then(async (res) => {
+          if (cancelled) return
+          if (!res.ok) {
+            setVerify('fail')
+            setVerifyDetail('Could not verify the site — you can still submit.')
+            return
+          }
+          const j = (await res.json().catch(() => null)) as { data?: { ok?: boolean; status?: number } } | null
+          if (cancelled) return
+          if (j?.data?.ok) {
+            setVerify('ok')
+            setVerifyDetail(`Site is live (HTTP ${j.data.status})`)
+          } else if (j?.data?.status) {
+            setVerify('fail')
+            setVerifyDetail(`Site responded with HTTP ${j.data.status} — you can still submit.`)
+          } else {
+            setVerify('fail')
+            setVerifyDetail('Could not reach the site — you can still submit.')
+          }
+        })
+        .catch(() => {
+          if (!cancelled) {
+            setVerify('fail')
+            setVerifyDetail('Could not reach the site — you can still submit.')
+          }
+        })
+    }, 600)
+    return () => {
+      cancelled = true
+      clearTimeout(timer)
+    }
+  }, [normalizedUrl])
 
   function validateStep(s: number): boolean {
     const errs: Record<string, string> = {}
     if (s === 1) {
       if (!url.trim()) errs.url = 'Portfolio URL is required.'
-      else if (!urlValid) errs.url = 'Please enter a valid URL (https://...).'
+      else if (!normalizedUrl) errs.url = 'Please enter a valid URL (e.g. example.com or https://example.com).'
     }
     setFieldErrors(errs)
     return Object.keys(errs).length === 0
@@ -46,7 +97,7 @@ export default function SubmitPage() {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          url: url.trim(),
+          url: normalizedUrl ?? url.trim(),
           name: name.trim() || undefined,
           email: email.trim() || undefined,
           role: role.trim() || undefined,
@@ -64,7 +115,8 @@ export default function SubmitPage() {
   }
 
   if (status === 'success') {
-    const embedSnippet = `<iframe src="https://gitdevfolio.vercel.app/api/v1/embeds/${encodeURIComponent(url.trim())}" width="140" height="60" frameborder="0" title="DevFolio score badge"></iframe>`
+    const savedUrl = normalizedUrl ?? url.trim()
+    const embedSnippet = `<iframe src="https://gitdevfolio.vercel.app/api/v1/embeds/${encodeURIComponent(savedUrl)}" width="140" height="60" frameborder="0" title="DevFolio score badge"></iframe>`
     return (
       <div className="relative overflow-hidden">
         <div className="bg-aurora pointer-events-none absolute inset-0" />
@@ -89,7 +141,7 @@ export default function SubmitPage() {
           </div>
           <h1 className="animate-hero delay-1 mt-6 text-3xl font-bold text-white">Thanks for submitting!</h1>
           <p className="animate-hero delay-2 mx-auto mt-3 max-w-md text-slate-400">
-            Your portfolio (<span className="text-slate-200">{url}</span>) has been queued for review. Once approved,
+            Your portfolio (<span className="text-slate-200">{savedUrl}</span>) has been queued for review. Once approved,
             it will be scored and appear in the directory.
           </p>
 
@@ -196,6 +248,30 @@ export default function SubmitPage() {
                 autoFocus
               />
               {fieldErrors.url && <p className="mt-1.5 text-xs text-red-400">{fieldErrors.url}</p>}
+              {autoFixed && !fieldErrors.url && (
+                <p className="mt-1.5 text-xs text-slate-500">
+                  We&apos;ll save it as{' '}
+                  <span className="font-medium text-slate-300">{normalizedUrl}</span>
+                </p>
+              )}
+              {normalizedUrl && (
+                <p
+                  className={cn(
+                    'mt-1.5 text-xs',
+                    verify === 'checking' && 'text-slate-500',
+                    verify === 'ok' && 'text-emerald-400',
+                    verify === 'fail' && 'text-amber-400',
+                  )}
+                >
+                  {verify === 'checking'
+                    ? 'Checking site…'
+                    : verify === 'ok'
+                      ? `✓ ${verifyDetail}`
+                      : verify === 'fail'
+                        ? `⚠ ${verifyDetail}`
+                        : ''}
+                </p>
+              )}
             </div>
           )}
 
@@ -251,7 +327,7 @@ export default function SubmitPage() {
                 <div className="space-y-2 text-sm">
                   <div className="flex justify-between">
                     <span className="text-slate-500">URL</span>
-                    <span className="font-medium text-white">{url}</span>
+                    <span className="font-medium text-white">{normalizedUrl ?? url}</span>
                   </div>
                   {name && (
                     <div className="flex justify-between">
