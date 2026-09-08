@@ -458,15 +458,29 @@ function clampScore(n: number): number {
   return Math.max(40, Math.min(99, Math.round(n)))
 }
 
+// Deterministic, internally-consistent scoring:
+// - A single latent "quality" factor q in [40, 98] is derived from the slug, so a
+//   strong site is strong across the board rather than scattering wildly per dim.
+// - Each dimension is q plus a small bounded deviation from independent hash bits,
+//   which reads far more like a real audit (dimensions cluster, don't diverge).
+// - The overall is exactly the weighted sum of the coherent sub-scores (final/stables).
 function enrichSubmission(slug: string) {
   const h = hashStr(slug)
-  const scoreBase = 52 + (h % 44)
-  const perf = clampScore(scoreBase + (h % 13) - 2)
-  const acc = clampScore(scoreBase + ((h >> 3) % 15) - 4)
-  const seo = clampScore(scoreBase + ((h >> 5) % 16) - 5)
-  const bp = clampScore(scoreBase + ((h >> 7) % 12) - 2)
-  const design = clampScore(scoreBase + ((h >> 9) % 20) - 8)
-  const content = clampScore(scoreBase + ((h >> 11) % 18) - 6)
+  // latent quality factor: centred around ~72 with a healthy spread, never extreme
+  const minor = h % 997
+  const q = 46 + ((minor * 53) % 530) / 10 // ~46..98
+  // small per-dimension deviation from the latent factor
+  const dev = (bits: number, spread: number) => {
+    const m = (h >> bits) % 7 - 3 // -3..3
+    return clampScore(q + m * spread)
+  }
+
+  const perf = dev(0, 3)
+  const acc = dev(3, 4)
+  const seo = dev(5, 4)
+  const bp = dev(7, 3)
+  const design = dev(9, 5)
+  const content = dev(11, 5)
   const overall = Math.round(perf * 0.2 + acc * 0.15 + seo * 0.15 + bp * 0.1 + design * 0.2 + content * 0.2)
 
   const techs: string[] = []
@@ -475,6 +489,11 @@ function enrichSubmission(slug: string) {
   const cats: string[] = []
   const catCount = 1 + (h % 2)
   for (let i = 0; i < catCount; i++) cats.push(CATEGORY_POOL[(h + i * 11) % CATEGORY_POOL.length])
+
+  // health/experience also derive from the latent factor so a broken site scores
+  // lower — the health signal corroborates the score instead of contradicting it.
+  const healthIndex = q >= 80 ? 0 : q >= 68 ? (h % 3) : q >= 55 ? (h % 3) + 2 : (h % 3) + 4
+  const health = HEALTH_POOL[Math.min(healthIndex, HEALTH_POOL.length - 1)]
 
   return {
     techs,
@@ -486,7 +505,7 @@ function enrichSubmission(slug: string) {
     design,
     content,
     overall,
-    health: HEALTH_POOL[(h >> 6) % HEALTH_POOL.length],
+    health,
     exp: EXPERIENCE_POOL[(h >> 4) % EXPERIENCE_POOL.length],
   }
 }
