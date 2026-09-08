@@ -673,15 +673,13 @@ export async function portfolioLikeCounts(ids: string[]): Promise<Map<string, nu
 
 export async function portfolioOfDay(): Promise<PortfolioWithScore | null> {
   const client = getAdminClient()
-  const today = new Date()
-  const seed = today.getFullYear() * 10000 + (today.getMonth() + 1) * 100 + today.getDate()
   const { count } = await client
     .from('portfolios')
     .select('id', { count: 'exact', head: true })
     .eq('status', 'approved')
     .not('overall_score', 'is', null)
   const total = count ?? 1
-  const offset = seed % total
+  const offset = Math.floor(Math.random() * total)
   const { data, error } = await client
     .from('portfolios')
     .select(PORTFOLIO_SELECT + ',scores(' + SCORE_SELECT + ')')
