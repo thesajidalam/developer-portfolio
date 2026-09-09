@@ -673,16 +673,19 @@ export async function portfolioLikeCounts(ids: string[]): Promise<Map<string, nu
 
 export async function portfolioOfDay(): Promise<PortfolioWithScore | null> {
   const client = getAdminClient()
-  const { count } = await client
+  // Count only portfolios that are approved, healthy, and actually have a score
+  // row (overall_score lives on the `scores` table, not `portfolios`).
+  const countRes = await client
     .from('portfolios')
-    .select('id', { count: 'exact', head: true })
+    .select('id, scores!inner(overall_score)', { count: 'exact', head: true })
     .eq('status', 'approved')
-    .not('overall_score', 'is', null)
-  const total = count ?? 1
+    .not('health', 'eq', 'down')
+    .not('health', 'eq', 'unknown')
+  const total = countRes.count ?? 1
   const offset = Math.floor(Math.random() * total)
   const { data, error } = await client
     .from('portfolios')
-    .select(PORTFOLIO_SELECT + ',scores(' + SCORE_SELECT + ')')
+    .select(PORTFOLIO_SELECT + ',scores!inner(' + SCORE_SELECT + ')')
     .eq('status', 'approved')
     .not('health', 'eq', 'down')
     .not('health', 'eq', 'unknown')
