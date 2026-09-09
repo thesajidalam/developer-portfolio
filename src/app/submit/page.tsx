@@ -8,7 +8,7 @@ type Status = 'idle' | 'loading' | 'success' | 'error'
 type VerifyState = 'idle' | 'checking' | 'ok' | 'fail'
 
 const inputClass =
-  'w-full rounded-xl border border-white/10 bg-[#0c111c]/80 px-3.5 py-2.5 text-sm text-slate-200 outline-none transition-all placeholder:text-slate-500 focus:border-[#3e8bff]/70 focus:bg-[#0e1420]'
+  'w-full rounded-xl border border-white/10 bg-[#101c2d]/80 px-3.5 py-2.5 text-sm text-slate-200 outline-none transition-all placeholder:text-slate-500 focus:border-[#3b82f6]/70 focus:bg-[#18283d]'
 
 export default function SubmitPage() {
   const [step, setStep] = useState(1)
@@ -130,23 +130,23 @@ export default function SubmitPage() {
                   style={{
                     left: `${Math.random() * 100}%`,
                     animationDelay: `${Math.random() * 0.6}s`,
-                    backgroundColor: ['#3e8bff', '#7dd3fc', '#22d3ee', '#35D07F', '#F2B84B'][i % 5],
+                    backgroundColor: ['#3b82f6', '#7dd3fc', '#38bdf8', '#10b981', '#f59e0b'][i % 5],
                   }}
                 />
               ))}
             </div>
-            <div className="animate-hero mx-auto flex h-16 w-16 items-center justify-center rounded-2xl bg-[#35D07F]/15 text-3xl text-[#4fe29b] ring-1 ring-[#35D07F]/30">
+            <div className="animate-hero mx-auto flex h-16 w-16 items-center justify-center rounded-2xl bg-[#10b981]/15 text-3xl text-[#34d399] ring-1 ring-[#10b981]/30">
               ✓
             </div>
           </div>
-          <h1 className="animate-hero delay-1 mt-6 text-3xl font-bold text-[#e8eef9]">Thanks for submitting!</h1>
+          <h1 className="animate-hero delay-1 mt-6 text-3xl font-bold text-[#f8fafc]">Thanks for submitting!</h1>
           <p className="animate-hero delay-2 mx-auto mt-3 max-w-md text-slate-400">
             Your portfolio (<span className="text-slate-200">{savedUrl}</span>) has been queued for review. Once approved,
             it will be scored and appear in the directory.
           </p>
 
-          <div className="animate-hero delay-3 mt-8 rounded-2xl border border-white/10 bg-[#0c111c]/70 p-5 text-left">
-            <h2 className="text-sm font-semibold text-[#e8eef9]">Grab your DevFolio badge</h2>
+          <div className="animate-hero delay-3 mt-8 rounded-2xl border border-white/10 bg-[#101c2d]/70 p-5 text-left">
+            <h2 className="text-sm font-semibold text-[#f8fafc]">Grab your DevFolio badge</h2>
             <p className="mt-1 text-xs text-slate-500">
               Once approved, embed your score on your site. Copy this snippet any time:
             </p>
@@ -164,7 +164,7 @@ export default function SubmitPage() {
                     alert('Could not copy automatically. Select the code above.')
                   }
                 }}
-                className="shrink-0 rounded-lg bg-[#3e8bff] px-3 py-2 text-xs font-semibold text-white ring-1 ring-inset ring-white/10 transition-colors hover:bg-[#66a5ff]"
+                className="shrink-0 rounded-lg bg-[#3b82f6] px-3 py-2 text-xs font-semibold text-white ring-1 ring-inset ring-white/10 transition-colors hover:bg-[#60a5fa]"
               >
                 Copy
               </button>
@@ -173,7 +173,7 @@ export default function SubmitPage() {
 
           <Link
             href="/"
-            className="shine animate-hero delay-3 mt-6 inline-block rounded-xl bg-[#3e8bff] px-6 py-3 text-sm font-semibold text-white ring-1 ring-inset ring-white/10 transition-colors hover:bg-[#66a5ff]"
+            className="shine btn-primary animate-hero delay-3 mt-6 inline-block rounded-xl px-6 py-3 text-sm font-semibold text-white"
           >
             Back to gallery
           </Link>
@@ -214,25 +214,25 @@ export default function SubmitPage() {
               <div
                 className={`flex h-8 w-8 items-center justify-center rounded-full text-xs font-bold transition-all ${
                   step > s.num
-                    ? 'bg-[#35D07F]/15 text-[#4fe29b] ring-1 ring-[#35D07F]/30'
+                    ? 'bg-[#10b981]/15 text-[#34d399] ring-1 ring-[#10b981]/30'
                     : step === s.num
-                      ? 'bg-[#3e8bff] text-white shadow-lg shadow-[#3e8bff]/30'
+                      ? 'bg-[#3b82f6] text-white shadow-lg shadow-[#3b82f6]/30'
                       : 'bg-white/[0.04] text-slate-500 ring-1 ring-white/10'
                 }`}
               >
                 {step > s.num ? '✓' : s.num}
               </div>
-              <span className={`hidden text-xs font-medium sm:inline ${step === s.num ? 'text-[#e8eef9]' : 'text-slate-500'}`}>
+              <span className={`hidden text-xs font-medium sm:inline ${step === s.num ? 'text-[#f8fafc]' : 'text-slate-500'}`}>
                 {s.title}
               </span>
               {i < steps.length - 1 && (
-                <div className={`mx-1 h-px w-8 ${step > s.num ? 'bg-[#35D07F]/40' : 'bg-white/10'}`} />
+                <div className={`mx-1 h-px w-8 ${step > s.num ? 'bg-[#10b981]/40' : 'bg-white/10'}`} />
               )}
             </div>
           ))}
         </div>
 
-        <form onSubmit={handleSubmit} className="animate-hero delay-2 space-y-5 rounded-2xl border border-white/[0.08] bg-[#0c111c]/70 p-6">
+        <form onSubmit={handleSubmit} className="animate-hero delay-2 space-y-5 rounded-2xl border border-white/[0.08] bg-[#101c2d]/70 p-6">
           {step === 1 && (
             <div>
               <label htmlFor="url" className="mb-1.5 block text-sm font-medium text-slate-300">
@@ -361,7 +361,7 @@ export default function SubmitPage() {
               <button
                 type="button"
                 onClick={() => setStep(step - 1)}
-                className="rounded-xl border border-white/10 bg-white/[0.03] px-4 py-2.5 text-sm font-medium text-slate-300 transition-colors hover:border-[#3e8bff]/50 hover:text-white"
+                className="rounded-xl border border-white/10 bg-white/[0.03] px-4 py-2.5 text-sm font-medium text-slate-300 transition-colors hover:border-[#3b82f6]/50 hover:text-white"
               >
                 Back
               </button>
@@ -370,7 +370,7 @@ export default function SubmitPage() {
               <button
                 type="button"
                 onClick={nextStep}
-                className="shine flex-1 rounded-xl bg-[#3e8bff] px-6 py-2.5 text-sm font-semibold text-white ring-1 ring-inset ring-white/10 transition-colors hover:bg-[#66a5ff]"
+                className="shine btn-primary flex-1 rounded-xl px-6 py-2.5 text-sm font-semibold text-white"
               >
                 Continue
               </button>
@@ -378,7 +378,7 @@ export default function SubmitPage() {
               <button
                 type="submit"
                 disabled={status === 'loading'}
-                className="shine flex-1 rounded-xl bg-[#3e8bff] px-6 py-2.5 text-sm font-semibold text-white ring-1 ring-inset ring-white/10 transition-colors hover:bg-[#66a5ff] disabled:cursor-not-allowed disabled:opacity-50"
+                className="shine btn-primary flex-1 rounded-xl px-6 py-2.5 text-sm font-semibold text-white disabled:cursor-not-allowed disabled:opacity-50"
               >
                 {status === 'loading' ? 'Submitting...' : 'Submit for review'}
               </button>
@@ -394,11 +394,11 @@ export default function SubmitPage() {
               { step: '2', title: 'We review', desc: 'Our team evaluates your site on six dimensions.' },
               { step: '3', title: 'You appear', desc: 'Get scored and listed in the directory.' },
             ].map((s) => (
-              <div key={s.step} className="rounded-2xl border border-white/[0.08] bg-[#0c111c]/60 p-5 text-center">
-                <div className="mx-auto mb-3 flex h-10 w-10 items-center justify-center rounded-xl bg-[#3e8bff]/15 text-sm font-bold text-[#d9e4f7] ring-1 ring-[#3e8bff]/25">
+              <div key={s.step} className="rounded-2xl border border-white/[0.08] bg-[#101c2d]/60 p-5 text-center">
+                <div className="mx-auto mb-3 flex h-10 w-10 items-center justify-center rounded-xl bg-[#3b82f6]/15 text-sm font-bold text-[#d9e4f7] ring-1 ring-[#3b82f6]/25">
                   {s.step}
                 </div>
-                <h3 className="text-sm font-semibold text-[#e8eef9]">{s.title}</h3>
+                <h3 className="text-sm font-semibold text-[#f8fafc]">{s.title}</h3>
                 <p className="mt-1 text-xs text-slate-500">{s.desc}</p>
               </div>
             ))}

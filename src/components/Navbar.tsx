@@ -23,7 +23,7 @@ export function Navbar() {
   }
 
   return (
-    <header className="sticky top-0 z-50 border-b border-white/[0.06] bg-[#0a0e17]/85 backdrop-blur-xl">
+    <header className="sticky top-0 z-50 border-b border-white/[0.06] bg-[#08111f]/85 backdrop-blur-xl">
       <div className="mx-auto flex h-16 max-w-7xl items-center justify-between gap-4 px-4 sm:px-6">
         <Link href="/" aria-label="DevFolio home" className="transition-opacity hover:opacity-85">
           <Logo />
@@ -37,7 +37,7 @@ export function Navbar() {
               className={cn(
                 'rounded-lg px-3.5 py-2 text-sm font-medium transition-colors',
                 isActive(l.href)
-                  ? 'bg-[#3e8bff]/15 text-[#d9e4f7]'
+                  ? 'bg-[#3b82f6]/15 text-[#d9e4f7]'
                   : 'text-slate-400 hover:bg-white/[0.05] hover:text-white',
               )}
             >
@@ -49,7 +49,7 @@ export function Navbar() {
         <div className="flex items-center gap-2">
           <Link
             href="/?focus=search"
-            className="hidden items-center gap-2 rounded-full border border-white/10 bg-white/[0.03] px-3 py-1.5 text-sm text-slate-300 transition-colors hover:border-[#3e8bff]/50 hover:text-white md:inline-flex"
+            className="hidden items-center gap-2 rounded-full border border-white/10 bg-white/[0.03] px-3 py-1.5 text-sm text-slate-300 transition-colors hover:border-[#3b82f6]/50 hover:text-white md:inline-flex"
             aria-label="Search portfolios"
           >
             <Search className="h-3.5 w-3.5 text-slate-500" aria-hidden />
@@ -58,7 +58,7 @@ export function Navbar() {
           </Link>
           <Link
             href="/submit"
-            className="hidden rounded-full bg-[#3e8bff] px-4 py-2 text-sm font-semibold text-white ring-1 ring-inset ring-white/10 transition-colors hover:bg-[#66a5ff] md:inline-flex"
+            className="btn-primary hidden rounded-full px-4 py-2 text-sm font-semibold text-white md:inline-flex"
           >
             Add yours
           </Link>
@@ -75,7 +75,7 @@ export function Navbar() {
       </div>
 
       {open && (
-        <div className="border-t border-white/[0.06] bg-[#03050a]/95 px-4 pb-4 pt-2 md:hidden">
+        <div className="border-t border-white/[0.06] bg-[#030810]/95 px-4 pb-4 pt-2 md:hidden">
           <nav className="flex flex-col gap-1" aria-label="Mobile">
             {links.map((l) => (
               <Link
@@ -84,7 +84,7 @@ export function Navbar() {
                 onClick={() => setOpen(false)}
                 className={cn(
                   'rounded-lg px-3 py-2.5 text-sm font-medium transition-colors',
-                  isActive(l.href) ? 'bg-[#3e8bff]/15 text-[#d9e4f7]' : 'text-slate-300 hover:bg-white/[0.05] hover:text-white',
+                  isActive(l.href) ? 'bg-[#3b82f6]/15 text-[#d9e4f7]' : 'text-slate-300 hover:bg-white/[0.05] hover:text-white',
                 )}
               >
                 {l.label}
@@ -108,7 +108,7 @@ export function Navbar() {
             <Link
               href="/submit"
               onClick={() => setOpen(false)}
-              className="mt-2 rounded-full bg-[#3e8bff] px-4 py-2.5 text-center text-sm font-semibold text-white ring-1 ring-inset ring-white/10 transition-colors hover:bg-[#66a5ff]"
+              className="btn-primary mt-2 rounded-full px-4 py-2.5 text-center text-sm font-semibold text-white"
             >
               Add yours
             </Link>

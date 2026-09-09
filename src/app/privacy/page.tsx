@@ -57,10 +57,10 @@ export default function PrivacyPolicyPage() {
           {sections.map((s, i) => (
             <div
               key={s.title}
-              className="rounded-2xl border border-white/[0.08] bg-[#0c111c]/60 p-6 transition-colors hover:border-[#3e8bff]/30 sm:p-7"
+              className="rounded-2xl border border-white/[0.08] bg-[#101c2d]/60 p-6 transition-colors hover:border-[#3b82f6]/30 sm:p-7"
             >
               <div className="flex items-start gap-4">
-                <span className="mt-0.5 flex h-7 w-7 shrink-0 items-center justify-center rounded-lg bg-[#3e8bff]/20 text-xs font-bold text-[#d9e4f7] ring-1 ring-[#3e8bff]/30">
+                <span className="mt-0.5 flex h-7 w-7 shrink-0 items-center justify-center rounded-lg bg-[#3b82f6]/20 text-xs font-bold text-[#d9e4f7] ring-1 ring-[#3b82f6]/30">
                   {i + 1}
                 </span>
                 <div>
@@ -75,13 +75,13 @@ export default function PrivacyPolicyPage() {
         <div className="animate-hero delay-4 mt-12 flex flex-wrap items-center gap-4">
           <Link
             href="/submit"
-            className="shine rounded-lg bg-[#3e8bff] px-5 py-2.5 text-sm font-semibold text-white ring-1 ring-inset ring-white/10 transition-colors hover:bg-[#66a5ff]"
+            className="shine rounded-lg bg-[#3b82f6] px-5 py-2.5 text-sm font-semibold text-white ring-1 ring-inset ring-white/10 transition-colors hover:bg-[#60a5fa]"
           >
             Add your portfolio
           </Link>
           <Link
             href="/"
-            className="rounded-lg border border-white/10 bg-white/[0.03] px-5 py-2.5 text-sm font-medium text-slate-300 transition-colors hover:border-[#3e8bff]/50 hover:text-white"
+            className="rounded-lg border border-white/10 bg-white/[0.03] px-5 py-2.5 text-sm font-medium text-slate-300 transition-colors hover:border-[#3b82f6]/50 hover:text-white"
           >
             ← Back to gallery
           </Link>

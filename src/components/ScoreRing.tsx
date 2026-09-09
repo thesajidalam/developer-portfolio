@@ -1,9 +1,9 @@
 function ringColor(score: number): string {
-  if (score >= 90) return '#4fe29b'
-  if (score >= 75) return '#35d07f'
-  if (score >= 60) return '#f2b84b'
-  if (score >= 40) return '#ff7a52'
-  return '#ff657a'
+  if (score >= 90) return '#34d399'
+  if (score >= 75) return '#10b981'
+  if (score >= 60) return '#f59e0b'
+  if (score >= 40) return '#f97316'
+  return '#ef4444'
 }
 
 export function ScoreRing({ score, size = 64, label }: { score: number; size?: number; label?: string }) {

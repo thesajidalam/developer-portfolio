@@ -34,7 +34,7 @@ function saveBookmarks(set: Set<string>): void {
 }
 
 const ghostBtn =
-  'inline-flex items-center gap-1.5 rounded-lg border border-white/10 bg-white/[0.03] px-2.5 py-1.5 text-xs font-medium text-slate-300 transition-colors hover:border-[#3e8bff]/40 hover:bg-white/[0.06] hover:text-white'
+  'inline-flex items-center gap-1.5 rounded-lg border border-white/10 bg-white/[0.03] px-2.5 py-1.5 text-xs font-medium text-slate-300 transition-colors hover:border-[#3b82f6]/40 hover:bg-white/[0.06] hover:text-white'
 
 export function Avatar({ p, size = 'md' }: { p: PortfolioWithScore; size?: 'sm' | 'md' | 'lg' }) {
   const cls = size === 'lg' ? 'h-16 w-16 text-xl' : size === 'sm' ? 'h-8 w-8 text-xs' : 'h-11 w-11 text-sm'
@@ -43,7 +43,7 @@ export function Avatar({ p, size = 'md' }: { p: PortfolioWithScore; size?: 'sm' 
     return <img src={p.avatarUrl} alt={p.name} className={cn(cls, 'rounded-full object-cover ring-1 ring-slate-800')} referrerPolicy="no-referrer" />
   }
   return (
-    <div className={cn(cls, 'flex items-center justify-center rounded-full bg-[#3e8bff]/20 font-semibold text-[#d9e4f7] ring-1 ring-[#3e8bff]/30')}>
+    <div className={cn(cls, 'flex items-center justify-center rounded-full bg-[#3b82f6]/20 font-semibold text-[#d9e4f7] ring-1 ring-[#3b82f6]/30')}>
       {initials(p.name)}
     </div>
   )
@@ -82,8 +82,8 @@ function LikeButton({ p, likeCount = 0 }: { p: PortfolioWithScore; likeCount?: n
       className={cn(
         'inline-flex items-center gap-1.5 rounded-lg border px-2.5 py-1.5 text-xs font-medium transition-colors',
         liked
-          ? 'border-[#3e8bff]/50 bg-[#3e8bff]/15 text-[#d9e4f7]'
-          : 'border-white/10 bg-white/[0.03] text-slate-300 hover:border-[#3e8bff]/40 hover:bg-white/[0.06] hover:text-white',
+          ? 'border-[#3b82f6]/50 bg-[#3b82f6]/15 text-[#d9e4f7]'
+          : 'border-white/10 bg-white/[0.03] text-slate-300 hover:border-[#3b82f6]/40 hover:bg-white/[0.06] hover:text-white',
       )}
     >
       <Heart
@@ -115,7 +115,7 @@ function ShareButton({ p }: { p: PortfolioWithScore }) {
         <Link2 className="h-3.5 w-3.5" aria-hidden />
       </button>
       {copied && (
-        <span className="absolute left-1/2 top-full z-20 mt-1.5 -translate-x-1/2 whitespace-nowrap rounded-md bg-[#35D07F]/90 px-2 py-1 text-[10px] font-semibold text-white shadow-lg">
+        <span className="absolute left-1/2 top-full z-20 mt-1.5 -translate-x-1/2 whitespace-nowrap rounded-md bg-[#10b981]/90 px-2 py-1 text-[10px] font-semibold text-white shadow-lg">
           Copied!
         </span>
       )}
@@ -162,7 +162,7 @@ export function PortfolioCard({ p, likeCount = 0, className }: { p: PortfolioWit
   return (
     <div
       className={cn(
-        'group relative flex flex-col overflow-hidden rounded-2xl border border-white/[0.07] bg-[#0c111c] p-4 transition-all duration-300 ease-out hover:-translate-y-1 hover:border-[#3e8bff]/40 hover:bg-[#0e1420]',
+        'group relative flex flex-col overflow-hidden rounded-2xl border border-white/[0.07] bg-[#101c2d] p-4 transition-all duration-300 ease-out hover:-translate-y-1 hover:border-[#3b82f6]/40 hover:bg-[#18283d]',
         className,
       )}
     >
@@ -171,9 +171,9 @@ export function PortfolioCard({ p, likeCount = 0, className }: { p: PortfolioWit
           <Avatar p={p} />
           <div className="min-w-0">
             <div className="flex items-center gap-1.5">
-              <h3 className="truncate font-semibold text-[#e8eef9] group-hover:text-[#d9e4f7]">{p.name}</h3>
+              <h3 className="truncate font-semibold text-[#f8fafc] group-hover:text-[#d9e4f7]">{p.name}</h3>
               {p.verified && (
-                <BadgeCheck aria-label="Verified" className="h-4 w-4 shrink-0 text-[#22d3ee]" />
+                <BadgeCheck aria-label="Verified" className="h-4 w-4 shrink-0 text-[#38bdf8]" />
               )}
               {p.featured && (
                 <Star aria-label="Featured" className="h-3.5 w-3.5 fill-current text-amber-400" />
@@ -198,7 +198,7 @@ export function PortfolioCard({ p, likeCount = 0, className }: { p: PortfolioWit
           </span>
         ))}
         {(p.categories ?? []).slice(0, 2).map((c) => (
-          <span key={c} className="rounded-md border border-[#3e8bff]/25 bg-[#3e8bff]/10 px-2 py-0.5 text-[11px] font-medium text-[#d9e4f7]">
+          <span key={c} className="rounded-md border border-[#3b82f6]/25 bg-[#3b82f6]/10 px-2 py-0.5 text-[11px] font-medium text-[#d9e4f7]">
             {c}
           </span>
         ))}
@@ -222,7 +222,7 @@ export function PortfolioCard({ p, likeCount = 0, className }: { p: PortfolioWit
             rel="noopener noreferrer"
             className={cn(
               ghostBtn,
-              'inline-flex shrink-0 items-center gap-1 border-[#3e8bff]/30 bg-[#3e8bff]/10 text-[#d9e4f7] hover:border-[#3e8bff]/50 hover:bg-[#3e8bff]/20 hover:text-white',
+              'inline-flex shrink-0 items-center gap-1 border-[#3b82f6]/30 bg-[#3b82f6]/10 text-[#d9e4f7] hover:border-[#3b82f6]/50 hover:bg-[#3b82f6]/20 hover:text-white',
             )}
           >
             Visit site <ArrowUpRight className="h-3.5 w-3.5" aria-hidden />

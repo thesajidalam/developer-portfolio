@@ -15,11 +15,11 @@ function esc(s: string): string {
 }
 
 function scoreHex(score: number): string {
-  if (score >= 90) return '#4fe29b'
-  if (score >= 75) return '#35d07f'
-  if (score >= 60) return '#f2b84b'
-  if (score >= 40) return '#ff7a52'
-  return '#ff657a'
+  if (score >= 90) return '#34d399'
+  if (score >= 75) return '#10b981'
+  if (score >= 60) return '#f59e0b'
+  if (score >= 40) return '#f97316'
+  return '#ef4444'
 }
 
 export async function GET(_request: NextRequest, { params }: { params: Promise<{ slug: string }> }) {
@@ -39,30 +39,30 @@ export async function GET(_request: NextRequest, { params }: { params: Promise<{
   const techChips = tech
     .map(
       (t, i) =>
-        `<rect x="${44 + i * 166}" y="448" width="154" height="36" rx="18" fill="#111826"/>
-         <text x="${131 + i * 166}" y="472" text-anchor="middle" font-family="Inter,system-ui,sans-serif" font-size="19" fill="#e8eef9">#${t}</text>`,
+        `<rect x="${44 + i * 166}" y="448" width="154" height="36" rx="18" fill="#142238"/>
+         <text x="${131 + i * 166}" y="472" text-anchor="middle" font-family="Inter,system-ui,sans-serif" font-size="19" fill="#f8fafc">#${t}</text>`,
     )
     .join('')
 
   const svg = `<svg width="1200" height="630" viewBox="0 0 1200 630" xmlns="http://www.w3.org/2000/svg">
   <defs>
     <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
-      <stop offset="0%" stop-color="#0a0e17"/>
-      <stop offset="100%" stop-color="#0c111c"/>
+      <stop offset="0%" stop-color="#08111f"/>
+      <stop offset="100%" stop-color="#101c2d"/>
     </linearGradient>
     <linearGradient id="glow" x1="0" y1="0" x2="1" y2="1">
-      <stop offset="0%" stop-color="#3e8bff"/>
-      <stop offset="100%" stop-color="#2dd4bf"/>
+      <stop offset="0%" stop-color="#3b82f6"/>
+      <stop offset="100%" stop-color="#10b981"/>
     </linearGradient>
   </defs>
   <rect width="1200" height="630" fill="url(#bg)"/>
-  <circle cx="1040" cy="120" r="260" fill="#3e8bff" opacity="0.16"/>
-  <circle cx="120" cy="560" r="220" fill="#2dd4bf" opacity="0.10"/>
+  <circle cx="1040" cy="120" r="260" fill="#3b82f6" opacity="0.16"/>
+  <circle cx="120" cy="560" r="220" fill="#10b981" opacity="0.10"/>
 
   <text x="48" y="60" font-family="Inter,system-ui,sans-serif" font-weight="800" font-size="26" fill="#7dd3fc" letter-spacing="1">DEVFOLIO</text>
 
-  <text x="48" y="250" font-family="Inter,system-ui,sans-serif" font-weight="700" font-size="64" fill="#e8eef9">${name}</text>
-  <text x="48" y="306" font-family="Inter,system-ui,sans-serif" font-size="34" fill="#98a7bf">${host}</text>
+  <text x="48" y="250" font-family="Inter,system-ui,sans-serif" font-weight="700" font-size="64" fill="#f8fafc">${name}</text>
+  <text x="48" y="306" font-family="Inter,system-ui,sans-serif" font-size="34" fill="#94a3b8">${host}</text>
 
   <circle cx="980" cy="285" r="118" fill="none" stroke="rgba(190,160,194,0.16)" stroke-width="18"/>
   <circle cx="980" cy="285" r="118" fill="none" stroke="${color}" stroke-width="18" stroke-linecap="round"
@@ -72,8 +72,8 @@ export async function GET(_request: NextRequest, { params }: { params: Promise<{
 
   ${techChips}
 
-  <text x="48" y="540" font-family="Inter,system-ui,sans-serif" font-size="26" fill="#98a7bf">${p.health === 'healthy' ? '● Healthy' : p.health === 'needs_attention' ? '● Needs attention' : '● Status unknown'}</text>
-  <text x="48" y="596" font-family="Inter,system-ui,sans-serif" font-size="22" fill="#98a7bf">Scored across Performance · Accessibility · SEO · Design · Content</text>
+  <text x="48" y="540" font-family="Inter,system-ui,sans-serif" font-size="26" fill="#94a3b8">${p.health === 'healthy' ? '● Healthy' : p.health === 'needs_attention' ? '● Needs attention' : '● Status unknown'}</text>
+  <text x="48" y="596" font-family="Inter,system-ui,sans-serif" font-size="22" fill="#94a3b8">Scored across Performance · Accessibility · SEO · Design · Content</text>
 
   <rect x="850" y="540" width="302" height="62" rx="31" fill="url(#glow)"/>
   <text x="1001" y="579" text-anchor="middle" font-family="Inter,system-ui,sans-serif" font-weight="700" font-size="26" fill="#ffffff">Check my score</text>

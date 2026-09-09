@@ -23,7 +23,7 @@ export async function GET(_request: NextRequest, { params }: { params: Promise<{
 
   const overall = p.score?.overallScore ?? 0
   const color =
-    overall >= 90 ? '#35d07f' : overall >= 75 ? '#63d19a' : overall >= 60 ? '#f2b84b' : overall >= 40 ? '#ff8a5c' : '#ff657a'
+    overall >= 90 ? '#10b981' : overall >= 75 ? '#34d399' : overall >= 60 ? '#f59e0b' : overall >= 40 ? '#f97316' : '#ef4444'
   const votes = await voteCount(p.id).catch(() => 0)
   const host = hostnameOf(p.portfolioUrl)
 
@@ -43,12 +43,12 @@ export async function GET(_request: NextRequest, { params }: { params: Promise<{
     }
     .card::before{content:"";position:absolute;inset:0 0 auto 0;height:1px;background:linear-gradient(90deg,transparent,rgba(62,139,255,0.85),rgba(34,211,238,0.7),transparent)}
     .card::after{content:"";position:absolute;top:-26px;left:-26px;width:110px;height:110px;border-radius:50%;background:radial-gradient(circle,rgba(62,139,255,0.16),transparent 65%);pointer-events:none}
-    .tile{flex:0 0 auto;width:28px;height:28px;border-radius:9px;background:linear-gradient(135deg,#3e8bff 0%,#22d3ee 100%);display:flex;align-items:center;justify-content:center;color:#fff;font-family:ui-monospace,'Cascadia Code',Menlo,Consolas,monospace;font-size:12px;font-weight:800;letter-spacing:-1px;box-shadow:0 3px 10px rgba(62,139,255,0.35)}
+    .tile{flex:0 0 auto;width:28px;height:28px;border-radius:9px;background:linear-gradient(135deg,#3b82f6 0%,#38bdf8 100%);display:flex;align-items:center;justify-content:center;color:#fff;font-family:ui-monospace,'Cascadia Code',Menlo,Consolas,monospace;font-size:12px;font-weight:800;letter-spacing:-1px;box-shadow:0 3px 10px rgba(62,139,255,0.35)}
     .mid{flex:1 1 auto;min-width:0}
-    .name{font-size:13px;font-weight:650;color:#e8eef9;line-height:1.15;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+    .name{font-size:13px;font-weight:650;color:#f8fafc;line-height:1.15;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
     .host{font-size:10px;color:#8e9bb3;margin-top:1px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
     .bar{height:3px;border-radius:99px;background:rgba(151,166,192,0.22);margin-top:5px;overflow:hidden}
-    .fill{height:100%;border-radius:99px;background:linear-gradient(90deg,#3e8bff,#22d3ee)}
+    .fill{height:100%;border-radius:99px;background:linear-gradient(90deg,#3b82f6,#38bdf8)}
     .score{flex:0 0 auto;font-size:20px;font-weight:800;line-height:1;letter-spacing:-0.5px;min-width:38px;text-align:right}
     .brand{flex:0 0 auto;margin-left:2px;font-size:13px;font-weight:800;color:#7dd3fc;letter-spacing:-0.2px}
     .grow{transition:transform .18s ease,box-shadow .18s ease}

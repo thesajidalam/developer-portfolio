@@ -37,11 +37,11 @@ export default async function CompareDetailPage({ params }: { params: Promise<{ 
       <div className="relative overflow-hidden">
         <div className="bg-aurora pointer-events-none absolute inset-0" />
         <div className="relative mx-auto max-w-xl px-4 py-24 text-center sm:px-6">
-          <h1 className="animate-hero text-3xl font-bold text-[#e8eef9]">Not enough portfolios</h1>
+          <h1 className="animate-hero text-3xl font-bold text-[#f8fafc]">Not enough portfolios</h1>
           <p className="animate-hero delay-1 mt-3 text-slate-400">This comparison needs at least two portfolios to render a table.</p>
           <Link
             href="/compare"
-            className="animate-hero delay-2 mt-8 inline-block rounded-xl border border-white/[0.08] bg-white/[0.03] px-5 py-2.5 text-sm font-medium text-slate-300 transition-colors hover:border-[#3e8bff]/50 hover:text-white"
+            className="animate-hero delay-2 mt-8 inline-block rounded-xl border border-white/[0.08] bg-white/[0.03] px-5 py-2.5 text-sm font-medium text-slate-300 transition-colors hover:border-[#3b82f6]/50 hover:text-white"
           >
             Back to compare
           </Link>
@@ -70,17 +70,17 @@ export default async function CompareDetailPage({ params }: { params: Promise<{ 
           </div>
           <Link
             href="/compare"
-            className="rounded-xl border border-white/[0.08] bg-white/[0.03] px-4 py-2 text-sm font-medium text-slate-300 transition-colors hover:border-[#3e8bff]/50 hover:text-white"
+            className="rounded-xl border border-white/[0.08] bg-white/[0.03] px-4 py-2 text-sm font-medium text-slate-300 transition-colors hover:border-[#3b82f6]/50 hover:text-white"
           >
             Back to compare
           </Link>
         </div>
 
-        <div className="animate-hero delay-1 mb-8 rounded-2xl border border-[#35D07F]/30 bg-[#35D07F]/5 p-6 text-center shadow-xl shadow-[#35D07F]/10">
-          <Trophy className="mx-auto h-7 w-7 text-[#4fe29b]" aria-hidden />
-          <h2 className="mt-2 text-xl font-bold text-[#e8eef9]">
-            Winner: <span className="text-[#4fe29b]">{overallWinner.name}</span> with{' '}
-            <span className="text-[#4fe29b]">{Math.round(maxOverall)}</span>/100
+        <div className="animate-hero delay-1 mb-8 rounded-2xl border border-[#10b981]/30 bg-[#10b981]/5 p-6 text-center shadow-xl shadow-[#10b981]/10">
+          <Trophy className="mx-auto h-7 w-7 text-[#34d399]" aria-hidden />
+          <h2 className="mt-2 text-xl font-bold text-[#f8fafc]">
+            Winner: <span className="text-[#34d399]">{overallWinner.name}</span> with{' '}
+            <span className="text-[#34d399]">{Math.round(maxOverall)}</span>/100
           </h2>
           <p className="mt-1 text-sm text-slate-400">{hostnameOf(overallWinner.portfolioUrl)}</p>
         </div>
@@ -92,9 +92,9 @@ export default async function CompareDetailPage({ params }: { params: Promise<{ 
               <div
                 key={p.id}
                 className={cn(
-                  'rounded-2xl border bg-[#0c111c]/70 p-5 transition-all',
+                  'rounded-2xl border bg-[#101c2d]/70 p-5 transition-all',
                   isOverallWinner
-                    ? 'border-[#35D07F]/40 shadow-xl shadow-[#35D07F]/10'
+                    ? 'border-[#10b981]/40 shadow-xl shadow-[#10b981]/10'
                     : 'border-white/[0.08]',
                 )}
               >

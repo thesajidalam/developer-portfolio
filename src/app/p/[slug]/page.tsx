@@ -67,8 +67,8 @@ export default async function PortfolioDetailPage({ params }: Props) {
           className={cn(
             'animate-hero delay-1 relative overflow-hidden rounded-2xl border p-6 sm:p-8',
             isOwner
-              ? 'border-amber-400/25 bg-gradient-to-b from-[#090e18]/80 to-[#0a0e17]/70'
-              : 'border-white/[0.08] bg-[#0c111c]/70',
+              ? 'border-amber-400/25 bg-gradient-to-b from-[#08111f]/80 to-[#08111f]/70'
+              : 'border-white/[0.08] bg-[#101c2d]/70',
           )}
         >
         {isOwner && (
@@ -92,7 +92,7 @@ export default async function PortfolioDetailPage({ params }: Props) {
                   <span
                     className={cn(
                       'inline-flex items-center gap-1 rounded-md px-2 py-0.5 text-xs font-medium',
-                      isOwner ? 'bg-amber-400/15 text-amber-200' : 'bg-[#3e8bff]/15 text-[#d9e4f7]',
+                      isOwner ? 'bg-amber-400/15 text-amber-200' : 'bg-[#3b82f6]/15 text-[#d9e4f7]',
                     )}
                   >
                     <BadgeCheck className="h-3 w-3" aria-hidden /> Verified
@@ -127,8 +127,8 @@ export default async function PortfolioDetailPage({ params }: Props) {
                   className={cn(
                     'shine inline-flex items-center justify-center gap-1.5 rounded-xl px-4 py-2 text-sm font-semibold text-white transition-colors hover:brightness-110',
                     isOwner
-                      ? 'bg-[#F2B84B] text-[#261303] hover:bg-[#f6c76e]'
-                      : 'bg-[#3e8bff] ring-1 ring-inset ring-white/10 hover:bg-[#66a5ff]',
+                      ? 'bg-[#f59e0b] text-[#422006] hover:bg-[#fbbf24]'
+                      : 'bg-[#3b82f6] ring-1 ring-inset ring-white/10 hover:bg-[#60a5fa]',
                   )}
                 >
                   Visit site <ArrowUpRight className="h-4 w-4" aria-hidden />
@@ -170,7 +170,7 @@ export default async function PortfolioDetailPage({ params }: Props) {
             </span>
           ))}
           {p.categories.map((c) => (
-            <span key={c} className="rounded-md bg-[#3e8bff]/15 px-2.5 py-1 text-xs font-medium text-[#d9e4f7]">
+            <span key={c} className="rounded-md bg-[#3b82f6]/15 px-2.5 py-1 text-xs font-medium text-[#d9e4f7]">
               {c}
             </span>
           ))}
@@ -179,14 +179,14 @@ export default async function PortfolioDetailPage({ params }: Props) {
         {p.location && <p className="mt-4 inline-flex items-center gap-1.5 text-sm text-slate-500"><MapPin className="h-4 w-4 text-slate-600" aria-hidden /> {p.location}</p>}
       </header>
 
-      <section className="animate-hero delay-3 mt-10 rounded-2xl border border-white/[0.08] bg-[#0c111c]/70 p-6 sm:p-8">
+      <section className="animate-hero delay-3 mt-10 rounded-2xl border border-white/[0.08] bg-[#101c2d]/70 p-6 sm:p-8">
         <h2 className="text-xl font-bold text-white">Score breakdown</h2>
         <p className="mt-1 text-sm text-slate-500">Six dimensions, weighted to produce the overall score.</p>
         <div className="mt-6 grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
           {breakdown.map((dim) => (
             <div
               key={dim.key}
-              className="group rounded-xl border border-white/[0.07] bg-[#0c111c]/80 p-5 transition-all hover:-translate-y-0.5 hover:border-[#3e8bff]/40 hover:shadow-lg hover:shadow-[#3e8bff]/10"
+              className="group rounded-xl border border-white/[0.07] bg-[#101c2d]/80 p-5 transition-all hover:-translate-y-0.5 hover:border-[#3b82f6]/40 hover:shadow-lg hover:shadow-[#3b82f6]/10"
             >
               <div className="flex items-start justify-between gap-3">
                 <span className="text-xs font-semibold uppercase tracking-wide text-slate-400">
@@ -196,14 +196,14 @@ export default async function PortfolioDetailPage({ params }: Props) {
                 <span
                   className={cn(
                     'text-2xl font-bold tabular-nums leading-none',
-                    dim.score >= 90 ? 'text-[#35D07F]' : dim.score >= 70 ? 'text-[#F2B84B]' : dim.score >= 50 ? 'text-[#FF8A5C]' : 'text-[#FF657A]',
+                    dim.score >= 90 ? 'text-[#10b981]' : dim.score >= 70 ? 'text-[#f59e0b]' : dim.score >= 50 ? 'text-[#f97316]' : 'text-[#ef4444]',
                   )}
                 >
                   {dim.score}
                 </span>
               </div>
               <div className="mt-4">
-                <ScoreBar label="" value={dim.score} color={dim.score >= 90 ? 'text-[#35D07F]' : dim.score >= 70 ? 'text-[#F2B84B]' : dim.score >= 50 ? 'text-[#FF8A5C]' : 'text-[#FF657A]'} />
+                <ScoreBar label="" value={dim.score} color={dim.score >= 90 ? 'text-[#10b981]' : dim.score >= 70 ? 'text-[#f59e0b]' : dim.score >= 50 ? 'text-[#f97316]' : 'text-[#ef4444]'} />
               </div>
               <p className="mt-3 text-xs leading-relaxed text-slate-500">{dim.description}</p>
             </div>

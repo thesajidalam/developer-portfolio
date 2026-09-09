@@ -43,7 +43,7 @@ export function EmbedBadge({ slug }: EmbedBadgeProps) {
       <button
         type="button"
         onClick={() => setOpen(true)}
-        className="inline-flex items-center gap-1.5 rounded-xl border border-white/10 bg-white/[0.03] px-4 py-2 text-sm font-medium text-slate-300 transition-all hover:border-[#3e8bff]/60 hover:text-white"
+        className="inline-flex items-center gap-1.5 rounded-xl border border-white/10 bg-white/[0.03] px-4 py-2 text-sm font-medium text-slate-300 transition-all hover:border-[#3b82f6]/60 hover:text-white"
       >
         <svg viewBox="0 0 24 24" className="h-4 w-4" fill="none" stroke="currentColor" strokeWidth="2" aria-hidden>
           <path d="m8 3 4 8 5-5 5 15H2L8 3z" />
@@ -62,10 +62,10 @@ export function EmbedBadge({ slug }: EmbedBadgeProps) {
             type="button"
             aria-hidden
             onClick={() => setOpen(false)}
-            className="absolute inset-0 bg-[#03050a]/80 backdrop-blur-sm"
+            className="absolute inset-0 bg-[#030810]/80 backdrop-blur-sm"
           />
-          <div className="relative w-full max-w-md overflow-hidden rounded-2xl border border-white/10 bg-[#0c111c] shadow-2xl shadow-black/70">
-            <div className="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-[#3e8bff]/60 to-transparent" />
+          <div className="relative w-full max-w-md overflow-hidden rounded-2xl border border-white/10 bg-[#101c2d] shadow-2xl shadow-black/70">
+            <div className="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-[#3b82f6]/60 to-transparent" />
 
             <div className="flex items-center justify-between border-b border-white/[0.06] px-5 py-4">
               <div>
@@ -85,7 +85,7 @@ export function EmbedBadge({ slug }: EmbedBadgeProps) {
             </div>
 
             <div className="px-5 py-4">
-              <div className="rounded-xl border border-white/[0.06] bg-[#05070c] p-2.5">
+              <div className="rounded-xl border border-white/[0.06] bg-[#050a14] p-2.5">
                 <p className="mb-2 px-1 text-[10px] font-semibold uppercase tracking-wider text-slate-500">
                   Live preview
                 </p>
@@ -97,7 +97,7 @@ export function EmbedBadge({ slug }: EmbedBadgeProps) {
               <p className="mt-4 text-[10px] font-semibold uppercase tracking-wider text-slate-500">
                 Copy this snippet into your site&apos;s HTML
               </p>
-              <div className="mt-2 rounded-lg border border-white/[0.08] bg-[#05070c] p-3 ring-offset-0 transition-colors focus-within:border-[#3e8bff]/50">
+              <div className="mt-2 rounded-lg border border-white/[0.08] bg-[#050a14] p-3 ring-offset-0 transition-colors focus-within:border-[#3b82f6]/50">
                 <code
                   className="block max-h-28 overflow-auto whitespace-pre-wrap break-all font-mono text-[11px] leading-relaxed text-slate-300 no-scrollbar"
                   onClick={(e) => {
@@ -116,7 +116,7 @@ export function EmbedBadge({ slug }: EmbedBadgeProps) {
                 <button
                   type="button"
                   onClick={copy}
-                  className="shine inline-flex flex-1 items-center justify-center gap-2 rounded-xl bg-[#3e8bff] px-4 py-2.5 text-sm font-semibold text-white transition-all hover:bg-[#66a5ff] active:scale-[0.98]"
+                  className="shine btn-primary flex-1 rounded-xl px-4 py-2.5 text-sm font-semibold text-white"
                 >
                   {copied ? (
                     <>

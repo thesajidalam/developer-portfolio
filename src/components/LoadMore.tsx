@@ -59,7 +59,7 @@ export function LoadMore({ initial, total, initialPage, pageSize, filters }: Loa
           <p className="mt-2 text-sm text-slate-500">Try adjusting your filters or clearing your search.</p>
           <a
             href="/"
-            className="shine mt-6 inline-block rounded-xl bg-[#3e8bff] px-5 py-2.5 text-sm font-semibold text-white shadow-lg shadow-indigo-500/25 transition-all hover:scale-105 active:scale-95"
+            className="shine btn-primary mt-6 inline-block rounded-xl px-5 py-2.5 text-sm font-semibold text-white"
           >
             Clear filters
           </a>
@@ -72,7 +72,7 @@ export function LoadMore({ initial, total, initialPage, pageSize, filters }: Loa
             type="button"
             onClick={loadMore}
             disabled={loading}
-            className="shine rounded-xl bg-[#3e8bff] px-6 py-3 text-sm font-semibold text-white shadow-lg shadow-indigo-500/25 transition-all hover:scale-[1.03] hover:shadow-xl hover:shadow-indigo-500/40 active:scale-95 disabled:cursor-not-allowed disabled:opacity-60"
+            className="shine btn-primary rounded-xl px-6 py-3 text-sm font-semibold text-white disabled:cursor-not-allowed disabled:opacity-60"
           >
             {loading ? 'Loading…' : 'Load more'}
           </button>

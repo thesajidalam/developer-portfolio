@@ -21,11 +21,11 @@ export function ScoreBadge({ score, className }: { score: number; className?: st
 }
 
 const BAR_COLORS: Record<string, string> = {
-  'bg-red-400/10': '#ff657a',
-  'bg-orange-400/10': '#ff7a52',
-  'bg-amber-400/10': '#f2b84b',
-  'bg-green-500/10': '#35d07f',
-  'bg-emerald-400/10': '#4fe29b',
+  'bg-red-400/10': '#ef4444',
+  'bg-orange-400/10': '#f97316',
+  'bg-amber-400/10': '#f59e0b',
+  'bg-green-500/10': '#10b981',
+  'bg-emerald-400/10': '#34d399',
 }
 
 export function ScoreBar({ label, value, color }: { label: string; value: number; color?: string }) {

@@ -96,7 +96,7 @@ export default function ComparePage() {
       <div className="bg-aurora pointer-events-none absolute inset-0" />
       <div className="relative mx-auto max-w-4xl px-4 py-16 sm:px-6">
         <div className="animate-hero mb-10 text-center">
-          <h1 className="text-4xl font-bold tracking-tight text-[#e8eef9]">Compare portfolios</h1>
+          <h1 className="text-4xl font-bold tracking-tight text-[#f8fafc]">Compare portfolios</h1>
           <p className="mt-2 text-slate-400">
             Pick {MIN} to {MAX} portfolios to build a shareable side-by-side comparison.
           </p>
@@ -114,8 +114,8 @@ export default function ComparePage() {
                   className={cn(
                     'inline-flex items-center gap-2 rounded-full border px-3 py-1.5 text-sm font-medium transition-colors',
                     selected.some((s) => s.id === p.id)
-                      ? 'border-[#3e8bff]/60 bg-[#3e8bff]/15 text-[#d9e4f7]'
-                      : 'border-white/10 bg-white/[0.04] text-slate-300 hover:border-[#3e8bff]/40 hover:bg-white/[0.06] hover:text-white',
+                      ? 'border-[#3b82f6]/60 bg-[#3b82f6]/15 text-[#d9e4f7]'
+                      : 'border-white/10 bg-white/[0.04] text-slate-300 hover:border-[#3b82f6]/40 hover:bg-white/[0.06] hover:text-white',
                   )}
                 >
                   <Avatar p={p} size="sm" />
@@ -138,7 +138,7 @@ export default function ComparePage() {
             value={query}
             onChange={(e) => setQuery(e.target.value)}
             placeholder="Search portfolios by name, technology, or domain..."
-            className="w-full rounded-2xl border border-white/10 bg-[#0c111c]/80 py-3.5 pl-12 pr-4 text-sm text-slate-200 outline-none transition-all placeholder:text-slate-500 focus:border-[#3e8bff]/70 focus:bg-[#0e1420]"
+            className="w-full rounded-2xl border border-white/10 bg-[#101c2d]/80 py-3.5 pl-12 pr-4 text-sm text-slate-200 outline-none transition-all placeholder:text-slate-500 focus:border-[#3b82f6]/70 focus:bg-[#18283d]"
           />
           {searching && (
             <span className="absolute right-4 top-1/2 -translate-y-1/2 text-xs text-slate-500">Searching…</span>
@@ -159,8 +159,8 @@ export default function ComparePage() {
                   className={cn(
                     'flex w-full items-center gap-3 rounded-xl border p-3 text-left transition-all',
                     isSelected
-                      ? 'border-[#3e8bff]/60 bg-[#3e8bff]/10'
-                      : 'border-white/10 bg-white/[0.03] hover:border-[#3e8bff]/40 hover:bg-white/[0.05]',
+                      ? 'border-[#3b82f6]/60 bg-[#3b82f6]/10'
+                      : 'border-white/10 bg-white/[0.03] hover:border-[#3b82f6]/40 hover:bg-white/[0.05]',
                     atMax && 'cursor-not-allowed opacity-50',
                   )}
                 >
@@ -170,7 +170,7 @@ export default function ComparePage() {
                     <div className="truncate text-xs text-slate-500">{hostnameOf(p.portfolioUrl)}</div>
                   </div>
                   <ScoreBadge score={p.score?.overallScore ?? 0} />
-                  <span className={cn('text-sm font-bold', isSelected ? 'text-[#4fe29b]' : 'text-[#7dd3fc]')}>
+                  <span className={cn('text-sm font-bold', isSelected ? 'text-[#34d399]' : 'text-[#7dd3fc]')}>
                     {isSelected ? '✓' : '+'}
                   </span>
                 </button>
@@ -204,7 +204,7 @@ export default function ComparePage() {
               {selected.map((p) => (
                 <span
                   key={p.id}
-                  className="inline-flex items-center gap-2 rounded-full border border-[#3e8bff]/40 bg-[#3e8bff]/10 pl-1 pr-2 text-sm font-medium text-[#d9e4f7]"
+                  className="inline-flex items-center gap-2 rounded-full border border-[#3b82f6]/40 bg-[#3b82f6]/10 pl-1 pr-2 text-sm font-medium text-[#d9e4f7]"
                 >
                   <Avatar p={p} size="sm" />
                   {p.name}
@@ -231,7 +231,7 @@ export default function ComparePage() {
             type="button"
             onClick={createLink}
             disabled={!canCreate || creating}
-            className="shine w-full max-w-md rounded-2xl bg-[#3e8bff] px-6 py-3.5 text-sm font-semibold text-white ring-1 ring-inset ring-white/10 transition-colors hover:bg-[#66a5ff] disabled:cursor-not-allowed disabled:opacity-50"
+            className="shine btn-primary w-full max-w-md rounded-2xl px-6 py-3.5 text-sm font-semibold text-white disabled:cursor-not-allowed disabled:opacity-50"
           >
             {creating ? 'Creating…' : `Compare Now →`}
           </button>
