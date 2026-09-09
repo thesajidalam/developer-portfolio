@@ -57,7 +57,7 @@ export default function PrivacyPolicyPage() {
           {sections.map((s, i) => (
             <div
               key={s.title}
-              className="rounded-2xl border border-white/[0.08] bg-[#141b2a]/60 p-6 transition-colors hover:border-[#3e8bff]/30 sm:p-7"
+              className="rounded-2xl border border-white/[0.08] bg-[#0c111c]/60 p-6 transition-colors hover:border-[#3e8bff]/30 sm:p-7"
             >
               <div className="flex items-start gap-4">
                 <span className="mt-0.5 flex h-7 w-7 shrink-0 items-center justify-center rounded-lg bg-[#3e8bff]/20 text-xs font-bold text-[#d9e4f7] ring-1 ring-[#3e8bff]/30">

@@ -222,12 +222,12 @@ const config: Config = {
         },
         // --- App surface tokens ----------------------------------------------
         surface: {
-          base: '#0B0E1A',
-          deep: '#070A12',
-          raised: '#10151F',
-          card: '#141B2A',
-          elevated: '#1C2436',
-          floating: '#222C40',
+          base: '#05070C',
+          deep: '#03050A',
+          raised: '#0A0E17',
+          card: '#0C111C',
+          elevated: '#111826',
+          floating: '#161E2E',
         },
         ink: {
           DEFAULT: '#E8EEF9',

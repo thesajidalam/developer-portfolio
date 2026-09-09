@@ -162,7 +162,7 @@ export function PortfolioCard({ p, likeCount = 0, className }: { p: PortfolioWit
   return (
     <div
       className={cn(
-        'group relative flex flex-col overflow-hidden rounded-2xl border border-white/[0.07] bg-[#141b2a] p-4 transition-all duration-300 ease-out hover:-translate-y-1 hover:border-[#3e8bff]/40 hover:bg-[#182136]',
+        'group relative flex flex-col overflow-hidden rounded-2xl border border-white/[0.07] bg-[#0c111c] p-4 transition-all duration-300 ease-out hover:-translate-y-1 hover:border-[#3e8bff]/40 hover:bg-[#0e1420]',
         className,
       )}
     >

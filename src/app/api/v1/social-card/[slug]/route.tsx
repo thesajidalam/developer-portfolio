@@ -39,7 +39,7 @@ export async function GET(_request: NextRequest, { params }: { params: Promise<{
   const techChips = tech
     .map(
       (t, i) =>
-        `<rect x="${44 + i * 166}" y="448" width="154" height="36" rx="18" fill="#1c2436"/>
+        `<rect x="${44 + i * 166}" y="448" width="154" height="36" rx="18" fill="#111826"/>
          <text x="${131 + i * 166}" y="472" text-anchor="middle" font-family="Inter,system-ui,sans-serif" font-size="19" fill="#e8eef9">#${t}</text>`,
     )
     .join('')
@@ -47,8 +47,8 @@ export async function GET(_request: NextRequest, { params }: { params: Promise<{
   const svg = `<svg width="1200" height="630" viewBox="0 0 1200 630" xmlns="http://www.w3.org/2000/svg">
   <defs>
     <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
-      <stop offset="0%" stop-color="#10151f"/>
-      <stop offset="100%" stop-color="#141b2a"/>
+      <stop offset="0%" stop-color="#0a0e17"/>
+      <stop offset="100%" stop-color="#0c111c"/>
     </linearGradient>
     <linearGradient id="glow" x1="0" y1="0" x2="1" y2="1">
       <stop offset="0%" stop-color="#3e8bff"/>

@@ -52,7 +52,7 @@ export const metadata: Metadata = {
 }
 
 export const viewport: Viewport = {
-  themeColor: '#0b0e1a',
+  themeColor: '#05070c',
   width: 'device-width',
   initialScale: 1,
 }
@@ -60,7 +60,7 @@ export const viewport: Viewport = {
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en" className={cn(inter.variable, sora.variable, jetbrains.variable)}>
-      <body className="min-h-screen bg-[#0b0e1a] text-[#e8eef9] antialiased">
+      <body className="min-h-screen bg-[#05070c] text-[#e8eef9] antialiased">
         <SearchShortcut />
         <Suspense fallback={null}>
           <SearchScrollRestore />

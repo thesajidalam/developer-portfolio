@@ -3,8 +3,8 @@
 @tailwind utilities;
 
 :root {
-  --background: #0b0e1a;
-  --surface: #141b2a;
+  --background: #05070c;
+  --surface: #0c111c;
   --foreground: #e8eef9;
   color-scheme: dark;
   /* Brand identity: electric blue */
@@ -36,7 +36,7 @@ html {
 
 body {
   margin: 0;
-  background: linear-gradient(180deg, #10151f 0%, #0b0e1a 32%, #0b0e1a 100%);
+  background: linear-gradient(180deg, #0a0e17 0%, #05070c 32%, #05070c 100%);
   color: var(--foreground);
   font-family:
     var(--font-inter),
@@ -75,29 +75,28 @@ textarea {
 }
 select option,
 select optgroup {
-  background-color: #141b2a;
+  background-color: #0c111c;
   color: #e8eef9;
 }
 select option:disabled {
   color: #7d8ca8;
 }
 
-/* ---- ambient multi-hue background ------------------------------------------- */
+/* ---- deep blueprint backdrop -------------------------------------------- */
 @layer utilities {
   .bg-aurora {
     background:
-      radial-gradient(820px circle at 10% -12%, rgb(62 139 255 / 0.2), transparent 46%),
-      radial-gradient(980px circle at 96% -8%, rgb(34 211 238 / 0.08), transparent 48%),
-      radial-gradient(760px circle at 50% 118%, rgb(45 212 191 / 0.12), transparent 52%);
+      radial-gradient(1200px 460px circle at 50% -12%, rgb(62 139 255 / 0.13), transparent 62%),
+      radial-gradient(900px 340px circle at 94% -8%, rgb(34 211 238 / 0.05), transparent 56%);
   }
 
   .bg-grid {
     background-image:
-      linear-gradient(rgb(184 196 216 / 0.05) 1px, transparent 1px),
-      linear-gradient(90deg, rgb(184 196 216 / 0.05) 1px, transparent 1px);
+      linear-gradient(rgb(151 166 192 / 0.03) 1px, transparent 1px),
+      linear-gradient(90deg, rgb(151 166 192 / 0.03) 1px, transparent 1px);
     background-size: 34px 34px;
-    mask-image: radial-gradient(ellipse 85% 62% at 50% 0%, #000 30%, transparent 78%);
-    -webkit-mask-image: radial-gradient(ellipse 85% 62% at 50% 0%, #000 30%, transparent 78%);
+    mask-image: radial-gradient(ellipse 80% 55% at 50% 0%, #000 25%, transparent 75%);
+    -webkit-mask-image: radial-gradient(ellipse 80% 55% at 50% 0%, #000 25%, transparent 75%);
   }
 }
 
@@ -118,25 +117,25 @@ textarea:focus-visible {
 /* ---- premium scrollbar -------------------------------------------------- */
 * {
   scrollbar-width: thin;
-  scrollbar-color: rgb(62 139 255 / 0.55) #070a12;
+  scrollbar-color: rgb(62 139 255 / 0.55) #03050a;
 }
 ::-webkit-scrollbar {
   width: 10px;
   height: 10px;
 }
 ::-webkit-scrollbar-track {
-  background: #070a12;
+  background: #03050a;
 }
 ::-webkit-scrollbar-thumb {
   background: linear-gradient(180deg, rgb(62 139 255 / 0.55), rgb(34 211 238 / 0.45));
   border-radius: 999px;
-  border: 2px solid #070a12;
+  border: 2px solid #03050a;
 }
 ::-webkit-scrollbar-thumb:hover {
   background: linear-gradient(180deg, rgb(62 139 255 / 0.85), rgb(45 212 191 / 0.65));
 }
 ::-webkit-scrollbar-corner {
-  background: #070a12;
+  background: #03050a;
 }
 ::selection {
   background: rgb(125 211 252 / 0.35);
@@ -181,16 +180,16 @@ textarea:focus-visible {
 /* ---- premium interactive surfaces ------------------------------------------ */
 @layer utilities {
   .glass {
-    background: rgb(20 27 42 / 0.72);
+    background: rgb(12 17 28 / 0.72);
     backdrop-filter: blur(14px);
     -webkit-backdrop-filter: blur(14px);
-    border: 1px solid rgb(184 196 216 / 0.1);
+    border: 1px solid rgb(151 166 192 / 0.1);
   }
   .glass-strong {
-    background: rgb(16 21 31 / 0.86);
+    background: rgb(10 14 23 / 0.88);
     backdrop-filter: blur(18px);
     -webkit-backdrop-filter: blur(18px);
-    border: 1px solid rgb(184 196 216 / 0.12);
+    border: 1px solid rgb(151 166 192 / 0.12);
   }
 }
 
@@ -242,7 +241,7 @@ textarea:focus-visible {
   100% { background-position: 400px 0; }
 }
 .skeleton {
-  background: linear-gradient(90deg, rgb(41 50 66 / 0.6) 25%, rgb(75 90 117 / 0.8) 50%, rgb(41 50 66 / 0.6) 75%);
+  background: linear-gradient(90deg, rgb(30 38 52 / 0.6) 25%, rgb(48 62 84 / 0.8) 50%, rgb(30 38 52 / 0.6) 75%);
   background-size: 800px 100%;
   animation: shimmer 1.6s linear infinite;
 }

@@ -138,7 +138,7 @@ export default function ComparePage() {
             value={query}
             onChange={(e) => setQuery(e.target.value)}
             placeholder="Search portfolios by name, technology, or domain..."
-            className="w-full rounded-2xl border border-white/10 bg-[#141b2a]/80 py-3.5 pl-12 pr-4 text-sm text-slate-200 outline-none transition-all placeholder:text-slate-500 focus:border-[#3e8bff]/70 focus:bg-[#182136]"
+            className="w-full rounded-2xl border border-white/10 bg-[#0c111c]/80 py-3.5 pl-12 pr-4 text-sm text-slate-200 outline-none transition-all placeholder:text-slate-500 focus:border-[#3e8bff]/70 focus:bg-[#0e1420]"
           />
           {searching && (
             <span className="absolute right-4 top-1/2 -translate-y-1/2 text-xs text-slate-500">Searching…</span>

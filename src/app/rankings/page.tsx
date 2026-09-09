@@ -74,112 +74,108 @@ export default async function RankingsPage({
     <div className="relative overflow-hidden">
       <div className="bg-aurora pointer-events-none absolute inset-0" />
       <div className="relative mx-auto max-w-5xl px-4 py-12 sm:px-6">
-        <div className="animate-hero mb-8 grid grid-cols-1 gap-6 lg:grid-cols-[1fr_360px] lg:items-start">
-          <div>
-            <h1 className="text-4xl font-bold tracking-tight text-[#e8eef9]">Rankings</h1>
-            <p className="mt-2 text-slate-400">
-              {result.meta.total.toLocaleString()} portfolios, ranked and sorted.
-            </p>
+        <div className="animate-hero mb-8">
+          <h1 className="text-4xl font-bold tracking-tight text-[#e8eef9]">Rankings</h1>
+          <p className="mt-2 text-slate-400">
+            {result.meta.total.toLocaleString()} portfolios, ranked and sorted.
+          </p>
 
-            <div className="mt-6 flex flex-wrap gap-2">
-              {SORT_TABS.map((tab) => {
-                const isActive = sortParam === tab.key
-                return (
-                  <Link
-                    key={tab.key}
-                    href={`/rankings?sort=${tab.key}${page > 1 ? `&page=${page}` : ''}`}
-                    scroll={false}
-                    className={cn(
-                      'rounded-full border px-4 py-2 text-sm font-medium transition-colors',
-                      isActive
-                        ? 'border-[#3e8bff]/60 bg-[#3e8bff]/15 text-[#d9e4f7]'
-                        : 'border-white/10 bg-white/[0.03] text-slate-400 hover:border-[#3e8bff]/40 hover:bg-white/[0.05] hover:text-white',
-                    )}
-                  >
-                    {tab.label}
-                  </Link>
-                )
-              })}
-            </div>
-          </div>
-
-          {potd && (
-            <aside className="relative overflow-hidden rounded-2xl border border-[#22d3ee]/25 bg-gradient-to-br from-[#141b2a] to-[#11182a] p-5">
-              <div className="pointer-events-none absolute -right-10 -top-10 h-40 w-40 rounded-full bg-[#22d3ee]/12 blur-3xl" />
-              <div className="pointer-events-none absolute -bottom-12 -left-8 h-36 w-36 rounded-full bg-[#3e8bff]/15 blur-3xl" />
-
-              <span className="inline-flex items-center gap-1.5 rounded-full border border-[#22d3ee]/40 bg-[#22d3ee]/10 px-3 py-1 text-[10px] font-bold uppercase tracking-widest text-[#67e8f9]">
-                <span className="h-1.5 w-1.5 rounded-full bg-[#22d3ee] animate-pulse-glow" />
-                Portfolio of the Day
-              </span>
-
-              <div className="mt-4 flex items-center justify-between gap-4">
-                <div className="min-w-0">
-                  <div className="truncate text-lg font-bold leading-tight text-[#e8eef9]">{potd.name}</div>
-                  <div className="mt-1 truncate text-xs text-slate-500">{hostnameOf(potd.portfolioUrl)}</div>
-                </div>
-                <ScoreRing score={potd.score?.overallScore ?? 0} size={68} label="score" />
-              </div>
-
-              <p className="mt-3 line-clamp-2 text-xs leading-relaxed text-slate-400">
-                {potd.description || potd.title || 'A standout developer portfolio worth studying.'}
-              </p>
-
-              <div className="mt-3 flex flex-wrap gap-1.5">
-                {(potd.technologies ?? []).slice(0, 4).map((t) => (
-                  <span key={t} className="rounded-md border border-white/10 bg-white/[0.04] px-1.5 py-0.5 text-[10px] font-medium text-slate-300">
-                    {t}
-                  </span>
-                ))}
-              </div>
-
-              <Link
-                href={`/p/${potd.slug}`}
-                className="group mt-4 inline-flex items-center gap-1.5 rounded-lg bg-[#3e8bff] px-3.5 py-2 text-xs font-semibold text-white ring-1 ring-inset ring-white/10 transition-colors hover:bg-[#66a5ff]"
-              >
-                View the report
-                <ArrowRight className="h-3.5 w-3.5 transition-transform group-hover:translate-x-0.5" aria-hidden />
-              </Link>
-            </aside>
-          )}
-        </div>
-
-        {top3.length > 0 && (
-          <div className="animate-hero mb-8 grid grid-cols-1 gap-4 sm:grid-cols-3">
-            {top3.map((p, i) => {
-              const rank = i + 1
-              const medal = MEDAL_STYLES[rank]
+          <div className="mt-6 flex flex-wrap gap-2">
+            {SORT_TABS.map((tab) => {
+              const isActive = sortParam === tab.key
               return (
                 <Link
-                  key={p.id}
-                  href={`/p/${p.slug}`}
+                  key={tab.key}
+                  href={`/rankings?sort=${tab.key}${page > 1 ? `&page=${page}` : ''}`}
+                  scroll={false}
                   className={cn(
-                    'group relative flex flex-col items-center rounded-2xl border p-6 text-center transition-all duration-300 hover:-translate-y-1 hover:shadow-xl',
-                    medal?.ring,
-                    medal?.glow,
+                    'rounded-full border px-4 py-2 text-sm font-medium transition-colors',
+                    isActive
+                      ? 'border-[#3e8bff]/60 bg-[#3e8bff]/15 text-[#d9e4f7]'
+                      : 'border-white/10 bg-white/[0.03] text-slate-400 hover:border-[#3e8bff]/40 hover:bg-white/[0.05] hover:text-white',
                   )}
                 >
-                  <span className="mb-3">{medal?.icon}</span>
-                  <span className={cn('mb-3 rounded-md px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wide', medal?.badge)}>
-                    {medal?.label}
-                  </span>
-                  <Avatar p={p} size="lg" />
-                  <h3 className="mt-3 truncate font-semibold text-white group-hover:text-[#7dd3fc]">{p.name}</h3>
-                  <span className="mt-0.5 block truncate text-xs text-slate-500">{hostnameOf(p.portfolioUrl)}</span>
-                  <div className="mt-3">
-                    <ScoreRing score={p.score?.overallScore ?? 0} size={72} label="overall" />
-                  </div>
-                  <div className="mt-2 flex items-center gap-2 text-xs text-slate-500">
-                    <span className={cn('h-2 w-2 rounded-full', getHealthColor(p.health))} />
-                    <span>{likeCounts.get(p.id) ?? 0} likes</span>
-                  </div>
+                  {tab.label}
                 </Link>
               )
             })}
           </div>
-        )}
+        </div>
 
-        <div className="animate-hero rounded-2xl border border-white/[0.08] bg-[#141b2a]/70">
+        <div className="animate-hero mb-8 grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
+          {top3.map((p, i) => {
+            const rank = i + 1
+            const medal = MEDAL_STYLES[rank]
+            return (
+              <Link
+                key={p.id}
+                href={`/p/${p.slug}`}
+                className={cn(
+                  'group relative flex flex-col items-center rounded-2xl border p-6 text-center transition-all duration-300 hover:-translate-y-1 hover:shadow-xl',
+                  medal?.ring,
+                  medal?.glow,
+                )}
+              >
+                <span className="mb-3">{medal?.icon}</span>
+                <span className={cn('mb-3 rounded-md px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wide', medal?.badge)}>
+                  {medal?.label}
+                </span>
+                <Avatar p={p} size="lg" />
+                <h3 className="mt-3 truncate font-semibold text-white group-hover:text-[#7dd3fc]">{p.name}</h3>
+                <span className="mt-0.5 block truncate text-xs text-slate-500">{hostnameOf(p.portfolioUrl)}</span>
+                <div className="mt-3">
+                  <ScoreRing score={p.score?.overallScore ?? 0} size={72} label="overall" />
+                </div>
+                <div className="mt-2 flex items-center gap-2 text-xs text-slate-500">
+                  <span className={cn('h-2 w-2 rounded-full', getHealthColor(p.health))} />
+                  <span>{likeCounts.get(p.id) ?? 0} likes</span>
+                </div>
+              </Link>
+            )
+          })}
+
+          {potd && (
+            <div className="rounded-2xl bg-gradient-to-br from-[#22d3ee]/45 via-white/10 to-[#3e8bff]/45 p-[1.5px]">
+              <div className="relative flex h-full flex-col items-center overflow-hidden rounded-2xl bg-[#05070c]/95 p-6 text-center transition-all duration-300 hover:-translate-y-1">
+                <div className="pointer-events-none absolute -right-12 -top-12 h-36 w-36 rounded-full bg-[#22d3ee]/15 blur-3xl" />
+                <div className="pointer-events-none absolute -bottom-12 -left-12 h-32 w-32 rounded-full bg-[#3e8bff]/20 blur-3xl" />
+
+                <span className="relative inline-flex items-center gap-1.5 rounded-full border border-[#22d3ee]/40 bg-[#22d3ee]/10 px-2.5 py-1 text-[10px] font-bold uppercase tracking-widest text-[#67e8f9]">
+                  <span className="h-1.5 w-1.5 rounded-full bg-[#22d3ee] animate-pulse-glow" />
+                  Of the Day
+                </span>
+
+                <div className="relative mt-3">
+                  <Avatar p={potd} size="lg" />
+                </div>
+                <h3 className="relative mt-3 w-full truncate font-semibold text-white group-hover:text-[#7dd3fc]">{potd.name}</h3>
+                <span className="relative mt-0.5 block w-full truncate text-xs text-slate-500">{hostnameOf(potd.portfolioUrl)}</span>
+
+                <div className="relative mt-3">
+                  <ScoreRing score={potd.score?.overallScore ?? 0} size={72} label="score" />
+                </div>
+
+                <div className="relative mt-3 flex max-w-full flex-wrap justify-center gap-1.5">
+                  {(potd.technologies ?? []).slice(0, 3).map((t) => (
+                    <span key={t} className="rounded-md border border-white/10 bg-white/[0.04] px-1.5 py-0.5 text-[10px] font-medium text-slate-300">
+                      {t}
+                    </span>
+                  ))}
+                </div>
+
+                <Link
+                  href={`/p/${potd.slug}`}
+                  className="shine relative mt-4 inline-flex items-center gap-1.5 rounded-lg bg-[#3e8bff] px-3.5 py-2 text-xs font-semibold text-white ring-1 ring-inset ring-white/10 transition-colors hover:bg-[#66a5ff]"
+                >
+                  View the report
+                  <ArrowRight className="h-3.5 w-3.5 transition-transform group-hover:translate-x-0.5" aria-hidden />
+                </Link>
+              </div>
+            </div>
+          )}
+        </div>
+
+        <div className="animate-hero rounded-2xl border border-white/[0.08] bg-[#0c111c]/70">
           <div className="w-full overflow-x-auto">
             <table className="w-full table-fixed">
               <thead>

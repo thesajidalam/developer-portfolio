@@ -5,7 +5,7 @@ import { Suspense, useState } from 'react'
 import { cn } from '@/lib/utils'
 
 const inputClass =
-  'w-full rounded-xl border border-white/10 bg-[#141b2a]/80 px-3.5 py-2.5 text-sm text-slate-200 outline-none transition-all placeholder:text-slate-500 focus:border-[#3e8bff]/70 focus:bg-[#182136]'
+  'w-full rounded-xl border border-white/10 bg-[#0c111c]/80 px-3.5 py-2.5 text-sm text-slate-200 outline-none transition-all placeholder:text-slate-500 focus:border-[#3e8bff]/70 focus:bg-[#0e1420]'
 
 function ReportForm() {
   const searchParams = useSearchParams()
@@ -62,7 +62,7 @@ function ReportForm() {
 
   return (
     <div className="mx-auto max-w-lg px-4 py-16 sm:px-6">
-      <div className="relative overflow-hidden rounded-3xl border border-white/[0.08] bg-[#141b2a]/70 p-8">
+      <div className="relative overflow-hidden rounded-3xl border border-white/[0.08] bg-[#0c111c]/70 p-8">
         <div className="pointer-events-none absolute -top-16 -right-16 h-48 w-48 rounded-full bg-[#3e8bff]/12 blur-3xl" />
 
         <a href="/" className="text-sm text-[#7dd3fc] transition-colors hover:text-[#a8d8ff]">

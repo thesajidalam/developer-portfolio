@@ -23,8 +23,9 @@ export async function GET(_request: NextRequest, { params }: { params: Promise<{
 
   const overall = p.score?.overallScore ?? 0
   const color =
-    overall >= 90 ? '#4fe29b' : overall >= 75 ? '#35d07f' : overall >= 60 ? '#f2b84b' : overall >= 40 ? '#ff7a52' : '#ff657a'
+    overall >= 90 ? '#35d07f' : overall >= 75 ? '#63d19a' : overall >= 60 ? '#f2b84b' : overall >= 40 ? '#ff8a5c' : '#ff657a'
   const votes = await voteCount(p.id).catch(() => 0)
+  const host = hostnameOf(p.portfolioUrl)
 
   const html = `<!DOCTYPE html>
 <html lang="en">
@@ -33,35 +34,40 @@ export async function GET(_request: NextRequest, { params }: { params: Promise<{
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <style>
     *{box-sizing:border-box;margin:0;padding:0}
-    body{background:#070a12;color:#e8eef9;font-family:system-ui,-apple-system,'Segoe UI',Roboto,sans-serif;height:100vh;display:flex;align-items:center;justify-content:center}
-    .card{background:#141b2a;border:1px solid rgba(255,255,255,0.08);border-radius:16px;padding:20px 24px;width:320px}
-    .row{display:flex;align-items:center;justify-content:space-between;gap:16px}
-    .name{font-size:18px;font-weight:700;line-height:1.2}
-    .host{font-size:13px;color:#98a7bf;margin-top:2px}
-    .score{font-size:38px;font-weight:800;line-height:1}
-    .bar{height:8px;border-radius:99px;background:rgba(190,160,194,0.14);margin-top:14px;overflow:hidden}
-    .fill{height:100%;border-radius:99px;background:#3e8bff}
-    .meta{display:flex;justify-content:space-between;margin-top:10px;font-size:12px;color:#98a7bf}
-    .link{display:block;margin-top:14px;text-align:center;padding:8px 0;border-radius:10px;background:#3e8bff;color:#fff;text-decoration:none;font-size:13px;font-weight:600}
-    .link:hover{background:#66a5ff}
+    body{background:transparent;height:100vh;width:300px;display:flex;align-items:center;justify-content:center;overflow:hidden}
+    .card{
+      position:relative;width:300px;height:64px;display:flex;align-items:center;gap:10px;padding:0 12px;
+      background:linear-gradient(135deg,rgba(17,24,38,0.94) 0%,rgba(10,14,23,0.94) 100%);
+      border-radius:16px;text-decoration:none;overflow:hidden;
+      box-shadow:inset 0 0 0 1px rgba(125,211,252,0.16),0 8px 24px rgba(0,0,0,0.45),0 0 24px rgba(62,139,255,0.10);
+    }
+    .card::before{content:"";position:absolute;inset:0 0 auto 0;height:1px;background:linear-gradient(90deg,transparent,rgba(62,139,255,0.85),rgba(34,211,238,0.7),transparent)}
+    .card::after{content:"";position:absolute;top:-26px;left:-26px;width:110px;height:110px;border-radius:50%;background:radial-gradient(circle,rgba(62,139,255,0.16),transparent 65%);pointer-events:none}
+    .tile{flex:0 0 auto;width:28px;height:28px;border-radius:9px;background:linear-gradient(135deg,#3e8bff 0%,#22d3ee 100%);display:flex;align-items:center;justify-content:center;color:#fff;font-family:ui-monospace,'Cascadia Code',Menlo,Consolas,monospace;font-size:12px;font-weight:800;letter-spacing:-1px;box-shadow:0 3px 10px rgba(62,139,255,0.35)}
+    .mid{flex:1 1 auto;min-width:0}
+    .name{font-size:13px;font-weight:650;color:#e8eef9;line-height:1.15;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+    .host{font-size:10px;color:#8e9bb3;margin-top:1px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+    .bar{height:3px;border-radius:99px;background:rgba(151,166,192,0.22);margin-top:5px;overflow:hidden}
+    .fill{height:100%;border-radius:99px;background:linear-gradient(90deg,#3e8bff,#22d3ee)}
+    .score{flex:0 0 auto;font-size:20px;font-weight:800;line-height:1;letter-spacing:-0.5px;min-width:38px;text-align:right}
+    .brand{flex:0 0 auto;margin-left:2px;font-size:13px;font-weight:800;color:#7dd3fc;letter-spacing:-0.2px}
+    .grow{transition:transform .18s ease,box-shadow .18s ease}
+    a.card:hover .tile{transform:scale(1.06)}
+    a.card:hover .score{transform:translateX(-1px)}
+    a.card:hover{box-shadow:inset 0 0 0 1px rgba(125,211,252,0.3),0 10px 28px rgba(0,0,0,0.5),0 0 30px rgba(62,139,255,0.18)}
   </style>
 </head>
 <body>
-  <div class="card">
-    <div class="row">
-      <div>
-        <div class="name">${esc(p.name)}</div>
-        <div class="host">${esc(hostnameOf(p.portfolioUrl))}</div>
-      </div>
-      <div class="score" style="color:${color}">${overall}</div>
-    </div>
-    <div class="bar"><div class="fill" style="width:${overall}%"></div></div>
-    <div class="meta">
-      <span>DevFolio Score</span>
-      <span>${votes} votes · ${p.health === 'healthy' ? 'Healthy' : 'Other'}</span>
-    </div>
-    <a class="link" href="${esc(absoluteUrl(p.portfolioUrl))}" target="_blank" rel="noopener noreferrer">Visit portfolio</a>
-  </div>
+  <a class="card" href="${esc(absoluteUrl(p.portfolioUrl))}" target="_blank" rel="noopener noreferrer" title="View ${esc(p.name)}">
+    <span class="tile">&lt;/&gt;</span>
+    <span class="mid">
+      <span class="name">${esc(p.name)}</span>
+      <span class="host">${esc(host)}${votes > 0 ? ` · ${votes} votes` : ''}</span>
+      <span class="bar"><span class="fill" style="width:${Math.max(4, Math.min(100, overall))}%"></span></span>
+    </span>
+    <span class="score" style="color:${color}">${overall}</span>
+    <span class="brand">&#8599;</span>
+  </a>
 </body>
 </html>`
 

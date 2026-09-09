@@ -92,7 +92,7 @@ export default async function CompareDetailPage({ params }: { params: Promise<{ 
               <div
                 key={p.id}
                 className={cn(
-                  'rounded-2xl border bg-[#141b2a]/70 p-5 transition-all',
+                  'rounded-2xl border bg-[#0c111c]/70 p-5 transition-all',
                   isOverallWinner
                     ? 'border-[#35D07F]/40 shadow-xl shadow-[#35D07F]/10'
                     : 'border-white/[0.08]',

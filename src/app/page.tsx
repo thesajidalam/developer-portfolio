@@ -42,7 +42,7 @@ function buildQuery(params: PortfolioFilters): string {
 }
 
 const SELECT_CLASS =
-  'h-11 w-full rounded-xl border border-white/10 bg-[#141b2a]/90 px-3.5 text-sm text-slate-200 outline-none transition-all focus:border-[#3e8bff]/70 focus:ring-2 focus:ring-[#3e8bff]/25 sm:w-auto [&>option]:bg-[#141b2a]'
+  'h-11 w-full rounded-xl border border-white/10 bg-[#0c111c]/90 px-3.5 text-sm text-slate-200 outline-none transition-all focus:border-[#3e8bff]/70 focus:ring-2 focus:ring-[#3e8bff]/25 sm:w-auto [&>option]:bg-[#0c111c]'
 
 export default async function HomePage({ searchParams }: { searchParams: Promise<{ [key: string]: string | string[] | undefined }> }) {
   const sp = await searchParams
@@ -95,7 +95,7 @@ export default async function HomePage({ searchParams }: { searchParams: Promise
 
   return (
     <>
-      {/* ---- moonlit hero --------------------------------------------------- */}
+      {/* ---- hero ------------------------------------------------------------ */}
       <section className="relative overflow-hidden border-b border-white/[0.06]">
         <div className="bg-aurora absolute inset-0" />
         <div className="bg-grid absolute inset-0" />
@@ -161,7 +161,7 @@ export default async function HomePage({ searchParams }: { searchParams: Promise
 
             {/* floating top-portfolio card */}
             <div className="hidden flex-1 justify-center lg:flex">
-              <div className="reveal reveal-visible relative w-full max-w-sm rounded-2xl border border-white/[0.08] bg-[#141b2a]/80 p-6">
+              <div className="reveal reveal-visible relative w-full max-w-sm rounded-2xl border border-white/[0.08] bg-[#0c111c]/80 p-6">
                 <div className="mb-4 flex items-center justify-between">
                   <span className="text-sm font-semibold text-slate-300">Top portfolio</span>
                   <span className="inline-flex items-center gap-0.5 text-[#F2B84B]">
@@ -267,7 +267,7 @@ export default async function HomePage({ searchParams }: { searchParams: Promise
               { title: 'Next.js portfolios', tech: 'Next.js', items: topNext },
             ].map((board) => (
               <Reveal key={board.title}>
-                <div className="rounded-2xl border border-white/[0.07] bg-[#141b2a]/70 p-5">
+                <div className="rounded-2xl border border-white/[0.07] bg-[#0c111c]/70 p-5">
                   <div className="mb-4 flex items-center justify-between">
                     <h3 className="text-lg font-semibold text-[#e8eef9]">{board.title}</h3>
                     <Link
@@ -359,7 +359,7 @@ export default async function HomePage({ searchParams }: { searchParams: Promise
                 defaultValue={filters.search ?? ''}
                 placeholder="Search portfolios by name, role, or URL…"
                 aria-label="Search portfolios by name, role, or URL"
-                className="h-12 w-full rounded-xl border border-white/10 bg-[#10151f]/80 pl-10 pr-4 text-sm text-slate-200 outline-none transition-all placeholder:text-slate-500 focus:border-[#3e8bff]/70 focus:ring-2 focus:ring-[#3e8bff]/25"
+                className="h-12 w-full rounded-xl border border-white/10 bg-[#0a0e17]/80 pl-10 pr-4 text-sm text-slate-200 outline-none transition-all placeholder:text-slate-500 focus:border-[#3e8bff]/70 focus:ring-2 focus:ring-[#3e8bff]/25"
               />
             </div>
 
@@ -373,7 +373,7 @@ export default async function HomePage({ searchParams }: { searchParams: Promise
                   defaultValue={filters.tech ?? ''}
                   placeholder="e.g. React"
                   aria-label="Filter by technology"
-                  className="h-11 w-full rounded-xl border border-white/10 bg-[#10151f]/80 pl-16 pr-3.5 text-sm text-slate-200 outline-none transition-all placeholder:text-slate-500 focus:border-[#3e8bff]/70 focus:ring-2 focus:ring-[#3e8bff]/25"
+                  className="h-11 w-full rounded-xl border border-white/10 bg-[#0a0e17]/80 pl-16 pr-3.5 text-sm text-slate-200 outline-none transition-all placeholder:text-slate-500 focus:border-[#3e8bff]/70 focus:ring-2 focus:ring-[#3e8bff]/25"
                 />
               </div>
               <div className="relative">
@@ -384,7 +384,7 @@ export default async function HomePage({ searchParams }: { searchParams: Promise
                   defaultValue={filters.category ?? ''}
                   placeholder="e.g. Design"
                   aria-label="Filter by category"
-                  className="h-11 w-full rounded-xl border border-white/10 bg-[#10151f]/80 pl-20 pr-3.5 text-sm text-slate-200 outline-none transition-all placeholder:text-slate-500 focus:border-[#3e8bff]/70 focus:ring-2 focus:ring-[#3e8bff]/25"
+                  className="h-11 w-full rounded-xl border border-white/10 bg-[#0a0e17]/80 pl-20 pr-3.5 text-sm text-slate-200 outline-none transition-all placeholder:text-slate-500 focus:border-[#3e8bff]/70 focus:ring-2 focus:ring-[#3e8bff]/25"
                 />
               </div>
               <select name="experience" defaultValue={filters.experience ?? ''} aria-label="Filter by experience level" className={SELECT_CLASS}>

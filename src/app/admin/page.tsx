@@ -45,7 +45,7 @@ function Toast({ message, onClose }: { message: string; onClose: () => void }) {
         visible ? 'translate-y-0 opacity-100' : 'translate-y-4 opacity-0',
       )}
     >
-      <div className="pointer-events-auto flex items-center gap-2 rounded-full border border-emerald-500/30 bg-[#141b2a]/95 px-4 py-2.5 text-sm font-medium text-emerald-300 shadow-xl shadow-emerald-500/10 backdrop-blur-xl">
+      <div className="pointer-events-auto flex items-center gap-2 rounded-full border border-emerald-500/30 bg-[#0c111c]/95 px-4 py-2.5 text-sm font-medium text-emerald-300 shadow-xl shadow-emerald-500/10 backdrop-blur-xl">
         <svg className="h-4 w-4" viewBox="0 0 20 20" fill="currentColor">
           <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
         </svg>
@@ -620,7 +620,7 @@ export default function AdminPage() {
   if (!unlocked) {
     return (
       <div className="mx-auto max-w-md px-4 py-24 sm:px-6">
-        <div className="relative overflow-hidden rounded-3xl border border-white/[0.08] bg-[#141b2a]/70 p-8">
+        <div className="relative overflow-hidden rounded-3xl border border-white/[0.08] bg-[#0c111c]/70 p-8">
           <div className="pointer-events-none absolute -top-16 -right-16 h-48 w-48 rounded-full bg-[#3e8bff]/15 blur-3xl" />
           <h1 className="text-2xl font-bold text-[#e8eef9]">Admin</h1>
           <p className="mt-2 text-sm text-slate-400">Enter your admin key to unlock the dashboard.</p>
@@ -718,7 +718,7 @@ export default function AdminPage() {
 
       {error && <div className="mb-6 rounded-lg border border-red-500/20 bg-red-500/10 px-4 py-3 text-sm text-red-300">{error}</div>}
 
-      <div className="rounded-2xl border border-white/10 bg-[#141b2a]/70">
+      <div className="rounded-2xl border border-white/10 bg-[#0c111c]/70">
         {tab === 'portfolios' && (
           <>
             <div className="flex flex-wrap items-center gap-3 border-b border-white/10 p-4">

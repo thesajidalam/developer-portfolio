@@ -8,7 +8,7 @@ type Status = 'idle' | 'loading' | 'success' | 'error'
 type VerifyState = 'idle' | 'checking' | 'ok' | 'fail'
 
 const inputClass =
-  'w-full rounded-xl border border-white/10 bg-[#141b2a]/80 px-3.5 py-2.5 text-sm text-slate-200 outline-none transition-all placeholder:text-slate-500 focus:border-[#3e8bff]/70 focus:bg-[#182136]'
+  'w-full rounded-xl border border-white/10 bg-[#0c111c]/80 px-3.5 py-2.5 text-sm text-slate-200 outline-none transition-all placeholder:text-slate-500 focus:border-[#3e8bff]/70 focus:bg-[#0e1420]'
 
 export default function SubmitPage() {
   const [step, setStep] = useState(1)
@@ -116,7 +116,7 @@ export default function SubmitPage() {
 
   if (status === 'success') {
     const savedUrl = normalizedUrl ?? url.trim()
-    const embedSnippet = `<iframe src="https://gitdevfolio.vercel.app/api/v1/embeds/${encodeURIComponent(savedUrl)}" width="140" height="60" frameborder="0" title="DevFolio score badge"></iframe>`
+    const embedSnippet = `<iframe src="https://gitdevfolio.vercel.app/api/v1/embeds/${encodeURIComponent(savedUrl)}" width="300" height="64" frameborder="0" title="DevFolio score badge" loading="lazy" style="border-radius:16px;max-width:100%"></iframe>`
     return (
       <div className="relative overflow-hidden">
         <div className="bg-aurora pointer-events-none absolute inset-0" />
@@ -145,7 +145,7 @@ export default function SubmitPage() {
             it will be scored and appear in the directory.
           </p>
 
-          <div className="animate-hero delay-3 mt-8 rounded-2xl border border-white/10 bg-[#141b2a]/70 p-5 text-left">
+          <div className="animate-hero delay-3 mt-8 rounded-2xl border border-white/10 bg-[#0c111c]/70 p-5 text-left">
             <h2 className="text-sm font-semibold text-[#e8eef9]">Grab your DevFolio badge</h2>
             <p className="mt-1 text-xs text-slate-500">
               Once approved, embed your score on your site. Copy this snippet any time:
@@ -232,7 +232,7 @@ export default function SubmitPage() {
           ))}
         </div>
 
-        <form onSubmit={handleSubmit} className="animate-hero delay-2 space-y-5 rounded-2xl border border-white/[0.08] bg-[#141b2a]/70 p-6">
+        <form onSubmit={handleSubmit} className="animate-hero delay-2 space-y-5 rounded-2xl border border-white/[0.08] bg-[#0c111c]/70 p-6">
           {step === 1 && (
             <div>
               <label htmlFor="url" className="mb-1.5 block text-sm font-medium text-slate-300">
@@ -394,7 +394,7 @@ export default function SubmitPage() {
               { step: '2', title: 'We review', desc: 'Our team evaluates your site on six dimensions.' },
               { step: '3', title: 'You appear', desc: 'Get scored and listed in the directory.' },
             ].map((s) => (
-              <div key={s.step} className="rounded-2xl border border-white/[0.08] bg-[#141b2a]/60 p-5 text-center">
+              <div key={s.step} className="rounded-2xl border border-white/[0.08] bg-[#0c111c]/60 p-5 text-center">
                 <div className="mx-auto mb-3 flex h-10 w-10 items-center justify-center rounded-xl bg-[#3e8bff]/15 text-sm font-bold text-[#d9e4f7] ring-1 ring-[#3e8bff]/25">
                   {s.step}
                 </div>

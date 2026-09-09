@@ -28,7 +28,7 @@ const cols: { title: string; links: { href: string; label: string }[] }[] = [
 
 export function Footer() {
   return (
-    <footer className="relative overflow-hidden border-t border-white/[0.06] bg-[#070a12]">
+    <footer className="relative overflow-hidden border-t border-white/[0.06] bg-[#03050a]">
       <div className="pointer-events-none absolute -top-44 left-1/2 h-80 w-[40rem] -translate-x-1/2 rounded-full bg-[#3e8bff]/10 blur-3xl" />
       <div className="relative mx-auto max-w-7xl px-4 py-14 sm:px-6">
         <div className="grid gap-10 sm:grid-cols-3">

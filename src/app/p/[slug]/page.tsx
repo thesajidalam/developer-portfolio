@@ -67,8 +67,8 @@ export default async function PortfolioDetailPage({ params }: Props) {
           className={cn(
             'animate-hero delay-1 relative overflow-hidden rounded-2xl border p-6 sm:p-8',
             isOwner
-              ? 'border-amber-400/25 bg-gradient-to-b from-[#121a2c]/80 to-[#10151f]/70'
-              : 'border-white/[0.08] bg-[#141b2a]/70',
+              ? 'border-amber-400/25 bg-gradient-to-b from-[#090e18]/80 to-[#0a0e17]/70'
+              : 'border-white/[0.08] bg-[#0c111c]/70',
           )}
         >
         {isOwner && (
@@ -179,20 +179,33 @@ export default async function PortfolioDetailPage({ params }: Props) {
         {p.location && <p className="mt-4 inline-flex items-center gap-1.5 text-sm text-slate-500"><MapPin className="h-4 w-4 text-slate-600" aria-hidden /> {p.location}</p>}
       </header>
 
-      <section className="animate-hero delay-3 mt-10 rounded-2xl border border-white/[0.08] bg-[#141b2a]/70 p-6 sm:p-8">
+      <section className="animate-hero delay-3 mt-10 rounded-2xl border border-white/[0.08] bg-[#0c111c]/70 p-6 sm:p-8">
         <h2 className="text-xl font-bold text-white">Score breakdown</h2>
         <p className="mt-1 text-sm text-slate-500">Six dimensions, weighted to produce the overall score.</p>
-        <div className="mt-6 grid grid-cols-1 gap-x-10 gap-y-5 md:grid-cols-2">
+        <div className="mt-6 grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
           {breakdown.map((dim) => (
-            <div key={dim.key}>
-              <div className="mb-1 flex items-center justify-between">
-                <span className="text-xs font-medium uppercase tracking-wide text-slate-400">
+            <div
+              key={dim.key}
+              className="group rounded-xl border border-white/[0.07] bg-[#0c111c]/80 p-5 transition-all hover:-translate-y-0.5 hover:border-[#3e8bff]/40 hover:shadow-lg hover:shadow-[#3e8bff]/10"
+            >
+              <div className="flex items-start justify-between gap-3">
+                <span className="text-xs font-semibold uppercase tracking-wide text-slate-400">
                   {dim.name}
-                  {!dim.automated && <span className="ml-2 text-[10px] text-slate-600">manual</span>}
+                  {!dim.automated && <span className="ml-2 text-[10px] font-normal normal-case text-slate-600">manual</span>}
+                </span>
+                <span
+                  className={cn(
+                    'text-2xl font-bold tabular-nums leading-none',
+                    dim.score >= 90 ? 'text-[#35D07F]' : dim.score >= 70 ? 'text-[#F2B84B]' : dim.score >= 50 ? 'text-[#FF8A5C]' : 'text-[#FF657A]',
+                  )}
+                >
+                  {dim.score}
                 </span>
               </div>
-              <ScoreBar label="" value={dim.score} color={cn(dim.score >= 90 ? 'text-[#35D07F]' : dim.score >= 70 ? 'text-[#F2B84B]' : dim.score >= 50 ? 'text-[#FF7A52]' : 'text-[#FF657A]')} />
-              <p className="mt-1 text-xs text-slate-600">{dim.description}</p>
+              <div className="mt-4">
+                <ScoreBar label="" value={dim.score} color={dim.score >= 90 ? 'text-[#35D07F]' : dim.score >= 70 ? 'text-[#F2B84B]' : dim.score >= 50 ? 'text-[#FF8A5C]' : 'text-[#FF657A]'} />
+              </div>
+              <p className="mt-3 text-xs leading-relaxed text-slate-500">{dim.description}</p>
             </div>
           ))}
         </div>
