@@ -3,21 +3,27 @@
 @tailwind utilities;
 
 :root {
-  --background: #0a0e1a;
-  --surface: #101627;
-  --foreground: #e8ecf4;
+  --background: #09030f;
+  --surface: #180921;
+  --foreground: #ede4f0;
   color-scheme: dark;
-  /* Primary: professional indigo */
-  --primary: #5b7cfa;
-  --primary-soft: #7c93fa;
-  --primary-soft-2: #97a8fb;
-  /* Accent: clean blue */
-  --blue: #3b82f6;
-  --blue-soft: #60a5fa;
-  /* Score / success accent: professional green */
-  --success: #22c55e;
-  --emerald: #10b981;
-  --success-soft: #34d399;
+  /* Brand: deep violet-mauve purple (identity) */
+  --primary: #7b337e;
+  --primary-soft: #b98cc5;
+  --primary-soft-2: #9669a8;
+  /* Lavender companion */
+  --blue: #6667ab;
+  --blue-soft: #8587c9;
+  /* Signature cyan signal (controlled accent) */
+  --accent: #00c4ff;
+  --accent-soft: #1bd0ff;
+  /* Score / success accent */
+  --success: #35d07f;
+  --emerald: #35d07f;
+  --success-soft: #4fe29b;
+  /* Warm light typography */
+  --ink: #ede4f0;
+  --muted: #b7a9bb;
 }
 
 * {
@@ -31,13 +37,35 @@ html {
 
 body {
   margin: 0;
-  background: var(--background);
+  background: linear-gradient(180deg, #12051a 0%, #09030f 32%, #09030f 100%);
   color: var(--foreground);
-  font-family: ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+  font-family:
+    var(--font-inter),
+    ui-sans-serif,
+    system-ui,
+    -apple-system,
+    "Segoe UI",
+    Roboto,
+    Helvetica,
+    Arial,
+    sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-rendering: optimizeLegibility;
   overflow-x: hidden;
+}
+
+h1,
+h2,
+h3,
+h4 {
+  font-family:
+    var(--font-sora),
+    var(--font-inter),
+    ui-sans-serif,
+    system-ui,
+    sans-serif;
+  letter-spacing: -0.015em;
 }
 
 /* ---- theme native form controls (fixes white dropdowns) ----------------- */
@@ -48,96 +76,101 @@ textarea {
 }
 select option,
 select optgroup {
-  background-color: #101627;
-  color: #e8ecf4;
+  background-color: #180921;
+  color: #ede4f0;
 }
 select option:disabled {
-  color: #64748b;
+  color: #84708a;
+}
+
+/* ---- moonlit ambient background ------------------------------------------- */
+@layer utilities {
+  .bg-aurora {
+    background:
+      radial-gradient(820px circle at 10% -12%, rgb(123 51 126 / 0.22), transparent 46%),
+      radial-gradient(980px circle at 96% -8%, rgb(0 196 255 / 0.07), transparent 48%),
+      radial-gradient(760px circle at 50% 118%, rgb(102 103 171 / 0.14), transparent 52%);
+  }
+
+  .bg-grid {
+    background-image:
+      linear-gradient(rgb(190 160 194 / 0.055) 1px, transparent 1px),
+      linear-gradient(90deg, rgb(190 160 194 / 0.055) 1px, transparent 1px);
+    background-size: 34px 34px;
+    mask-image: radial-gradient(ellipse 85% 62% at 50% 0%, #000 30%, transparent 78%);
+    -webkit-mask-image: radial-gradient(ellipse 85% 62% at 50% 0%, #000 30%, transparent 78%);
+  }
 }
 
 /* ---- premium focus rings -------------------------------------------------- */
 :focus-visible {
-  outline: 2px solid rgb(91 124 250 / 0.7);
-  outline-offset: 2px;
-  border-radius: 4px;
+  outline: none;
+  box-shadow: 0 0 0 2px var(--background), 0 0 0 4px rgb(123 51 126 / 0.8) !important;
+  border-radius: 6px;
 }
 a:focus-visible,
 button:focus-visible,
 input:focus-visible,
 select:focus-visible,
 textarea:focus-visible {
-  outline-color: rgb(59 130 246 / 0.6);
+  box-shadow: 0 0 0 2px var(--background), 0 0 0 4px rgb(102 103 171 / 0.9) !important;
 }
 
 /* ---- premium scrollbar -------------------------------------------------- */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: rgb(123 51 126 / 0.55) #0b0412;
+}
 ::-webkit-scrollbar {
   width: 10px;
   height: 10px;
 }
 ::-webkit-scrollbar-track {
-  background: #0a0e1a;
+  background: #0b0412;
 }
 ::-webkit-scrollbar-thumb {
-  background: linear-gradient(180deg, rgb(91 124 250 / 0.55), rgb(59 130 246 / 0.4));
+  background: linear-gradient(180deg, rgb(123 51 126 / 0.55), rgb(102 103 171 / 0.42));
   border-radius: 999px;
-  border: 2px solid #0a0e1a;
+  border: 2px solid #0b0412;
 }
 ::-webkit-scrollbar-thumb:hover {
-  background: linear-gradient(180deg, rgb(91 124 250 / 0.8), rgb(59 130 246 / 0.6));
+  background: linear-gradient(180deg, rgb(123 51 126 / 0.8), rgb(102 103 171 / 0.6));
+}
+::-webkit-scrollbar-corner {
+  background: #0b0412;
 }
 ::selection {
-  background: rgb(91 124 250 / 0.4);
+  background: rgb(185 140 197 / 0.35);
   color: #fff;
-}
-
-/* ---- ambient aurora background ------------------------------------------- */
-@layer utilities {
-  .bg-aurora {
-    background:
-      radial-gradient(900px circle at 12% -10%, rgb(91 124 250 / 0.18), transparent 42%),
-      radial-gradient(1000px circle at 95% -5%, rgb(59 130 246 / 0.10), transparent 45%),
-      radial-gradient(700px circle at 50% 120%, rgb(30 64 175 / 0.12), transparent 50%);
-  }
-
-  .bg-grid {
-    background-image:
-      linear-gradient(rgb(148 163 184 / 0.05) 1px, transparent 1px),
-      linear-gradient(90deg, rgb(148 163 184 / 0.05) 1px, transparent 1px);
-    background-size: 32px 32px;
-    mask-image: radial-gradient(ellipse 80% 60% at 50% 0%, #000 30%, transparent 75%);
-    -webkit-mask-image: radial-gradient(ellipse 80% 60% at 50% 0%, #000 30%, transparent 75%);
-  }
 }
 
 /* ---- cinematic entrance animations --------------------------------------- */
 @layer utilities {
   .animate-hero {
-    animation: heroIn 0.9s cubic-bezier(0.16, 1, 0.3, 1) both;
+    animation: heroIn 0.8s cubic-bezier(0.16, 1, 0.3, 1) both;
   }
   .delay-1 { animation-delay: 0.08s; }
   .delay-2 { animation-delay: 0.16s; }
   .delay-3 { animation-delay: 0.24s; }
-  .delay-4 { animation-delay: 0.32s; }
+  .delay-4 { animation-delay: 0.34s; }
   .delay-5 { animation-delay: 0.42s; }
 }
 
 @keyframes heroIn {
   from {
     opacity: 0;
-    transform: translateY(28px) scale(0.98);
-    filter: blur(6px);
+    transform: translateY(22px) scale(0.99);
   }
   to {
     opacity: 1;
     transform: translateY(0) scale(1);
-    filter: blur(0);
   }
 }
 
 /* ---- scroll reveal -------------------------------------------------------- */
 .reveal {
   opacity: 0;
-  transform: translateY(26px);
+  transform: translateY(24px);
   transition: opacity 0.7s cubic-bezier(0.16, 1, 0.3, 1), transform 0.7s cubic-bezier(0.16, 1, 0.3, 1);
   will-change: opacity, transform;
 }
@@ -149,31 +182,25 @@ textarea:focus-visible {
 /* ---- premium interactive surfaces ------------------------------------------ */
 @layer utilities {
   .glass {
-    background: rgb(16 22 39 / 0.55);
-    backdrop-filter: blur(16px) saturate(140%);
-    -webkit-backdrop-filter: blur(16px) saturate(140%);
-    border: 1px solid rgb(148 163 184 / 0.12);
+    background: rgb(24 9 33 / 0.72);
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
+    border: 1px solid rgb(190 160 194 / 0.1);
   }
   .glass-strong {
-    background: rgb(12 17 30 / 0.78);
-    backdrop-filter: blur(20px) saturate(150%);
-    -webkit-backdrop-filter: blur(20px) saturate(150%);
-    border: 1px solid rgb(148 163 184 / 0.14);
+    background: rgb(18 5 26 / 0.86);
+    backdrop-filter: blur(18px);
+    -webkit-backdrop-filter: blur(18px);
+    border: 1px solid rgb(190 160 194 / 0.12);
   }
 }
 
-/* animated gradient text */
+/* restrained brand gradient for select accent words only */
 .text-gradient {
-  background: linear-gradient(90deg, #7c93fa, #bfd4fd, #93c5fd, #7c93fa);
-  background-size: 300% auto;
+  background: linear-gradient(92deg, #d5b2dc 0%, #b98cc5 34%, #9a6cae 72%, #a9aade 100%);
   -webkit-background-clip: text;
   background-clip: text;
   color: transparent;
-  animation: gradientMove 8s linear infinite;
-}
-@keyframes gradientMove {
-  0% { background-position: 0% center; }
-  100% { background-position: 300% center; }
 }
 
 /* ---- shine sweep on buttons/cards ------------------------------------------ */
@@ -182,10 +209,10 @@ textarea:focus-visible {
   overflow: hidden;
 }
 .shine::after {
-  content: '';
+  content: "";
   position: absolute;
   inset: 0;
-  background: linear-gradient(105deg, transparent 40%, rgb(255 255 255 / 0.18) 50%, transparent 60%);
+  background: linear-gradient(105deg, transparent 40%, rgb(255 255 255 / 0.14) 50%, transparent 60%);
   transform: translateX(-120%);
   transition: transform 0.7s ease;
   pointer-events: none;
@@ -196,11 +223,11 @@ textarea:focus-visible {
 
 @keyframes floatSlow {
   0%, 100% { transform: translateY(0) translateX(0); }
-  33% { transform: translateY(-22px) translateX(16px); }
-  66% { transform: translateY(12px) translateX(-14px); }
+  33% { transform: translateY(-18px) translateX(14px); }
+  66% { transform: translateY(10px) translateX(-12px); }
 }
 .animate-float-slow {
-  animation: floatSlow 12s ease-in-out infinite;
+  animation: floatSlow 14s ease-in-out infinite;
 }
 
 @keyframes pulseGlow {
@@ -216,7 +243,7 @@ textarea:focus-visible {
   100% { background-position: 400px 0; }
 }
 .skeleton {
-  background: linear-gradient(90deg, rgb(30 41 59 / 0.6) 25%, rgb(51 65 85 / 0.8) 50%, rgb(30 41 59 / 0.6) 75%);
+  background: linear-gradient(90deg, rgb(54 43 56 / 0.6) 25%, rgb(78 62 80 / 0.8) 50%, rgb(54 43 56 / 0.6) 75%);
   background-size: 800px 100%;
   animation: shimmer 1.6s linear infinite;
 }
@@ -241,49 +268,9 @@ textarea:focus-visible {
   .animate-hero,
   .animate-float-slow,
   .animate-pulse-glow,
-  .skeleton,
-  .text-gradient {
+  .skeleton {
     animation: none !important;
   }
-}
-
-/* ---- keyboard navigation focus rings ---------------------------------------- */
-:focus-visible {
-  outline: 2px solid transparent !important;
-  box-shadow: 0 0 0 2px var(--background), 0 0 0 4px #5b7cfa !important;
-  border-radius: 6px;
-}
-a:focus-visible,
-button:focus-visible,
-input:focus-visible,
-select:focus-visible,
-textarea:focus-visible {
-  outline: 2px solid transparent !important;
-  box-shadow: 0 0 0 2px var(--background), 0 0 0 4px #3b82f6 !important;
-}
-
-/* ---- thin themed scrollbar -------------------------------------------------- */
-* {
-  scrollbar-width: thin;
-  scrollbar-color: rgb(91 124 250 / 0.5) #0a0e1a;
-}
-::-webkit-scrollbar {
-  width: 8px;
-  height: 8px;
-}
-::-webkit-scrollbar-track {
-  background: #0a0e1a;
-}
-::-webkit-scrollbar-thumb {
-  background: linear-gradient(180deg, rgb(91 124 250 / 0.5), rgb(59 130 246 / 0.4));
-  border-radius: 999px;
-  border: 2px solid #0a0e1a;
-}
-::-webkit-scrollbar-thumb:hover {
-  background: linear-gradient(180deg, rgb(91 124 250 / 0.75), rgb(59 130 246 / 0.55));
-}
-::-webkit-scrollbar-corner {
-  background: #0a0e1a;
 }
 
 /* ---- hide scrollbars while keeping scroll ----------------------------------- */

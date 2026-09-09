@@ -1,3 +1,4 @@
+import { Star } from 'lucide-react'
 import { cn, getScoreBg, getScoreColor } from '@/lib/utils'
 import { scoreLabel } from '@/lib/scoring'
 
@@ -6,40 +7,40 @@ export function ScoreBadge({ score, className }: { score: number; className?: st
   return (
     <span
       className={cn(
-        'inline-flex items-center gap-1 rounded-full border border-white/10 px-2.5 py-1 text-xs font-semibold backdrop-blur-sm',
+        'inline-flex items-center gap-1.5 rounded-full border border-white/10 px-2.5 py-1 text-xs font-semibold',
         getScoreBg(score),
         getScoreColor(score),
         className,
       )}
       title={`${title} — ${score}/100`}
     >
-      <span aria-hidden className="text-[0.8em] drop-shadow">★</span>
+      <Star className="h-3 w-3 fill-current" aria-hidden />
       {Math.round(score)}
     </span>
   )
 }
 
-const BAR_GRADIENTS: Record<string, string> = {
-  'bg-red-400/10': 'from-red-400 to-orange-400',
-  'bg-orange-400/10': 'from-orange-400 to-amber-400',
-  'bg-amber-400/10': 'from-amber-400 to-emerald-400',
-  'bg-green-500/10': 'from-green-500 to-emerald-400',
-  'bg-emerald-400/10': 'from-emerald-400 to-emerald-300',
+const BAR_COLORS: Record<string, string> = {
+  'bg-red-400/10': '#ff657a',
+  'bg-orange-400/10': '#ff7a52',
+  'bg-amber-400/10': '#f2b84b',
+  'bg-green-500/10': '#35d07f',
+  'bg-emerald-400/10': '#4fe29b',
 }
 
 export function ScoreBar({ label, value, color }: { label: string; value: number; color?: string }) {
   const c = color ?? getScoreColor(value)
-  const grad = BAR_GRADIENTS[getScoreBg(value) as string] ?? 'from-indigo-500 to-indigo-300'
+  const fill = BAR_COLORS[getScoreBg(value) as string] ?? '#b98cc5'
   return (
-    <div className="space-y-1">
+    <div className="space-y-1.5">
       <div className="flex items-center justify-between text-xs">
         <span className="font-medium text-slate-400">{label}</span>
         <span className={cn('font-semibold tabular-nums', c)}>{Math.round(value)}</span>
       </div>
-      <div className="h-1.5 w-full overflow-hidden rounded-full bg-slate-800/80">
+      <div className="h-1.5 w-full overflow-hidden rounded-full bg-slate-800/70">
         <div
-          className={cn('h-full rounded-full bg-gradient-to-r', grad)}
-          style={{ width: `${Math.max(0, Math.min(100, value))}%` }}
+          className="h-full rounded-full transition-[width] duration-500 ease-out"
+          style={{ width: `${Math.max(0, Math.min(100, value))}%`, backgroundColor: fill }}
         />
       </div>
     </div>

@@ -1,5 +1,7 @@
 import Link from 'next/link'
 import type { Metadata } from 'next'
+import type { ReactNode } from 'react'
+import { Award, Medal, Trophy } from 'lucide-react'
 import { Avatar } from '@/components/PortfolioCard'
 import { ScoreRing } from '@/components/ScoreRing'
 import { ScoreBadge } from '@/components/ScoreBadge'
@@ -19,27 +21,27 @@ const SORT_TABS = [
   { key: 'newest', label: 'Newest' },
 ] as const
 
-const MEDAL_STYLES: Record<number, { ring: string; badge: string; label: string; emoji: string; glow: string }> = {
+const MEDAL_STYLES: Record<number, { ring: string; badge: string; label: string; icon: ReactNode; glow: string }> = {
   1: {
-    ring: 'border-amber-400/60 bg-gradient-to-br from-amber-500/10 to-transparent',
-    badge: 'bg-amber-500/15 text-amber-300',
+    ring: 'border-[#F2B84B]/50 bg-[#F2B84B]/5',
+    badge: 'bg-[#F2B84B]/15 text-[#F2B84B]',
     label: 'Gold',
-    emoji: '🥇',
-    glow: 'shadow-amber-500/20',
+    icon: <Trophy className="h-8 w-8 text-[#F2B84B]" aria-hidden />,
+    glow: 'shadow-[#F2B84B]/20',
   },
   2: {
-    ring: 'border-slate-300/50 bg-gradient-to-br from-slate-300/10 to-transparent',
+    ring: 'border-slate-300/40 bg-slate-300/5',
     badge: 'bg-slate-300/15 text-slate-200',
     label: 'Silver',
-    emoji: '🥈',
+    icon: <Medal className="h-8 w-8 text-slate-300" aria-hidden />,
     glow: 'shadow-slate-300/15',
   },
   3: {
-    ring: 'border-amber-700/50 bg-gradient-to-br from-amber-700/10 to-transparent',
-    badge: 'bg-amber-700/15 text-amber-400',
+    ring: 'border-[#FF7A52]/50 bg-[#FF7A52]/5',
+    badge: 'bg-[#FF7A52]/15 text-[#FF7A52]',
     label: 'Bronze',
-    emoji: '🥉',
-    glow: 'shadow-amber-700/15',
+    icon: <Award className="h-8 w-8 text-[#FF8F68]" aria-hidden />,
+    glow: 'shadow-[#FF7A52]/15',
   },
 }
 
@@ -72,7 +74,7 @@ export default async function RankingsPage({
       <div className="bg-aurora pointer-events-none absolute inset-0" />
       <div className="relative mx-auto max-w-5xl px-4 py-12 sm:px-6">
         <div className="animate-hero mb-10">
-          <h1 className="text-4xl font-bold tracking-tight text-white">Rankings</h1>
+          <h1 className="text-4xl font-bold tracking-tight text-[#ede4f0]">Rankings</h1>
           <p className="mt-2 text-slate-400">
             {result.meta.total.toLocaleString()} portfolios, ranked and sorted.
           </p>
@@ -87,10 +89,10 @@ export default async function RankingsPage({
                 href={`/rankings?sort=${tab.key}${page > 1 ? `&page=${page}` : ''}`}
                 scroll={false}
                 className={cn(
-                  'rounded-full border px-4 py-2 text-sm font-medium transition-all',
+                  'rounded-full border px-4 py-2 text-sm font-medium transition-colors',
                   isActive
-                    ? 'border-indigo-500/60 bg-indigo-500/15 text-indigo-300 shadow-lg shadow-indigo-500/10'
-                    : 'border-white/10 bg-white/[0.03] text-slate-400 hover:border-indigo-500/40 hover:bg-white/[0.05] hover:text-white',
+                    ? 'border-[#7B337E]/60 bg-[#7B337E]/15 text-[#e9d7ec]'
+                    : 'border-white/10 bg-white/[0.03] text-slate-400 hover:border-[#7B337E]/40 hover:bg-white/[0.05] hover:text-white',
                 )}
               >
                 {tab.label}
@@ -109,17 +111,17 @@ export default async function RankingsPage({
                   key={p.id}
                   href={`/p/${p.slug}`}
                   className={cn(
-                    'group relative flex flex-col items-center rounded-2xl border p-6 text-center backdrop-blur-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-xl',
+                    'group relative flex flex-col items-center rounded-2xl border p-6 text-center transition-all duration-300 hover:-translate-y-1 hover:shadow-xl',
                     medal?.ring,
                     medal?.glow,
                   )}
                 >
-                  <span className="mb-3 text-3xl">{medal?.emoji}</span>
+                  <span className="mb-3">{medal?.icon}</span>
                   <span className={cn('mb-3 rounded-md px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wide', medal?.badge)}>
                     {medal?.label}
                   </span>
                   <Avatar p={p} size="lg" />
-                  <h3 className="mt-3 truncate font-semibold text-white group-hover:text-indigo-300">{p.name}</h3>
+                  <h3 className="mt-3 truncate font-semibold text-white group-hover:text-[#b98cc5]">{p.name}</h3>
                   <span className="mt-0.5 block truncate text-xs text-slate-500">{hostnameOf(p.portfolioUrl)}</span>
                   <div className="mt-3">
                     <ScoreRing score={p.score?.overallScore ?? 0} size={72} label="overall" />
@@ -134,7 +136,7 @@ export default async function RankingsPage({
           </div>
         )}
 
-        <div className="animate-hero rounded-2xl border border-white/10 bg-white/[0.03] shadow-2xl shadow-indigo-500/5 backdrop-blur-xl">
+        <div className="animate-hero rounded-2xl border border-white/[0.08] bg-[#180921]/70">
           <div className="w-full overflow-x-auto">
             <table className="w-full table-fixed">
               <thead>
@@ -157,7 +159,7 @@ export default async function RankingsPage({
                         <Link href={`/p/${p.slug}`} className="flex items-center gap-3">
                           <Avatar p={p} size="sm" />
                           <div className="min-w-0 max-w-full">
-                            <span className="block truncate font-medium text-white hover:text-indigo-300">{p.name}</span>
+                            <span className="block truncate font-medium text-white hover:text-[#b98cc5]">{p.name}</span>
                             <span className="block truncate text-xs text-slate-500">{hostnameOf(p.portfolioUrl)}</span>
                           </div>
                         </Link>
@@ -200,7 +202,7 @@ export default async function RankingsPage({
               <Link
                 href={`/rankings?sort=${sortParam}&page=${page - 1}`}
                 scroll={false}
-                className="rounded-lg border border-white/10 bg-white/[0.03] px-4 py-2 text-sm font-medium text-slate-300 transition-colors hover:border-indigo-500/50 hover:text-white"
+                className="rounded-lg border border-white/10 bg-white/[0.03] px-4 py-2 text-sm font-medium text-slate-300 transition-colors hover:border-[#7B337E]/50 hover:text-white"
               >
                 ← Previous
               </Link>
@@ -213,7 +215,7 @@ export default async function RankingsPage({
               <Link
                 href={`/rankings?sort=${sortParam}&page=${page + 1}`}
                 scroll={false}
-                className="shine rounded-lg bg-gradient-to-r from-indigo-500 to-blue-500 px-4 py-2 text-sm font-semibold text-white shadow-lg shadow-indigo-500/25 transition-all hover:scale-[1.03] hover:shadow-xl hover:shadow-indigo-500/40 active:scale-95"
+                className="shine rounded-lg bg-[#7B337E] px-4 py-2 text-sm font-semibold text-white ring-1 ring-inset ring-white/10 transition-colors hover:bg-[#8a3d8d]"
               >
                 Next →
               </Link>

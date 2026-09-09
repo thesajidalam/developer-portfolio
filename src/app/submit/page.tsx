@@ -8,7 +8,7 @@ type Status = 'idle' | 'loading' | 'success' | 'error'
 type VerifyState = 'idle' | 'checking' | 'ok' | 'fail'
 
 const inputClass =
-  'w-full rounded-xl border border-white/10 bg-white/[0.04] px-3.5 py-2.5 text-sm text-slate-200 outline-none transition-all placeholder:text-slate-500 focus:border-indigo-500/60 focus:bg-white/[0.06]'
+  'w-full rounded-xl border border-white/10 bg-[#180921]/80 px-3.5 py-2.5 text-sm text-slate-200 outline-none transition-all placeholder:text-slate-500 focus:border-[#7B337E]/70 focus:bg-[#1b0a26]'
 
 export default function SubmitPage() {
   const [step, setStep] = useState(1)
@@ -130,23 +130,23 @@ export default function SubmitPage() {
                   style={{
                     left: `${Math.random() * 100}%`,
                     animationDelay: `${Math.random() * 0.6}s`,
-                    backgroundColor: ['#6366f1', '#38bdf8', '#34d399', '#facc15', '#f472b6'][i % 5],
+                    backgroundColor: ['#7B337E', '#B98CC5', '#00C4FF', '#35D07F', '#F2B84B'][i % 5],
                   }}
                 />
               ))}
             </div>
-            <div className="animate-hero mx-auto flex h-16 w-16 items-center justify-center rounded-2xl bg-gradient-to-br from-emerald-500/20 to-emerald-500/5 text-3xl text-emerald-400 ring-1 ring-emerald-500/30">
+            <div className="animate-hero mx-auto flex h-16 w-16 items-center justify-center rounded-2xl bg-[#35D07F]/15 text-3xl text-[#4fe29b] ring-1 ring-[#35D07F]/30">
               ✓
             </div>
           </div>
-          <h1 className="animate-hero delay-1 mt-6 text-3xl font-bold text-white">Thanks for submitting!</h1>
+          <h1 className="animate-hero delay-1 mt-6 text-3xl font-bold text-[#ede4f0]">Thanks for submitting!</h1>
           <p className="animate-hero delay-2 mx-auto mt-3 max-w-md text-slate-400">
             Your portfolio (<span className="text-slate-200">{savedUrl}</span>) has been queued for review. Once approved,
             it will be scored and appear in the directory.
           </p>
 
-          <div className="animate-hero delay-3 mt-8 rounded-2xl border border-white/10 bg-white/[0.03] p-5 text-left backdrop-blur-xl">
-            <h2 className="text-sm font-semibold text-white">Grab your DevFolio badge</h2>
+          <div className="animate-hero delay-3 mt-8 rounded-2xl border border-white/10 bg-[#180921]/70 p-5 text-left">
+            <h2 className="text-sm font-semibold text-[#ede4f0]">Grab your DevFolio badge</h2>
             <p className="mt-1 text-xs text-slate-500">
               Once approved, embed your score on your site. Copy this snippet any time:
             </p>
@@ -164,7 +164,7 @@ export default function SubmitPage() {
                     alert('Could not copy automatically. Select the code above.')
                   }
                 }}
-                className="shrink-0 rounded-lg bg-gradient-to-r from-indigo-500 to-blue-500 px-3 py-2 text-xs font-semibold text-white transition-all hover:scale-105 active:scale-95"
+                className="shrink-0 rounded-lg bg-[#7B337E] px-3 py-2 text-xs font-semibold text-white ring-1 ring-inset ring-white/10 transition-colors hover:bg-[#8a3d8d]"
               >
                 Copy
               </button>
@@ -173,7 +173,7 @@ export default function SubmitPage() {
 
           <Link
             href="/"
-            className="shine animate-hero delay-3 mt-6 inline-block rounded-xl bg-gradient-to-r from-indigo-500 to-blue-500 px-6 py-3 text-sm font-semibold text-white shadow-lg shadow-indigo-500/30 transition-all hover:scale-105 hover:shadow-xl hover:shadow-indigo-500/40 active:scale-95"
+            className="shine animate-hero delay-3 mt-6 inline-block rounded-xl bg-[#7B337E] px-6 py-3 text-sm font-semibold text-white ring-1 ring-inset ring-white/10 transition-colors hover:bg-[#8a3d8d]"
           >
             Back to gallery
           </Link>
@@ -214,25 +214,25 @@ export default function SubmitPage() {
               <div
                 className={`flex h-8 w-8 items-center justify-center rounded-full text-xs font-bold transition-all ${
                   step > s.num
-                    ? 'bg-emerald-500/20 text-emerald-400 ring-1 ring-emerald-500/30'
+                    ? 'bg-[#35D07F]/15 text-[#4fe29b] ring-1 ring-[#35D07F]/30'
                     : step === s.num
-                      ? 'bg-gradient-to-r from-indigo-500 to-blue-500 text-white shadow-lg shadow-indigo-500/25'
+                      ? 'bg-[#7B337E] text-white shadow-lg shadow-[#7B337E]/30'
                       : 'bg-white/[0.04] text-slate-500 ring-1 ring-white/10'
                 }`}
               >
                 {step > s.num ? '✓' : s.num}
               </div>
-              <span className={`hidden text-xs font-medium sm:inline ${step === s.num ? 'text-white' : 'text-slate-500'}`}>
+              <span className={`hidden text-xs font-medium sm:inline ${step === s.num ? 'text-[#ede4f0]' : 'text-slate-500'}`}>
                 {s.title}
               </span>
               {i < steps.length - 1 && (
-                <div className={`mx-1 h-px w-8 ${step > s.num ? 'bg-emerald-500/40' : 'bg-white/10'}`} />
+                <div className={`mx-1 h-px w-8 ${step > s.num ? 'bg-[#35D07F]/40' : 'bg-white/10'}`} />
               )}
             </div>
           ))}
         </div>
 
-        <form onSubmit={handleSubmit} className="animate-hero delay-2 space-y-5 rounded-2xl border border-white/10 bg-white/[0.03] p-6 shadow-2xl shadow-indigo-500/5 backdrop-blur-xl">
+        <form onSubmit={handleSubmit} className="animate-hero delay-2 space-y-5 rounded-2xl border border-white/[0.08] bg-[#180921]/70 p-6">
           {step === 1 && (
             <div>
               <label htmlFor="url" className="mb-1.5 block text-sm font-medium text-slate-300">
@@ -361,7 +361,7 @@ export default function SubmitPage() {
               <button
                 type="button"
                 onClick={() => setStep(step - 1)}
-                className="rounded-xl border border-white/10 bg-white/[0.03] px-4 py-2.5 text-sm font-medium text-slate-300 transition-all hover:border-indigo-500/50 hover:text-white"
+                className="rounded-xl border border-white/10 bg-white/[0.03] px-4 py-2.5 text-sm font-medium text-slate-300 transition-colors hover:border-[#7B337E]/50 hover:text-white"
               >
                 Back
               </button>
@@ -370,7 +370,7 @@ export default function SubmitPage() {
               <button
                 type="button"
                 onClick={nextStep}
-                className="shine flex-1 rounded-xl bg-gradient-to-r from-indigo-500 to-blue-500 px-6 py-2.5 text-sm font-semibold text-white shadow-lg shadow-indigo-500/30 transition-all hover:scale-[1.02] hover:shadow-xl hover:shadow-indigo-500/40 active:scale-95"
+                className="shine flex-1 rounded-xl bg-[#7B337E] px-6 py-2.5 text-sm font-semibold text-white ring-1 ring-inset ring-white/10 transition-colors hover:bg-[#8a3d8d]"
               >
                 Continue
               </button>
@@ -378,7 +378,7 @@ export default function SubmitPage() {
               <button
                 type="submit"
                 disabled={status === 'loading'}
-                className="shine flex-1 rounded-xl bg-gradient-to-r from-indigo-500 to-blue-500 px-6 py-2.5 text-sm font-semibold text-white shadow-lg shadow-indigo-500/30 transition-all hover:scale-[1.02] hover:shadow-xl hover:shadow-indigo-500/40 disabled:cursor-not-allowed disabled:opacity-50 disabled:hover:scale-100 active:scale-95"
+                className="shine flex-1 rounded-xl bg-[#7B337E] px-6 py-2.5 text-sm font-semibold text-white ring-1 ring-inset ring-white/10 transition-colors hover:bg-[#8a3d8d] disabled:cursor-not-allowed disabled:opacity-50"
               >
                 {status === 'loading' ? 'Submitting...' : 'Submit for review'}
               </button>
@@ -394,11 +394,11 @@ export default function SubmitPage() {
               { step: '2', title: 'We review', desc: 'Our team evaluates your site on six dimensions.' },
               { step: '3', title: 'You appear', desc: 'Get scored and listed in the directory.' },
             ].map((s) => (
-              <div key={s.step} className="rounded-2xl border border-white/10 bg-white/[0.03] p-5 text-center backdrop-blur-sm">
-                <div className="mx-auto mb-3 flex h-10 w-10 items-center justify-center rounded-xl bg-gradient-to-br from-indigo-500/20 to-blue-500/10 text-sm font-bold text-indigo-300 ring-1 ring-indigo-500/20">
+              <div key={s.step} className="rounded-2xl border border-white/[0.08] bg-[#180921]/60 p-5 text-center">
+                <div className="mx-auto mb-3 flex h-10 w-10 items-center justify-center rounded-xl bg-[#7B337E]/15 text-sm font-bold text-[#e9d7ec] ring-1 ring-[#7B337E]/25">
                   {s.step}
                 </div>
-                <h3 className="text-sm font-semibold text-white">{s.title}</h3>
+                <h3 className="text-sm font-semibold text-[#ede4f0]">{s.title}</h3>
                 <p className="mt-1 text-xs text-slate-500">{s.desc}</p>
               </div>
             ))}

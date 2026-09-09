@@ -1,6 +1,7 @@
 import Link from 'next/link'
 import { notFound } from 'next/navigation'
 import type { Metadata } from 'next'
+import { ArrowUpRight, BadgeCheck, MapPin, Star } from 'lucide-react'
 import { Avatar, PortfolioCard } from '@/components/PortfolioCard'
 import { ScoreRing } from '@/components/ScoreRing'
 import { ScoreBar } from '@/components/ScoreBadge'
@@ -64,14 +65,14 @@ export default async function PortfolioDetailPage({ params }: Props) {
 
         <header
           className={cn(
-            'animate-hero delay-1 relative overflow-hidden rounded-2xl border p-6 backdrop-blur-xl sm:p-8',
+            'animate-hero delay-1 relative overflow-hidden rounded-2xl border p-6 sm:p-8',
             isOwner
-              ? 'border-amber-400/30 bg-gradient-to-br from-[#151021] to-[#0c0e18] shadow-2xl shadow-amber-500/10'
-              : 'border-white/10 bg-white/[0.03] shadow-2xl shadow-indigo-500/5',
+              ? 'border-amber-400/25 bg-gradient-to-b from-[#1b0b20]/80 to-[#12051A]/70'
+              : 'border-white/[0.08] bg-[#180921]/70',
           )}
         >
         {isOwner && (
-          <div className="pointer-events-none absolute -right-10 -top-10 h-40 w-40 rounded-full bg-amber-400/20 blur-3xl" />
+          <div className="pointer-events-none absolute -right-10 -top-10 h-40 w-40 rounded-full bg-amber-400/15 blur-3xl" />
         )}
         <div className="flex flex-col gap-8 sm:flex-row sm:items-start sm:justify-between">
           <div className="flex min-w-0 items-start gap-5">
@@ -90,16 +91,16 @@ export default async function PortfolioDetailPage({ params }: Props) {
                 {p.verified && (
                   <span
                     className={cn(
-                      'rounded-md px-2 py-0.5 text-xs font-medium',
-                      isOwner ? 'bg-amber-400/15 text-amber-200' : 'bg-indigo-500/10 text-indigo-300',
+                      'inline-flex items-center gap-1 rounded-md px-2 py-0.5 text-xs font-medium',
+                      isOwner ? 'bg-amber-400/15 text-amber-200' : 'bg-[#7B337E]/15 text-[#e9d7ec]',
                     )}
                   >
-                    ✓ Verified
+                    <BadgeCheck className="h-3 w-3" aria-hidden /> Verified
                   </span>
                 )}
                 {p.featured && (
-                  <span title="Featured" className="rounded-md bg-amber-500/10 px-2 py-0.5 text-xs font-medium text-amber-300">
-                    ★ Featured
+                  <span className="inline-flex items-center gap-1 rounded-md bg-amber-500/10 px-2 py-0.5 text-xs font-medium text-amber-300">
+                    <Star className="h-3 w-3 fill-current" aria-hidden /> Featured
                   </span>
                 )}
               </div>
@@ -113,7 +114,7 @@ export default async function PortfolioDetailPage({ params }: Props) {
           </div>
 
           <div className="flex shrink-0 items-center gap-6">
-            <div className={cn('relative inline-flex rounded-2xl p-[1.5px]', isOwner && 'bg-gradient-to-br from-amber-300/60 to-amber-600/40')}>
+            <div className={cn('relative inline-flex rounded-2xl p-[1.5px]', isOwner && 'bg-gradient-to-br from-amber-300/50 to-amber-600/30')}>
               <ScoreRing score={overall} size={140} label="Overall" />
             </div>
             <div className="space-y-2">
@@ -124,13 +125,13 @@ export default async function PortfolioDetailPage({ params }: Props) {
                   target="_blank"
                   rel="noopener noreferrer"
                   className={cn(
-                    'shine inline-flex items-center justify-center rounded-xl px-4 py-2 text-sm font-semibold text-white shadow-lg transition-all hover:scale-[1.03] hover:shadow-xl active:scale-95',
+                    'shine inline-flex items-center justify-center gap-1.5 rounded-xl px-4 py-2 text-sm font-semibold text-white transition-colors hover:brightness-110',
                     isOwner
-                      ? 'bg-gradient-to-r from-amber-400 to-amber-600 shadow-amber-500/30 hover:shadow-amber-500/50'
-                      : 'bg-gradient-to-r from-indigo-500 to-blue-500 shadow-indigo-500/30 hover:shadow-indigo-500/40',
+                      ? 'bg-[#F2B84B] text-[#261303] hover:bg-[#f6c76e]'
+                      : 'bg-[#7B337E] ring-1 ring-inset ring-white/10 hover:bg-[#8a3d8d]',
                   )}
                 >
-                  Visit site ↗
+                  Visit site <ArrowUpRight className="h-4 w-4" aria-hidden />
                 </a>
                 {p.githubUrl && (
                   <a
@@ -164,21 +165,21 @@ export default async function PortfolioDetailPage({ params }: Props) {
 
         <div className="mt-6 flex flex-wrap gap-1.5">
           {p.technologies.map((t) => (
-            <span key={t} className="rounded-md bg-slate-800 px-2.5 py-1 text-xs font-medium text-slate-300">
+            <span key={t} className="rounded-md bg-white/[0.06] px-2.5 py-1 text-xs font-medium text-slate-300">
               {t}
             </span>
           ))}
           {p.categories.map((c) => (
-            <span key={c} className="rounded-md bg-indigo-500/10 px-2.5 py-1 text-xs font-medium text-indigo-300">
+            <span key={c} className="rounded-md bg-[#7B337E]/15 px-2.5 py-1 text-xs font-medium text-[#e9d7ec]">
               {c}
             </span>
           ))}
         </div>
 
-        {p.location && <p className="mt-4 text-sm text-slate-500">📍 {p.location}</p>}
+        {p.location && <p className="mt-4 inline-flex items-center gap-1.5 text-sm text-slate-500"><MapPin className="h-4 w-4 text-slate-600" aria-hidden /> {p.location}</p>}
       </header>
 
-      <section className="animate-hero delay-3 mt-10 rounded-2xl border border-white/10 bg-white/[0.03] p-6 backdrop-blur-xl sm:p-8">
+      <section className="animate-hero delay-3 mt-10 rounded-2xl border border-white/[0.08] bg-[#180921]/70 p-6 sm:p-8">
         <h2 className="text-xl font-bold text-white">Score breakdown</h2>
         <p className="mt-1 text-sm text-slate-500">Six dimensions, weighted to produce the overall score.</p>
         <div className="mt-6 grid grid-cols-1 gap-x-10 gap-y-5 md:grid-cols-2">
@@ -190,7 +191,7 @@ export default async function PortfolioDetailPage({ params }: Props) {
                   {!dim.automated && <span className="ml-2 text-[10px] text-slate-600">manual</span>}
                 </span>
               </div>
-              <ScoreBar label="" value={dim.score} color={cn(dim.score >= 90 ? 'text-emerald-500' : dim.score >= 70 ? 'text-yellow-500' : dim.score >= 50 ? 'text-orange-500' : 'text-red-500')} />
+              <ScoreBar label="" value={dim.score} color={cn(dim.score >= 90 ? 'text-[#35D07F]' : dim.score >= 70 ? 'text-[#F2B84B]' : dim.score >= 50 ? 'text-[#FF7A52]' : 'text-[#FF657A]')} />
               <p className="mt-1 text-xs text-slate-600">{dim.description}</p>
             </div>
           ))}

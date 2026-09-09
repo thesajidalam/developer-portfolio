@@ -1,10 +1,30 @@
 import type { Metadata, Viewport } from 'next'
 import { Suspense } from 'react'
+import { Inter, JetBrains_Mono, Sora } from 'next/font/google'
+import { cn } from '@/lib/utils'
 import './globals.css'
 import { Navbar } from '@/components/Navbar'
 import { Footer } from '@/components/Footer'
 import { SearchShortcut } from '@/components/SearchShortcut'
 import { SearchScrollRestore } from '@/components/SearchScrollRestore'
+
+const inter = Inter({
+  subsets: ['latin'],
+  display: 'swap',
+  variable: '--font-inter',
+})
+
+const sora = Sora({
+  subsets: ['latin'],
+  display: 'swap',
+  variable: '--font-sora',
+})
+
+const jetbrains = JetBrains_Mono({
+  subsets: ['latin'],
+  display: 'swap',
+  variable: '--font-jetbrains',
+})
 
 export const metadata: Metadata = {
   metadataBase: new URL(process.env.NEXT_PUBLIC_BASE_URL || 'http://localhost:3000'),
@@ -32,15 +52,15 @@ export const metadata: Metadata = {
 }
 
 export const viewport: Viewport = {
-  themeColor: '#06070f',
+  themeColor: '#09030f',
   width: 'device-width',
   initialScale: 1,
 }
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en">
-      <body className="min-h-screen bg-[#06070f] text-slate-100 antialiased">
+    <html lang="en" className={cn(inter.variable, sora.variable, jetbrains.variable)}>
+      <body className="min-h-screen bg-[#09030f] text-[#ede4f0] antialiased">
         <SearchShortcut />
         <Suspense fallback={null}>
           <SearchScrollRestore />

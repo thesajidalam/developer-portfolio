@@ -3,14 +3,14 @@
 export default function NotFound() {
   return (
     <div className="flex flex-1 flex-col items-center justify-center px-4 py-24 text-center">
-      <p className="bg-gradient-to-r from-indigo-400 to-blue-400 bg-clip-text text-8xl font-black text-transparent">404</p>
-      <h1 className="mt-6 text-2xl font-bold text-white">Page not found</h1>
+      <p className="font-display text-8xl font-black text-[#b98cc5]">404</p>
+      <h1 className="mt-6 text-2xl font-bold text-[#ede4f0]">Page not found</h1>
       <p className="mt-2 max-w-md text-slate-400">
         The page you are looking for doesn&apos;t exist or has been moved.
       </p>
       <Link
         href="/"
-        className="shine mt-8 inline-block rounded-xl bg-gradient-to-r from-indigo-500 to-blue-500 px-6 py-3 text-sm font-semibold text-white shadow-lg shadow-indigo-500/30 transition-all hover:scale-105 hover:shadow-xl hover:shadow-indigo-500/40 active:scale-95"
+        className="shine mt-8 inline-block rounded-xl bg-[#7B337E] px-6 py-3 text-sm font-semibold text-white ring-1 ring-inset ring-white/10 transition-colors hover:bg-[#8a3d8d]"
       >
         Back to gallery
       </Link>

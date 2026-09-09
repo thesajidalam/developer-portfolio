@@ -1,4 +1,4 @@
-'use client'
+﻿'use client'
 
 import { useCallback, useEffect, useRef, useState } from 'react'
 import type { LinkReport, Paginated, Portfolio, SiteAnalytics, Submission } from '@/lib/types'
@@ -45,7 +45,7 @@ function Toast({ message, onClose }: { message: string; onClose: () => void }) {
         visible ? 'translate-y-0 opacity-100' : 'translate-y-4 opacity-0',
       )}
     >
-      <div className="pointer-events-auto flex items-center gap-2 rounded-full border border-emerald-500/30 bg-[#101627]/95 px-4 py-2.5 text-sm font-medium text-emerald-300 shadow-xl shadow-emerald-500/10 backdrop-blur-xl">
+      <div className="pointer-events-auto flex items-center gap-2 rounded-full border border-emerald-500/30 bg-[#180921]/95 px-4 py-2.5 text-sm font-medium text-emerald-300 shadow-xl shadow-emerald-500/10 backdrop-blur-xl">
         <svg className="h-4 w-4" viewBox="0 0 20 20" fill="currentColor">
           <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
         </svg>
@@ -75,7 +75,7 @@ function AdminPagination({ meta, onPrev, onNext }: { meta: PageMeta; onPrev: () 
           type="button"
           onClick={onNext}
           disabled={meta.page >= totalPages}
-          className="rounded-lg bg-gradient-to-r from-indigo-500 to-blue-500 px-3 py-1.5 text-xs font-semibold text-white shadow-lg shadow-indigo-500/25 transition-transform hover:scale-[1.03] disabled:cursor-not-allowed disabled:opacity-40 disabled:hover:scale-100"
+          className="rounded-lg bg-[#7B337E] px-3 py-1.5 text-xs font-semibold text-white transition-colors hover:bg-[#8a3d8d] disabled:cursor-not-allowed disabled:opacity-40"
         >
           Next →
         </button>
@@ -620,9 +620,9 @@ export default function AdminPage() {
   if (!unlocked) {
     return (
       <div className="mx-auto max-w-md px-4 py-24 sm:px-6">
-        <div className="relative overflow-hidden rounded-3xl border border-white/10 bg-white/[0.03] p-8 shadow-2xl shadow-indigo-500/10 backdrop-blur-xl">
-          <div className="pointer-events-none absolute -top-16 -right-16 h-48 w-48 rounded-full bg-indigo-500/25 blur-3xl" />
-          <h1 className="text-2xl font-bold text-white">Admin</h1>
+        <div className="relative overflow-hidden rounded-3xl border border-white/[0.08] bg-[#180921]/70 p-8">
+          <div className="pointer-events-none absolute -top-16 -right-16 h-48 w-48 rounded-full bg-[#7B337E]/15 blur-3xl" />
+          <h1 className="text-2xl font-bold text-[#ede4f0]">Admin</h1>
           <p className="mt-2 text-sm text-slate-400">Enter your admin key to unlock the dashboard.</p>
           <input
             type="password"
@@ -641,7 +641,7 @@ export default function AdminPage() {
             type="button"
             onClick={unlock}
             disabled={!key.trim()}
-            className="shine mt-5 w-full rounded-xl bg-gradient-to-r from-indigo-500 to-blue-500 px-4 py-2.5 text-sm font-semibold text-white shadow-lg shadow-indigo-500/25 transition-all hover:scale-[1.02] disabled:cursor-not-allowed disabled:opacity-50 disabled:hover:scale-100"
+            className="shine mt-5 w-full rounded-xl bg-[#7B337E] px-4 py-2.5 text-sm font-semibold text-white ring-1 ring-inset ring-white/10 transition-colors hover:bg-[#8a3d8d] disabled:cursor-not-allowed disabled:opacity-50"
           >
             Unlock
           </button>
@@ -705,10 +705,10 @@ export default function AdminPage() {
             type="button"
             onClick={() => switchTab(t)}
             className={cn(
-              'rounded-lg px-4 py-2 text-sm font-semibold transition-all',
+              'rounded-lg px-4 py-2 text-sm font-semibold transition-colors',
               tab === t
-                ? 'bg-gradient-to-r from-indigo-500 to-blue-500 text-white shadow-lg shadow-indigo-500/25'
-                : 'border border-white/10 bg-white/[0.03] text-slate-300 hover:border-indigo-500/50 hover:text-white',
+                ? 'bg-[#7B337E] text-white'
+                : 'border border-white/10 bg-white/[0.03] text-slate-300 hover:border-[#7B337E]/50 hover:text-white',
             )}
           >
             {label}
@@ -718,7 +718,7 @@ export default function AdminPage() {
 
       {error && <div className="mb-6 rounded-lg border border-red-500/20 bg-red-500/10 px-4 py-3 text-sm text-red-300">{error}</div>}
 
-      <div className="rounded-2xl border border-white/10 bg-white/[0.02] backdrop-blur-xl">
+      <div className="rounded-2xl border border-white/10 bg-[#180921]/70">
         {tab === 'portfolios' && (
           <>
             <div className="flex flex-wrap items-center gap-3 border-b border-white/10 p-4">
@@ -759,7 +759,7 @@ export default function AdminPage() {
                 <button
                   type="button"
                   onClick={() => loadPortfolios(1, portfolioStatus, portfolioQuery)}
-                  className="rounded-lg bg-gradient-to-r from-indigo-500 to-blue-500 px-3.5 py-2 text-xs font-semibold text-white shadow-lg shadow-indigo-500/25 transition-transform hover:scale-[1.03]"
+                  className="rounded-lg bg-[#7B337E] px-3.5 py-2 text-xs font-semibold text-white transition-colors hover:bg-[#8a3d8d]"
                 >
                   Search
                 </button>
@@ -822,7 +822,7 @@ export default function AdminPage() {
                 <button
                   type="button"
                   onClick={() => loadSubmissions(1, submissionStatus, submissionQuery)}
-                  className="rounded-lg bg-gradient-to-r from-indigo-500 to-blue-500 px-3.5 py-2 text-xs font-semibold text-white shadow-lg shadow-indigo-500/25 transition-transform hover:scale-[1.03]"
+                  className="rounded-lg bg-[#7B337E] px-3.5 py-2 text-xs font-semibold text-white transition-colors hover:bg-[#8a3d8d]"
                 >
                   Search
                 </button>
@@ -917,7 +917,7 @@ export default function AdminPage() {
                         <p className="text-sm text-slate-500">No technology data.</p>
                       ) : (
                         analytics.techDistribution.map((t) => (
-                          <DistributionBar key={t.tech} label={t.tech} count={t.count} max={maxTech} color="bg-gradient-to-r from-indigo-500 to-blue-500" />
+                          <DistributionBar key={t.tech} label={t.tech} count={t.count} max={maxTech} color="bg-[#7B337E]" />
                         ))
                       )}
                     </div>
@@ -930,7 +930,7 @@ export default function AdminPage() {
                         <p className="text-sm text-slate-500">No category data.</p>
                       ) : (
                         analytics.categoryDistribution.map((c) => (
-                          <DistributionBar key={c.category} label={c.category} count={c.count} max={maxCat} color="bg-gradient-to-r from-blue-500 to-pink-500" />
+                          <DistributionBar key={c.category} label={c.category} count={c.count} max={maxCat} color="bg-[#6667AB]" />
                         ))
                       )}
                     </div>
@@ -951,12 +951,12 @@ export default function AdminPage() {
                           max={maxHealth}
                           color={
                             h.health === 'healthy'
-                              ? 'bg-gradient-to-r from-emerald-500 to-teal-500'
+                              ? 'bg-[#35D07F]'
                               : h.health === 'needs_attention'
-                                ? 'bg-gradient-to-r from-amber-500 to-orange-500'
+                                ? 'bg-[#F2B84B]'
                                 : h.health === 'down'
-                                  ? 'bg-gradient-to-r from-red-500 to-rose-500'
-                                  : 'bg-gradient-to-r from-zinc-500 to-zinc-400'
+                                  ? 'bg-[#FF657A]'
+                                  : 'bg-[#8a6f94]'
                           }
                         />
                       ))
