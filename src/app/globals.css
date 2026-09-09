@@ -3,27 +3,26 @@
 @tailwind utilities;
 
 :root {
-  --background: #09030f;
-  --surface: #180921;
-  --foreground: #ede4f0;
+  --background: #0b0e1a;
+  --surface: #141b2a;
+  --foreground: #e8eef9;
   color-scheme: dark;
-  /* Brand: deep violet-mauve purple (identity) */
-  --primary: #7b337e;
-  --primary-soft: #b98cc5;
-  --primary-soft-2: #9669a8;
-  /* Lavender companion */
-  --blue: #6667ab;
-  --blue-soft: #8587c9;
-  /* Signature cyan signal (controlled accent) */
-  --accent: #00c4ff;
-  --accent-soft: #1bd0ff;
+  /* Brand identity: electric blue */
+  --primary: #3e8bff;
+  --primary-soft: #7dd3fc;
+  --primary-soft-2: #639cff;
+  /* Secondary teal + cyan signal accents */
+  --blue: #2dd4bf;
+  --blue-soft: #75ded1;
+  --accent: #22d3ee;
+  --accent-soft: #67e8f9;
   /* Score / success accent */
   --success: #35d07f;
   --emerald: #35d07f;
   --success-soft: #4fe29b;
-  /* Warm light typography */
-  --ink: #ede4f0;
-  --muted: #b7a9bb;
+  /* Cool light typography */
+  --ink: #e8eef9;
+  --muted: #98a7bf;
 }
 
 * {
@@ -37,7 +36,7 @@ html {
 
 body {
   margin: 0;
-  background: linear-gradient(180deg, #12051a 0%, #09030f 32%, #09030f 100%);
+  background: linear-gradient(180deg, #10151f 0%, #0b0e1a 32%, #0b0e1a 100%);
   color: var(--foreground);
   font-family:
     var(--font-inter),
@@ -76,26 +75,26 @@ textarea {
 }
 select option,
 select optgroup {
-  background-color: #180921;
-  color: #ede4f0;
+  background-color: #141b2a;
+  color: #e8eef9;
 }
 select option:disabled {
-  color: #84708a;
+  color: #7d8ca8;
 }
 
-/* ---- moonlit ambient background ------------------------------------------- */
+/* ---- ambient multi-hue background ------------------------------------------- */
 @layer utilities {
   .bg-aurora {
     background:
-      radial-gradient(820px circle at 10% -12%, rgb(123 51 126 / 0.22), transparent 46%),
-      radial-gradient(980px circle at 96% -8%, rgb(0 196 255 / 0.07), transparent 48%),
-      radial-gradient(760px circle at 50% 118%, rgb(102 103 171 / 0.14), transparent 52%);
+      radial-gradient(820px circle at 10% -12%, rgb(62 139 255 / 0.2), transparent 46%),
+      radial-gradient(980px circle at 96% -8%, rgb(34 211 238 / 0.08), transparent 48%),
+      radial-gradient(760px circle at 50% 118%, rgb(45 212 191 / 0.12), transparent 52%);
   }
 
   .bg-grid {
     background-image:
-      linear-gradient(rgb(190 160 194 / 0.055) 1px, transparent 1px),
-      linear-gradient(90deg, rgb(190 160 194 / 0.055) 1px, transparent 1px);
+      linear-gradient(rgb(184 196 216 / 0.05) 1px, transparent 1px),
+      linear-gradient(90deg, rgb(184 196 216 / 0.05) 1px, transparent 1px);
     background-size: 34px 34px;
     mask-image: radial-gradient(ellipse 85% 62% at 50% 0%, #000 30%, transparent 78%);
     -webkit-mask-image: radial-gradient(ellipse 85% 62% at 50% 0%, #000 30%, transparent 78%);
@@ -105,7 +104,7 @@ select option:disabled {
 /* ---- premium focus rings -------------------------------------------------- */
 :focus-visible {
   outline: none;
-  box-shadow: 0 0 0 2px var(--background), 0 0 0 4px rgb(123 51 126 / 0.8) !important;
+  box-shadow: 0 0 0 2px var(--background), 0 0 0 4px rgb(62 139 255 / 0.8) !important;
   border-radius: 6px;
 }
 a:focus-visible,
@@ -113,34 +112,34 @@ button:focus-visible,
 input:focus-visible,
 select:focus-visible,
 textarea:focus-visible {
-  box-shadow: 0 0 0 2px var(--background), 0 0 0 4px rgb(102 103 171 / 0.9) !important;
+  box-shadow: 0 0 0 2px var(--background), 0 0 0 4px rgb(34 211 238 / 0.9) !important;
 }
 
 /* ---- premium scrollbar -------------------------------------------------- */
 * {
   scrollbar-width: thin;
-  scrollbar-color: rgb(123 51 126 / 0.55) #0b0412;
+  scrollbar-color: rgb(62 139 255 / 0.55) #070a12;
 }
 ::-webkit-scrollbar {
   width: 10px;
   height: 10px;
 }
 ::-webkit-scrollbar-track {
-  background: #0b0412;
+  background: #070a12;
 }
 ::-webkit-scrollbar-thumb {
-  background: linear-gradient(180deg, rgb(123 51 126 / 0.55), rgb(102 103 171 / 0.42));
+  background: linear-gradient(180deg, rgb(62 139 255 / 0.55), rgb(34 211 238 / 0.45));
   border-radius: 999px;
-  border: 2px solid #0b0412;
+  border: 2px solid #070a12;
 }
 ::-webkit-scrollbar-thumb:hover {
-  background: linear-gradient(180deg, rgb(123 51 126 / 0.8), rgb(102 103 171 / 0.6));
+  background: linear-gradient(180deg, rgb(62 139 255 / 0.85), rgb(45 212 191 / 0.65));
 }
 ::-webkit-scrollbar-corner {
-  background: #0b0412;
+  background: #070a12;
 }
 ::selection {
-  background: rgb(185 140 197 / 0.35);
+  background: rgb(125 211 252 / 0.35);
   color: #fff;
 }
 
@@ -182,22 +181,22 @@ textarea:focus-visible {
 /* ---- premium interactive surfaces ------------------------------------------ */
 @layer utilities {
   .glass {
-    background: rgb(24 9 33 / 0.72);
+    background: rgb(20 27 42 / 0.72);
     backdrop-filter: blur(14px);
     -webkit-backdrop-filter: blur(14px);
-    border: 1px solid rgb(190 160 194 / 0.1);
+    border: 1px solid rgb(184 196 216 / 0.1);
   }
   .glass-strong {
-    background: rgb(18 5 26 / 0.86);
+    background: rgb(16 21 31 / 0.86);
     backdrop-filter: blur(18px);
     -webkit-backdrop-filter: blur(18px);
-    border: 1px solid rgb(190 160 194 / 0.12);
+    border: 1px solid rgb(184 196 216 / 0.12);
   }
 }
 
-/* restrained brand gradient for select accent words only */
+/* restrained multi-hue gradient for select accent words only */
 .text-gradient {
-  background: linear-gradient(92deg, #d5b2dc 0%, #b98cc5 34%, #9a6cae 72%, #a9aade 100%);
+  background: linear-gradient(92deg, #8bb4ff 0%, #7dd3fc 34%, #67e8f9 72%, #2dd4bf 100%);
   -webkit-background-clip: text;
   background-clip: text;
   color: transparent;
@@ -243,7 +242,7 @@ textarea:focus-visible {
   100% { background-position: 400px 0; }
 }
 .skeleton {
-  background: linear-gradient(90deg, rgb(54 43 56 / 0.6) 25%, rgb(78 62 80 / 0.8) 50%, rgb(54 43 56 / 0.6) 75%);
+  background: linear-gradient(90deg, rgb(41 50 66 / 0.6) 25%, rgb(75 90 117 / 0.8) 50%, rgb(41 50 66 / 0.6) 75%);
   background-size: 800px 100%;
   animation: shimmer 1.6s linear infinite;
 }

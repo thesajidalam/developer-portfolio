@@ -1,11 +1,11 @@
 import Link from 'next/link'
 import type { Metadata } from 'next'
 import type { ReactNode } from 'react'
-import { Award, Medal, Trophy } from 'lucide-react'
+import { ArrowRight, Award, Medal, Trophy } from 'lucide-react'
 import { Avatar } from '@/components/PortfolioCard'
 import { ScoreRing } from '@/components/ScoreRing'
 import { ScoreBadge } from '@/components/ScoreBadge'
-import { listPortfolios, topLiked, portfolioLikeCounts } from '@/lib/repository'
+import { listPortfolios, portfolioLikeCounts, portfolioOfDay, topLiked } from '@/lib/repository'
 import { cn, getHealthColor, hostnameOf } from '@/lib/utils'
 
 export const metadata: Metadata = {
@@ -65,6 +65,7 @@ export default async function RankingsPage({
 
   const displayedIds = result.data.map((p) => p.id)
   const likeCounts = await portfolioLikeCounts(displayedIds)
+  const potd = await portfolioOfDay().catch(() => null)
 
   const top3 = result.data.slice(0, 3)
   const rest = result.data.slice(3)
@@ -73,32 +74,74 @@ export default async function RankingsPage({
     <div className="relative overflow-hidden">
       <div className="bg-aurora pointer-events-none absolute inset-0" />
       <div className="relative mx-auto max-w-5xl px-4 py-12 sm:px-6">
-        <div className="animate-hero mb-10">
-          <h1 className="text-4xl font-bold tracking-tight text-[#ede4f0]">Rankings</h1>
-          <p className="mt-2 text-slate-400">
-            {result.meta.total.toLocaleString()} portfolios, ranked and sorted.
-          </p>
-        </div>
+        <div className="animate-hero mb-8 grid grid-cols-1 gap-6 lg:grid-cols-[1fr_360px] lg:items-start">
+          <div>
+            <h1 className="text-4xl font-bold tracking-tight text-[#e8eef9]">Rankings</h1>
+            <p className="mt-2 text-slate-400">
+              {result.meta.total.toLocaleString()} portfolios, ranked and sorted.
+            </p>
 
-        <div className="animate-hero mb-8 flex gap-2">
-          {SORT_TABS.map((tab) => {
-            const isActive = sortParam === tab.key
-            return (
+            <div className="mt-6 flex flex-wrap gap-2">
+              {SORT_TABS.map((tab) => {
+                const isActive = sortParam === tab.key
+                return (
+                  <Link
+                    key={tab.key}
+                    href={`/rankings?sort=${tab.key}${page > 1 ? `&page=${page}` : ''}`}
+                    scroll={false}
+                    className={cn(
+                      'rounded-full border px-4 py-2 text-sm font-medium transition-colors',
+                      isActive
+                        ? 'border-[#3e8bff]/60 bg-[#3e8bff]/15 text-[#d9e4f7]'
+                        : 'border-white/10 bg-white/[0.03] text-slate-400 hover:border-[#3e8bff]/40 hover:bg-white/[0.05] hover:text-white',
+                    )}
+                  >
+                    {tab.label}
+                  </Link>
+                )
+              })}
+            </div>
+          </div>
+
+          {potd && (
+            <aside className="relative overflow-hidden rounded-2xl border border-[#22d3ee]/25 bg-gradient-to-br from-[#141b2a] to-[#11182a] p-5">
+              <div className="pointer-events-none absolute -right-10 -top-10 h-40 w-40 rounded-full bg-[#22d3ee]/12 blur-3xl" />
+              <div className="pointer-events-none absolute -bottom-12 -left-8 h-36 w-36 rounded-full bg-[#3e8bff]/15 blur-3xl" />
+
+              <span className="inline-flex items-center gap-1.5 rounded-full border border-[#22d3ee]/40 bg-[#22d3ee]/10 px-3 py-1 text-[10px] font-bold uppercase tracking-widest text-[#67e8f9]">
+                <span className="h-1.5 w-1.5 rounded-full bg-[#22d3ee] animate-pulse-glow" />
+                Portfolio of the Day
+              </span>
+
+              <div className="mt-4 flex items-center justify-between gap-4">
+                <div className="min-w-0">
+                  <div className="truncate text-lg font-bold leading-tight text-[#e8eef9]">{potd.name}</div>
+                  <div className="mt-1 truncate text-xs text-slate-500">{hostnameOf(potd.portfolioUrl)}</div>
+                </div>
+                <ScoreRing score={potd.score?.overallScore ?? 0} size={68} label="score" />
+              </div>
+
+              <p className="mt-3 line-clamp-2 text-xs leading-relaxed text-slate-400">
+                {potd.description || potd.title || 'A standout developer portfolio worth studying.'}
+              </p>
+
+              <div className="mt-3 flex flex-wrap gap-1.5">
+                {(potd.technologies ?? []).slice(0, 4).map((t) => (
+                  <span key={t} className="rounded-md border border-white/10 bg-white/[0.04] px-1.5 py-0.5 text-[10px] font-medium text-slate-300">
+                    {t}
+                  </span>
+                ))}
+              </div>
+
               <Link
-                key={tab.key}
-                href={`/rankings?sort=${tab.key}${page > 1 ? `&page=${page}` : ''}`}
-                scroll={false}
-                className={cn(
-                  'rounded-full border px-4 py-2 text-sm font-medium transition-colors',
-                  isActive
-                    ? 'border-[#7B337E]/60 bg-[#7B337E]/15 text-[#e9d7ec]'
-                    : 'border-white/10 bg-white/[0.03] text-slate-400 hover:border-[#7B337E]/40 hover:bg-white/[0.05] hover:text-white',
-                )}
+                href={`/p/${potd.slug}`}
+                className="group mt-4 inline-flex items-center gap-1.5 rounded-lg bg-[#3e8bff] px-3.5 py-2 text-xs font-semibold text-white ring-1 ring-inset ring-white/10 transition-colors hover:bg-[#66a5ff]"
               >
-                {tab.label}
+                View the report
+                <ArrowRight className="h-3.5 w-3.5 transition-transform group-hover:translate-x-0.5" aria-hidden />
               </Link>
-            )
-          })}
+            </aside>
+          )}
         </div>
 
         {top3.length > 0 && (
@@ -121,7 +164,7 @@ export default async function RankingsPage({
                     {medal?.label}
                   </span>
                   <Avatar p={p} size="lg" />
-                  <h3 className="mt-3 truncate font-semibold text-white group-hover:text-[#b98cc5]">{p.name}</h3>
+                  <h3 className="mt-3 truncate font-semibold text-white group-hover:text-[#7dd3fc]">{p.name}</h3>
                   <span className="mt-0.5 block truncate text-xs text-slate-500">{hostnameOf(p.portfolioUrl)}</span>
                   <div className="mt-3">
                     <ScoreRing score={p.score?.overallScore ?? 0} size={72} label="overall" />
@@ -136,7 +179,7 @@ export default async function RankingsPage({
           </div>
         )}
 
-        <div className="animate-hero rounded-2xl border border-white/[0.08] bg-[#180921]/70">
+        <div className="animate-hero rounded-2xl border border-white/[0.08] bg-[#141b2a]/70">
           <div className="w-full overflow-x-auto">
             <table className="w-full table-fixed">
               <thead>
@@ -159,7 +202,7 @@ export default async function RankingsPage({
                         <Link href={`/p/${p.slug}`} className="flex items-center gap-3">
                           <Avatar p={p} size="sm" />
                           <div className="min-w-0 max-w-full">
-                            <span className="block truncate font-medium text-white hover:text-[#b98cc5]">{p.name}</span>
+                            <span className="block truncate font-medium text-white hover:text-[#7dd3fc]">{p.name}</span>
                             <span className="block truncate text-xs text-slate-500">{hostnameOf(p.portfolioUrl)}</span>
                           </div>
                         </Link>
@@ -202,7 +245,7 @@ export default async function RankingsPage({
               <Link
                 href={`/rankings?sort=${sortParam}&page=${page - 1}`}
                 scroll={false}
-                className="rounded-lg border border-white/10 bg-white/[0.03] px-4 py-2 text-sm font-medium text-slate-300 transition-colors hover:border-[#7B337E]/50 hover:text-white"
+                className="rounded-lg border border-white/10 bg-white/[0.03] px-4 py-2 text-sm font-medium text-slate-300 transition-colors hover:border-[#3e8bff]/50 hover:text-white"
               >
                 ← Previous
               </Link>
@@ -215,7 +258,7 @@ export default async function RankingsPage({
               <Link
                 href={`/rankings?sort=${sortParam}&page=${page + 1}`}
                 scroll={false}
-                className="shine rounded-lg bg-[#7B337E] px-4 py-2 text-sm font-semibold text-white ring-1 ring-inset ring-white/10 transition-colors hover:bg-[#8a3d8d]"
+                className="shine rounded-lg bg-[#3e8bff] px-4 py-2 text-sm font-semibold text-white ring-1 ring-inset ring-white/10 transition-colors hover:bg-[#66a5ff]"
               >
                 Next →
               </Link>

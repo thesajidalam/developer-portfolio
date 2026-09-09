@@ -1,4 +1,4 @@
-﻿import { NextRequest, NextResponse } from 'next/server'
+import { NextRequest, NextResponse } from 'next/server'
 import { getPortfolioBySlug, voteCount } from '@/lib/repository'
 import { hostnameOf, absoluteUrl } from '@/lib/utils'
 
@@ -33,17 +33,17 @@ export async function GET(_request: NextRequest, { params }: { params: Promise<{
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <style>
     *{box-sizing:border-box;margin:0;padding:0}
-    body{background:#0b0412;color:#ede4f0;font-family:system-ui,-apple-system,'Segoe UI',Roboto,sans-serif;height:100vh;display:flex;align-items:center;justify-content:center}
-    .card{background:#180921;border:1px solid rgba(255,255,255,0.08);border-radius:16px;padding:20px 24px;width:320px}
+    body{background:#070a12;color:#e8eef9;font-family:system-ui,-apple-system,'Segoe UI',Roboto,sans-serif;height:100vh;display:flex;align-items:center;justify-content:center}
+    .card{background:#141b2a;border:1px solid rgba(255,255,255,0.08);border-radius:16px;padding:20px 24px;width:320px}
     .row{display:flex;align-items:center;justify-content:space-between;gap:16px}
     .name{font-size:18px;font-weight:700;line-height:1.2}
-    .host{font-size:13px;color:#b7a9bb;margin-top:2px}
+    .host{font-size:13px;color:#98a7bf;margin-top:2px}
     .score{font-size:38px;font-weight:800;line-height:1}
     .bar{height:8px;border-radius:99px;background:rgba(190,160,194,0.14);margin-top:14px;overflow:hidden}
-    .fill{height:100%;border-radius:99px;background:#7B337E}
-    .meta{display:flex;justify-content:space-between;margin-top:10px;font-size:12px;color:#b7a9bb}
-    .link{display:block;margin-top:14px;text-align:center;padding:8px 0;border-radius:10px;background:#7B337E;color:#fff;text-decoration:none;font-size:13px;font-weight:600}
-    .link:hover{background:#8a3d8d}
+    .fill{height:100%;border-radius:99px;background:#3e8bff}
+    .meta{display:flex;justify-content:space-between;margin-top:10px;font-size:12px;color:#98a7bf}
+    .link{display:block;margin-top:14px;text-align:center;padding:8px 0;border-radius:10px;background:#3e8bff;color:#fff;text-decoration:none;font-size:13px;font-weight:600}
+    .link:hover{background:#66a5ff}
   </style>
 </head>
 <body>

@@ -30,7 +30,7 @@ const BAR_COLORS: Record<string, string> = {
 
 export function ScoreBar({ label, value, color }: { label: string; value: number; color?: string }) {
   const c = color ?? getScoreColor(value)
-  const fill = BAR_COLORS[getScoreBg(value) as string] ?? '#b98cc5'
+  const fill = BAR_COLORS[getScoreBg(value) as string] ?? '#7dd3fc'
   return (
     <div className="space-y-1.5">
       <div className="flex items-center justify-between text-xs">

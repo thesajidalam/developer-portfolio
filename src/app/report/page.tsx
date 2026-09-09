@@ -5,7 +5,7 @@ import { Suspense, useState } from 'react'
 import { cn } from '@/lib/utils'
 
 const inputClass =
-  'w-full rounded-xl border border-white/10 bg-[#180921]/80 px-3.5 py-2.5 text-sm text-slate-200 outline-none transition-all placeholder:text-slate-500 focus:border-[#7B337E]/70 focus:bg-[#1b0a26]'
+  'w-full rounded-xl border border-white/10 bg-[#141b2a]/80 px-3.5 py-2.5 text-sm text-slate-200 outline-none transition-all placeholder:text-slate-500 focus:border-[#3e8bff]/70 focus:bg-[#182136]'
 
 function ReportForm() {
   const searchParams = useSearchParams()
@@ -62,13 +62,13 @@ function ReportForm() {
 
   return (
     <div className="mx-auto max-w-lg px-4 py-16 sm:px-6">
-      <div className="relative overflow-hidden rounded-3xl border border-white/[0.08] bg-[#180921]/70 p-8">
-        <div className="pointer-events-none absolute -top-16 -right-16 h-48 w-48 rounded-full bg-[#7B337E]/12 blur-3xl" />
+      <div className="relative overflow-hidden rounded-3xl border border-white/[0.08] bg-[#141b2a]/70 p-8">
+        <div className="pointer-events-none absolute -top-16 -right-16 h-48 w-48 rounded-full bg-[#3e8bff]/12 blur-3xl" />
 
-        <a href="/" className="text-sm text-[#b98cc5] transition-colors hover:text-[#d5b2dc]">
+        <a href="/" className="text-sm text-[#7dd3fc] transition-colors hover:text-[#a8d8ff]">
           ← Back to gallery
         </a>
-        <h1 className="mt-4 font-display text-2xl font-bold text-[#ede4f0]">Report a broken link</h1>
+        <h1 className="mt-4 font-display text-2xl font-bold text-[#e8eef9]">Report a broken link</h1>
         <p className="mt-2 text-sm text-slate-400">
           Found a portfolio link that no longer works? Let us know and we&apos;ll take it down or fix it.
         </p>
@@ -150,7 +150,7 @@ function ReportForm() {
           <button
             type="submit"
             disabled={status === 'loading'}
-            className="shine w-full rounded-xl bg-[#7B337E] px-4 py-3 text-sm font-semibold text-white ring-1 ring-inset ring-white/10 transition-colors hover:bg-[#8a3d8d] disabled:cursor-not-allowed disabled:opacity-50"
+            className="shine w-full rounded-xl bg-[#3e8bff] px-4 py-3 text-sm font-semibold text-white ring-1 ring-inset ring-white/10 transition-colors hover:bg-[#66a5ff] disabled:cursor-not-allowed disabled:opacity-50"
           >
             {status === 'loading' ? 'Submitting…' : 'Submit report'}
           </button>

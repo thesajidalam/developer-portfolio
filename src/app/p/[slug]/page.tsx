@@ -67,8 +67,8 @@ export default async function PortfolioDetailPage({ params }: Props) {
           className={cn(
             'animate-hero delay-1 relative overflow-hidden rounded-2xl border p-6 sm:p-8',
             isOwner
-              ? 'border-amber-400/25 bg-gradient-to-b from-[#1b0b20]/80 to-[#12051A]/70'
-              : 'border-white/[0.08] bg-[#180921]/70',
+              ? 'border-amber-400/25 bg-gradient-to-b from-[#121a2c]/80 to-[#10151f]/70'
+              : 'border-white/[0.08] bg-[#141b2a]/70',
           )}
         >
         {isOwner && (
@@ -92,7 +92,7 @@ export default async function PortfolioDetailPage({ params }: Props) {
                   <span
                     className={cn(
                       'inline-flex items-center gap-1 rounded-md px-2 py-0.5 text-xs font-medium',
-                      isOwner ? 'bg-amber-400/15 text-amber-200' : 'bg-[#7B337E]/15 text-[#e9d7ec]',
+                      isOwner ? 'bg-amber-400/15 text-amber-200' : 'bg-[#3e8bff]/15 text-[#d9e4f7]',
                     )}
                   >
                     <BadgeCheck className="h-3 w-3" aria-hidden /> Verified
@@ -128,7 +128,7 @@ export default async function PortfolioDetailPage({ params }: Props) {
                     'shine inline-flex items-center justify-center gap-1.5 rounded-xl px-4 py-2 text-sm font-semibold text-white transition-colors hover:brightness-110',
                     isOwner
                       ? 'bg-[#F2B84B] text-[#261303] hover:bg-[#f6c76e]'
-                      : 'bg-[#7B337E] ring-1 ring-inset ring-white/10 hover:bg-[#8a3d8d]',
+                      : 'bg-[#3e8bff] ring-1 ring-inset ring-white/10 hover:bg-[#66a5ff]',
                   )}
                 >
                   Visit site <ArrowUpRight className="h-4 w-4" aria-hidden />
@@ -170,7 +170,7 @@ export default async function PortfolioDetailPage({ params }: Props) {
             </span>
           ))}
           {p.categories.map((c) => (
-            <span key={c} className="rounded-md bg-[#7B337E]/15 px-2.5 py-1 text-xs font-medium text-[#e9d7ec]">
+            <span key={c} className="rounded-md bg-[#3e8bff]/15 px-2.5 py-1 text-xs font-medium text-[#d9e4f7]">
               {c}
             </span>
           ))}
@@ -179,7 +179,7 @@ export default async function PortfolioDetailPage({ params }: Props) {
         {p.location && <p className="mt-4 inline-flex items-center gap-1.5 text-sm text-slate-500"><MapPin className="h-4 w-4 text-slate-600" aria-hidden /> {p.location}</p>}
       </header>
 
-      <section className="animate-hero delay-3 mt-10 rounded-2xl border border-white/[0.08] bg-[#180921]/70 p-6 sm:p-8">
+      <section className="animate-hero delay-3 mt-10 rounded-2xl border border-white/[0.08] bg-[#141b2a]/70 p-6 sm:p-8">
         <h2 className="text-xl font-bold text-white">Score breakdown</h2>
         <p className="mt-1 text-sm text-slate-500">Six dimensions, weighted to produce the overall score.</p>
         <div className="mt-6 grid grid-cols-1 gap-x-10 gap-y-5 md:grid-cols-2">
