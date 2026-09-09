@@ -142,7 +142,7 @@ export default async function RankingsPage({
 
                 <span className="relative inline-flex items-center gap-1.5 rounded-full border border-[#38bdf8]/40 bg-[#38bdf8]/10 px-2.5 py-1 text-[10px] font-bold uppercase tracking-widest text-[#7dd3fc]">
                   <span className="h-1.5 w-1.5 rounded-full bg-[#38bdf8] animate-pulse-glow" />
-                  Of the Day
+                  Portfolio of the Day
                 </span>
 
                 <div className="relative mt-3">

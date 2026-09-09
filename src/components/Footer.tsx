@@ -7,13 +7,13 @@ const cols: { title: string; links: { href: string; label: string }[] }[] = [
     links: [
       { href: '/', label: 'Gallery' },
       { href: '/rankings', label: 'Rankings' },
+      { href: '/compare', label: 'Compare' },
+      { href: '/submit', label: 'Submit' },
     ],
   },
   {
     title: 'Service',
     links: [
-      { href: '/compare', label: 'Compare portfolios' },
-      { href: '/submit', label: 'List your portfolio' },
       { href: '/privacy', label: 'Privacy policy' },
     ],
   },

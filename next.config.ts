@@ -2,7 +2,6 @@ import type { NextConfig } from 'next'
 
 const securityHeaders = [
   { key: 'X-Content-Type-Options', value: 'nosniff' },
-  { key: 'X-Frame-Options', value: 'DENY' },
   { key: 'Referrer-Policy', value: 'strict-origin-when-cross-origin' },
   {
     key: 'Permissions-Policy',
@@ -40,6 +39,28 @@ const nextConfig: NextConfig = {
       {
         source: '/:path*',
         headers: securityHeaders,
+      },
+      // The score badge is meant to be embedded anywhere via <iframe> —
+      // allow framing on the embeds route only (remove X-Frame-Options and
+      // relax frame-ancestors); every other route stays frame-blocked.
+      {
+        source: '/api/v1/embeds/:path*',
+        headers: [
+          {
+            key: 'Content-Security-Policy',
+            value: [
+              "default-src 'self'",
+              "script-src 'self' 'unsafe-inline'",
+              "style-src 'self' 'unsafe-inline'",
+              "img-src 'self' data: https:",
+              "font-src 'self' data:",
+              "connect-src 'self' https://*.supabase.co",
+              "frame-ancestors *",
+              "base-uri 'self'",
+              "form-action 'self'",
+            ].join('; '),
+          },
+        ],
       },
       // Turnstile lives ONLY on /admin; grant its origin (script, iframe,
       // worker, connect) just for that route so the public CSP stays strict.
