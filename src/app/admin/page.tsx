@@ -383,6 +383,52 @@ export default function AdminPage() {
   const [error, setError] = useState<string | null>(null)
   const [toast, setToast] = useState<string | null>(null)
   const toastTimer = useRef<ReturnType<typeof setTimeout> | null>(null)
+  const [totp, setTotp] = useState('')
+  const [mfaConfigured, setMfaConfigured] = useState(false)
+  const [trying, setTrying] = useState(false)
+  const [turnstileToken, setTurnstileToken] = useState('')
+  const [turnstileReady, setTurnstileReady] = useState(false)
+  const widgetRef = useRef<HTMLDivElement | null>(null)
+  const widgetIdRef = useRef<string | null>(null)
+
+  const siteKey = process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY ?? ''
+
+  interface TurnstileWidget {
+    render: (el: HTMLElement, opts: Record<string, unknown>) => string
+    reset: (id: string) => void
+  }
+
+  function turnstileApi(): TurnstileWidget | null {
+    return (window as unknown as { turnstile?: TurnstileWidget }).turnstile ?? null
+  }
+
+  function loadTurnstileScript(): Promise<void> {
+    return new Promise((resolve, reject) => {
+      if (typeof window === 'undefined') return reject(new Error('no window'))
+      if (turnstileApi()) return resolve()
+      let script = document.getElementById('df-cf-turnstile') as HTMLScriptElement | null
+      if (script) {
+        script.addEventListener('load', () => resolve(), { once: true })
+        return
+      }
+      script = document.createElement('script')
+      script.id = 'df-cf-turnstile'
+      script.src = 'https://challenges.cloudflare.com/turnstile/v0/api.js?render=explicit'
+      script.async = true
+      script.defer = true
+      script.onload = () => resolve()
+      script.onerror = () => reject(new Error('failed to load'))
+      document.head.appendChild(script)
+    })
+  }
+
+  function resetTurnstile() {
+    const api = turnstileApi()
+    if (api && widgetIdRef.current) {
+      api.reset(widgetIdRef.current)
+    }
+    setTurnstileToken('')
+  }
 
   function notify(message: string) {
     if (toastTimer.current) clearTimeout(toastTimer.current)
@@ -394,12 +440,11 @@ export default function AdminPage() {
       ...init,
       headers: {
         'Content-Type': 'application/json',
-        Authorization: `Bearer ${key}`,
         ...init.headers,
       },
     })
     if (!res.ok) {
-      if (res.status === 401 || res.status === 403) throw new Error('Unauthorized — check your admin key')
+      if (res.status === 401 || res.status === 403) throw new Error('Session expired or unauthorized')
       throw new Error(`Request failed (${res.status})`)
     }
     return (await res.json()) as T
@@ -427,7 +472,7 @@ export default function AdminPage() {
         if (!silent) setLoading(false)
       }
     },
-    [key],
+    [],
   )
 
   const loadSubmissions = useCallback(
@@ -448,7 +493,7 @@ export default function AdminPage() {
         if (!silent) setLoading(false)
       }
     },
-    [key],
+    [],
   )
 
   const loadReports = useCallback(
@@ -467,7 +512,7 @@ export default function AdminPage() {
         if (!silent) setLoading(false)
       }
     },
-    [key],
+    [],
   )
 
   const loadNewsletter = useCallback(
@@ -483,7 +528,7 @@ export default function AdminPage() {
         if (!silent) setLoading(false)
       }
     },
-    [key],
+    [],
   )
 
   const loadAnalytics = useCallback(
@@ -499,15 +544,102 @@ export default function AdminPage() {
         if (!silent) setLoading(false)
       }
     },
-    [key],
+    [],
   )
 
-  function unlock() {
+  useEffect(() => {
+    let cancelled = false
+    fetch('/api/v1/admin/session', { method: 'GET' })
+      .then((r) => (r.ok ? r.json() : null))
+      .then((j) => {
+        if (cancelled) return
+        if (j?.authenticated) {
+          setUnlocked(true)
+          loadPortfolios(1, 'all', '')
+        } else if (typeof j?.mfaConfigured === 'boolean') {
+          setMfaConfigured(j.mfaConfigured)
+        }
+      })
+      .catch(() => undefined)
+    return () => {
+      cancelled = true
+    }
+  }, [])
+
+  useEffect(() => {
+    if (unlocked || !siteKey || turnstileReady) return
+    let cancelled = false
+    setTurnstileReady(false)
+    loadTurnstileScript()
+      .then(() => {
+        if (cancelled || !widgetRef.current) return
+        const api = turnstileApi()
+        if (!api) return
+        if (widgetRef.current.dataset.rendered === '1') return
+        widgetRef.current.dataset.rendered = '1'
+        widgetIdRef.current = api.render(widgetRef.current, {
+          sitekey: siteKey,
+          action: 'admin-login',
+          callback: (token: unknown) => setTurnstileToken(String(token)),
+          'expired-callback': () => setTurnstileToken(''),
+          'error-callback': () => setTurnstileToken(''),
+        })
+        setTurnstileReady(true)
+      })
+      .catch(() => setTurnstileReady(false))
+    return () => {
+      cancelled = true
+    }
+  }, [unlocked, siteKey, turnstileReady])
+
+  async function submitLogin() {
     const trimmed = key.trim()
-    if (!trimmed) return
-    setKey(trimmed)
-    setUnlocked(true)
-    loadPortfolios(1, 'all', '')
+    if (!trimmed || !turnstileToken || trying) return
+    setTrying(true)
+    setError(null)
+    try {
+      const res = await fetch('/api/v1/admin/login', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          apiKey: trimmed,
+          turnstileToken,
+          totp: mfaConfigured ? totp.trim() : '',
+        }),
+      })
+      if (res.status === 429) {
+        resetTurnstile()
+        setError('Too many attempts. Wait a moment before trying again.')
+        return
+      }
+      if (!res.ok) {
+        resetTurnstile()
+        setError('Invalid credentials or request.')
+        return
+      }
+      setKey('')
+      setTotp('')
+      setUnlocked(true)
+      loadPortfolios(1, 'all', '')
+    } catch {
+      resetTurnstile()
+      setError('Invalid credentials or request.')
+    } finally {
+      setTrying(false)
+    }
+  }
+
+  async function lock() {
+    setUnlocked(false)
+    setKey('')
+    setTotp('')
+    setTurnstileToken('')
+    setError(null)
+    try {
+      await fetch('/api/v1/admin/logout', { method: 'POST' })
+    } catch {
+      // ignore
+    }
   }
 
   function switchTab(next: Tab) {
@@ -624,27 +756,56 @@ export default function AdminPage() {
           <div className="pointer-events-none absolute -top-16 -right-16 h-48 w-48 rounded-full bg-[#3e8bff]/15 blur-3xl" />
           <h1 className="text-2xl font-bold text-[#e8eef9]">Admin</h1>
           <p className="mt-2 text-sm text-slate-400">Enter your admin key to unlock the dashboard.</p>
-          <input
-            type="password"
-            value={key}
-            onChange={(e) => setKey(e.target.value)}
-            onKeyDown={(e) => {
-              if (e.key === 'Enter') unlock()
+          <form
+            onSubmit={(e) => {
+              e.preventDefault()
+              submitLogin()
             }}
-            placeholder="Admin key"
-            autoComplete="current-password"
-            aria-label="Admin key"
-            className={cn(inputClass, 'mt-5')}
-          />
-          {error && <p className="mt-3 rounded-lg border border-red-500/20 bg-red-500/10 px-3 py-2 text-sm text-red-300">{error}</p>}
-          <button
-            type="button"
-            onClick={unlock}
-            disabled={!key.trim()}
-            className="shine mt-5 w-full rounded-xl bg-[#3e8bff] px-4 py-2.5 text-sm font-semibold text-white ring-1 ring-inset ring-white/10 transition-colors hover:bg-[#66a5ff] disabled:cursor-not-allowed disabled:opacity-50"
+            className="mt-5 space-y-4"
           >
-            Unlock
-          </button>
+            <input
+              type="password"
+              value={key}
+              onChange={(e) => setKey(e.target.value)}
+              placeholder="Admin key"
+              autoComplete="current-password"
+              aria-label="Admin key"
+              className={cn(inputClass)}
+            />
+            {mfaConfigured && (
+              <input
+                type="text"
+                inputMode="numeric"
+                value={totp}
+                onChange={(e) => setTotp(e.target.value.replace(/[^0-9]/g, '').slice(0, 6))}
+                placeholder="Authenticator code"
+                autoComplete="one-time-code"
+                aria-label="Authenticator code"
+                className={cn(inputClass)}
+              />
+            )}
+            {siteKey ? (
+              <div
+                ref={widgetRef}
+                aria-label="Human verification"
+                className="flex justify-center [&>div]:w-full"
+              />
+            ) : (
+              !mfaConfigured && (
+                <p className="rounded-lg border border-amber-500/20 bg-amber-500/10 px-3 py-2 text-xs text-amber-300">
+                  Security layer not configured — the site administrator needs to add Cloudflare Turnstile keys.
+                </p>
+              )
+            )}
+            {error && <p className="rounded-lg border border-red-500/20 bg-red-500/10 px-3 py-2 text-sm text-red-300">{error}</p>}
+            <button
+              type="submit"
+              disabled={!key.trim() || !turnstileToken || trying}
+              className="shine mt-1 w-full rounded-xl bg-[#3e8bff] px-4 py-2.5 text-sm font-semibold text-white ring-1 ring-inset ring-white/10 transition-colors hover:bg-[#66a5ff] disabled:cursor-not-allowed disabled:opacity-50"
+            >
+              {trying ? 'Verifying…' : 'Unlock'}
+            </button>
+          </form>
         </div>
       </div>
     )
@@ -679,11 +840,7 @@ export default function AdminPage() {
         </div>
         <button
           type="button"
-          onClick={() => {
-            setUnlocked(false)
-            setKey('')
-            setError(null)
-          }}
+          onClick={lock}
           className={buttonClass}
           aria-label="Lock admin dashboard"
         >
@@ -988,17 +1145,12 @@ export default function AdminPage() {
 
               <button
                 type="button"
-                onClick={() => {
-                  setUnlocked(false)
-                  setKey('')
-                  setError(null)
-                  notify('Dashboard locked')
-                }}
+                onClick={lock}
                 className="w-full rounded-xl border border-white/10 bg-white/[0.03] px-4 py-3 text-left text-sm font-medium text-slate-200 transition-all hover:border-red-500/50 hover:bg-white/[0.06]"
                 aria-label="Lock dashboard"
               >
                 <span className="block font-semibold text-white">Lock dashboard</span>
-                <span className="mt-0.5 text-xs text-slate-500">Require the admin key again before continuing</span>
+                <span className="mt-0.5 text-xs text-slate-500">End your session and require the admin key again</span>
               </button>
             </div>
           </div>
