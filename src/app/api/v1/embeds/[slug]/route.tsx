@@ -76,7 +76,6 @@ export async function GET(_request: NextRequest, { params }: { params: Promise<{
       'Content-Type': 'text/html; charset=utf-8',
       'Cache-Control': 'public, s-maxage=300, stale-while-revalidate=3600',
       'X-Content-Type-Options': 'nosniff',
-      'X-Frame-Options': 'ALLOWALL',
     },
   })
 }
